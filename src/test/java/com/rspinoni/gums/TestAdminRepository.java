@@ -14,31 +14,31 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.rspinoni.gums.config.MockDbConfig;
-import com.rspinoni.gums.dao.User;
-import com.rspinoni.gums.repository.UserRepository;
+import com.rspinoni.gums.dao.Admin;
+import com.rspinoni.gums.repository.AdminRepository;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { MockDbConfig.class})
-public class TestUserRepository {
+public class TestAdminRepository {
 
   @Autowired
-  private UserRepository userRepository;
+  AdminRepository adminRepository;
 
   @BeforeEach
   public  void setup() {
-    User user1 = new User(1090L, "UserName", "user.name@mail.com", "password");
-    userRepository.save(user1);
+      Admin user1 = new Admin(1L, "adminKey", "UserName", "user.name@mail.com", "password");
+    adminRepository.save(user1);
   }
 
   @AfterEach
   public void tearDown() {
-    userRepository.deleteAll();
+    adminRepository.deleteAll();
   }
 
   @Test
   public void testRetrieval() {
-    Optional<User> user = userRepository.findById(1090L);
+    Optional<Admin> user = adminRepository.findById(1L);
     assertFalse(user.isEmpty());
-    assertEquals("UserName", user.get().getName(), "User name should be UserName");
+    assertEquals("adminKey", user.get().getAdminKey(), "Admin key should be correct");
   }
 }
