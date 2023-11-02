@@ -12,7 +12,7 @@ public class Admin extends User {
 
   String adminKey;
 
-  public Admin(Long id, String adminKey, String name, String email, String password) {
+  public Admin(String id, String adminKey, String name, String email, String password) {
     super(id, name, email, password);
     this.adminKey = adminKey;
   }

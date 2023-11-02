@@ -2,6 +2,7 @@ package com.rspinoni.gums.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -10,6 +11,7 @@ import com.mongodb.MongoClientSettings;
 
 //configures the test database
 @Configuration
+@Profile("test")
 @ComponentScan(basePackages = {"com.rspinoni.gums"})
 @EnableMongoRepositories(basePackages = {"com.rspinoni.gums.repository"})
 public class MockDbConfig extends AbstractMongoClientConfiguration {
