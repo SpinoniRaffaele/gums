@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rspinoni.gums.dao.Admin;
+import com.rspinoni.gums.model.Admin;
 import com.rspinoni.gums.exceptions.InvalidRequestException;
 import com.rspinoni.gums.repository.AdminRepository;
 

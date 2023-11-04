@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rspinoni.gums.dao.User;
+import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.exceptions.InvalidRequestException;
 import com.rspinoni.gums.exceptions.NotFoundException;
 import com.rspinoni.gums.repository.UserRepository;

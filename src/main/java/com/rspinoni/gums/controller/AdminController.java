@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rspinoni.gums.dao.Admin;
+import com.rspinoni.gums.model.Admin;
 import com.rspinoni.gums.service.AdminService;
 
 @RestController

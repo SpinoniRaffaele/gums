@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.rspinoni.gums.config.MockDbConfig;
-import com.rspinoni.gums.dao.User;
+import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.repository.UserRepository;
 
 @ExtendWith(SpringExtension.class)

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rspinoni.gums.dao.User;
+import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.service.UserService;
 
 @RestController

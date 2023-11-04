@@ -1,4 +1,4 @@
-package com.rspinoni.gums.dao;
+package com.rspinoni.gums.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
