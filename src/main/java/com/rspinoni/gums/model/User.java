@@ -18,7 +18,13 @@ public class User {
 
   String name;
 
+  int age;
+
   String email;
 
   String password;
+
+  boolean isAdmin;
+
+  String adminKey;
 }

@@ -32,7 +32,7 @@ public class TestUserRepository {
   @BeforeEach
   public  void setup() {
     id = UUID.randomUUID().toString();
-    User user1 = new User(id, "UserName", "user.name@mail.com", "password");
+    User user1 = new User(id, "UserName", 40, "user.name@mail.com", "password", false, null);
     userRepository.save(user1);
   }
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -45,9 +46,21 @@ public class UserController {
     userService.deleteAllUsers();
   }
 
+  @DeleteMapping("/{name}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteUserByName(@PathVariable String name) {
+    userService.deleteUserByName(name);
+  }
+
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
   public void createUser(@RequestBody User user) {
     userService.createUser(user);
+  }
+
+  @PutMapping()
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateUser(@RequestBody User user) {
+    userService.updateUser(user);
   }
 }
