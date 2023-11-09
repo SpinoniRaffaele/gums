@@ -41,6 +41,14 @@ public class UserService {
     return userOptional.get();
   }
 
+  public User getUserById(String id) {
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isEmpty()) {
+      throw new NotFoundException("User with specified name not found");
+    }
+    return userOptional.get();
+  }
+
   public List<User> getAllUsers() {
     return userRepository.findAll();
   }
@@ -50,8 +58,7 @@ public class UserService {
   }
 
   public void deleteUserByName(String name) {
-    List<User> users = getAllUsers();
-    Optional<User> optionalUser = users.stream().filter(user -> user.getName().equals(name)).findFirst();
+    Optional<User> optionalUser = userRepository.findByName(name);
     if (optionalUser.isPresent()) {
       userRepository.delete(optionalUser.get());
     } else {
@@ -62,7 +69,7 @@ public class UserService {
   public void createUser(User user) {
     validateUserCreation(user);
     user.setId(UUID.randomUUID().toString());
-    userRepository.save(user);
+    userRepository.insert(user);
   }
 
   public void updateUser(User user) {
