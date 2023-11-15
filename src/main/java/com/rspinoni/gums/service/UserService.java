@@ -58,12 +58,11 @@ public class UserService {
   }
 
   public void deleteUserByName(String name) {
-    Optional<User> optionalUser = userRepository.findByName(name);
-    if (optionalUser.isPresent()) {
-      userRepository.delete(optionalUser.get());
-    } else {
-      throw new InvalidRequestException("The specified name is not present in the database");
-    }
+    userRepository.deleteByName(name);
+  }
+
+  public void deleteUserById(String id) {
+    userRepository.deleteById(id);
   }
 
   public void createUser(User user) {

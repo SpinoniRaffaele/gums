@@ -1,5 +1,6 @@
 package com.rspinoni.gums.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,6 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping()
-  @ResponseStatus(HttpStatus.OK)
-  public List<User> getUsers() {
-    return userService.getAllUsers();
-  }
-
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public User getUserById(@PathVariable String id) {
@@ -43,20 +38,27 @@ public class UserController {
 
   @GetMapping()
   @ResponseStatus(HttpStatus.OK)
-  public User getUserByName(@RequestParam("name") String name) {
-    return userService.getUserByName(name);
+  public List<User> getUsers(@RequestParam(value = "name", required = false) String name) {
+    if (name == null || name.isEmpty()) {
+      return userService.getAllUsers();
+    }
+    return Collections.singletonList(userService.getUserByName(name));
   }
 
   @DeleteMapping()
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteUsers() {
-    userService.deleteAllUsers();
+  public void deleteUsers(@RequestParam(value = "name", required = false) String name) {
+    if (name == null || name.isEmpty()) {
+      userService.deleteAllUsers();
+      return;
+    }
+    userService.deleteUserByName(name);
   }
 
-  @DeleteMapping("/{name}")
+  @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteUserByName(@PathVariable String name) {
-    userService.deleteUserByName(name);
+  public void deleteUserById(@PathVariable String id) {
+    userService.deleteUserById(id);
   }
 
   @PostMapping()

@@ -96,4 +96,14 @@ public class TestUserRepository {
 
     assertEquals(0, users.size());
   }
+  @Test
+  @Order(5)
+  public void testDeleteByName() {
+    userRepository.insert(USER_1);
+    userRepository.deleteByName("UserName");
+
+    List<User> users = userRepository.findAll();
+
+    assertEquals(0, users.size());
+  }
 }
