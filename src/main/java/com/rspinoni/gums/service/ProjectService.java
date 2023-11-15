@@ -89,7 +89,7 @@ public class ProjectService {
 
   private void validateProjectCreation(Project project) {
     if (project.getName() == null || project.getName().isEmpty()) {
-      throw new InvalidRequestException("Project name cannot be null or empty");
+      throw new InvalidRequestException("Project name is missing");
     }
     if (project.getOwnerId() == null || project.getOwnerId().isEmpty()) {
       throw new InvalidRequestException("Project owner missing");
@@ -102,8 +102,11 @@ public class ProjectService {
     if (project.getCollaboratorIds().stream().anyMatch(collaboratorIds -> !usersId.contains(collaboratorIds))) {
       throw new InvalidRequestException("Collaborators must be valid users");
     }
-    if (usersId.contains(project.getOwnerId())) {
+    if (!usersId.contains(project.getOwnerId())) {
       throw new InvalidRequestException("Owner must be a valid user");
+    }
+    if (!project.getCollaboratorIds().contains(project.getOwnerId())) {
+      throw new InvalidRequestException("Owner must also be a collaborator");
     }
   }
 }

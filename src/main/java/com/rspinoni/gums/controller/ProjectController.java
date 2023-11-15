@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,8 +35,8 @@ public class ProjectController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<Project> getProjects(
-      @RequestParam("name") String name, @RequestParam("ownerId") String ownerId) {
+  public List<Project> getProjects(@RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "ownerId", required = false) String ownerId) {
     boolean nameFilter = name != null && !name.isEmpty();
     boolean ownerIdFilter = ownerId != null && !ownerId.isEmpty();
     if (nameFilter && ownerIdFilter) {
@@ -59,8 +60,8 @@ public class ProjectController {
 
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteProjects(
-      @RequestParam("name") String name, @RequestParam("ownerId") String ownerId) {
+  public void deleteProjects(@RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "ownerId", required = false) String ownerId) {
     boolean nameFilter = name != null && !name.isEmpty();
     boolean ownerIdFilter = ownerId != null && !ownerId.isEmpty();
     if (nameFilter && ownerIdFilter) {
@@ -81,13 +82,13 @@ public class ProjectController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void createProject(Project project) {
+  public void createProject(@RequestBody Project project) {
     projectService.createProject(project);
   }
 
   @PutMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void updateProject(Project project) {
+  public void updateProject(@RequestBody Project project) {
     projectService.updateProject(project);
   }
 }
