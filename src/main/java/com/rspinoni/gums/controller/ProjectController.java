@@ -2,6 +2,7 @@ package com.rspinoni.gums.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rspinoni.gums.model.Project;
@@ -25,11 +27,13 @@ public class ProjectController {
   }
 
   @GetMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
   public Project getProjectById(@PathVariable String id) {
     return projectService.getProjectById(id);
   }
 
   @GetMapping
+  @ResponseStatus(HttpStatus.OK)
   public List<Project> getProjects(
       @RequestParam("name") String name, @RequestParam("ownerId") String ownerId) {
     boolean nameFilter = name != null && !name.isEmpty();
@@ -48,11 +52,13 @@ public class ProjectController {
   }
 
   @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteProjectById(@PathVariable String id) {
     projectService.deleteProjectById(id);
   }
 
   @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteProjects(
       @RequestParam("name") String name, @RequestParam("ownerId") String ownerId) {
     boolean nameFilter = name != null && !name.isEmpty();
@@ -74,11 +80,13 @@ public class ProjectController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public void createProject(Project project) {
     projectService.createProject(project);
   }
 
   @PutMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateProject(Project project) {
     projectService.updateProject(project);
   }
