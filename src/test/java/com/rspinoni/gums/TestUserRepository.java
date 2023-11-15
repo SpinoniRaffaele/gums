@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,11 @@ public class TestUserRepository {
 
   @Autowired
   private UserRepository userRepository;
+
+  @AfterAll
+  public static void cleanUp(@Autowired UserRepository userRepository) {
+    userRepository.deleteAll();
+  }
 
   @Test
   @Order(0)
