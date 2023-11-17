@@ -18,6 +18,7 @@ public class User {
   @Id
   String id;
 
+  //the name is unique for users
   String name;
 
   int age;
