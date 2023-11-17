@@ -80,14 +80,8 @@ public class UserService {
     if (user.getAge() <= 0) {
       throw new InvalidRequestException("Invalid field: age");
     }
-    if (user.getPassword() == null || !passwordValidator.validatePassword(user.getPassword())) {
-      throw new InvalidRequestException("Invalid password, the password must match the following criteria: "
-          + "at least 8 characters long, contain at least one uppercase letter, "
-          + "one lowercase letter and one number");
-    }
-    if (user.getEmail() == null || !emailValidator.validateEmail(user.getEmail())) {
-      throw new InvalidRequestException("User email is invalid");
-    }
+    passwordValidator.validatePassword(user.getPassword());
+    emailValidator.validateEmail(user.getEmail());
     if (user.getName() == null || user.getName().isEmpty()) {
       throw new InvalidRequestException("User name cannot be empty");
     }
