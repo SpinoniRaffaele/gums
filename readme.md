@@ -5,7 +5,7 @@ This project is a spring application that provides a reactive REST API for manag
 The application stores data in the NoSQL MongoDB.
 
 ## TODO
-- Unit Tests
+- logging
 - Move to reactive implementation
 - add spring security and implement authentication
 - hash passwords
