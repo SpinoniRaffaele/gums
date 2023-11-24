@@ -20,6 +20,13 @@
   </properties>
 
   <dependencies>
+    <!-- maven -->
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>3.4.0</version>
+    </dependency>
+
     <!--spring-->
     <dependency>
       <groupId>org.springframework</groupId>
