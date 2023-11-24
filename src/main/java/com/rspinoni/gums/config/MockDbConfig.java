@@ -18,7 +18,7 @@ public class MockDbConfig extends AbstractMongoClientConfiguration {
 
   private final String TEST_DB_NAME = "test";
 
-  private final String CONNECTION_URI = "mongodb://localhost:27017/" + TEST_DB_NAME;
+  private final String CONNECTION_URI = "mongodb://localhost:27017";
 
   @Override
   protected void configureClientSettings(MongoClientSettings.Builder builder) {
