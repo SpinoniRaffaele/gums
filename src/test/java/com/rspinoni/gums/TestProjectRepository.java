@@ -18,13 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-import com.rspinoni.gums.config.MockDbConfig;
+import com.rspinoni.gums.config.MongoDBTestContainerConfig;
 import com.rspinoni.gums.model.Project;
 import com.rspinoni.gums.repository.ProjectRepository;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { MockDbConfig.class})
+@ContextConfiguration(classes = { MongoDBTestContainerConfig.class})
+@Testcontainers
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestProjectRepository {

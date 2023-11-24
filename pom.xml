@@ -16,6 +16,7 @@
     <org.springframework.version>6.0.11</org.springframework.version>
     <slf4jVersion>2.0.5</slf4jVersion>
     <mongodb.version>4.11.0</mongodb.version>
+    <testcontainer.version>1.18.1</testcontainer.version>
   </properties>
 
   <dependencies>
@@ -118,6 +119,21 @@
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>5.7.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainer.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mongodb</artifactId>
+      <version>${testcontainer.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${testcontainer.version}</version>
     </dependency>
   </dependencies>
 
