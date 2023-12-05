@@ -11,4 +11,3 @@ The application stores data in the NoSQL MongoDB.
 - hash passwords
 - Build UI with Three.js
 - Add docker support and export as a docker image
-- investigate swagger to document the API

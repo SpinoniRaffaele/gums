@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.rspinoni.gums.exceptions.InvalidRequestException;
 
 @Service
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:gums.properties")
 public class PasswordValidator {
 
   private final int MINIMUM_PASSWORD_LENGTH;

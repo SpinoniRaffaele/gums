@@ -10,7 +10,6 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.internal.MongoClientImpl;
 
 @Configuration
 @EnableMongoRepositories(basePackages = {"com.rspinoni.gums.repository"})
