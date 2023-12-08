@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.rspinoni.gums.model.Credentials;
 import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.service.UserService;
 
@@ -94,5 +95,20 @@ class UserControllerTest {
     userController.updateUser(USER);
 
     verify(userService).updateUser(USER);
+  }
+
+  @Test
+  public void testUpdatePassword() {
+    userController.updatePassword("1", USER);
+
+    verify(userService).updateUserPassword("1", USER.getPassword());
+  }
+
+  @Test
+  public void testCheckCredentials() {
+    Credentials credentials = Credentials.builder().password(USER.getPassword()).name(USER.getName()).build();
+    userController.checkUserCredentials(credentials);
+
+    verify(userService).checkUserCredentials(credentials);
   }
 }

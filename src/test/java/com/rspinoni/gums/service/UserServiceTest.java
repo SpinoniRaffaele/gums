@@ -17,9 +17,12 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.rspinoni.gums.exceptions.InvalidRequestException;
 import com.rspinoni.gums.exceptions.NotFoundException;
+import com.rspinoni.gums.model.Credentials;
+import com.rspinoni.gums.model.CredentialsStatus;
 import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.repository.UserRepository;
 import com.rspinoni.gums.service.utils.EmailValidator;
@@ -48,6 +51,9 @@ class UserServiceTest {
 
   @Mock
   private PasswordValidator passwordValidator;
+
+  @Mock
+  private PasswordEncoder passwordEncoder;
 
   @Captor
   private ArgumentCaptor<User> userCaptor;
@@ -242,5 +248,27 @@ class UserServiceTest {
     userService.deleteUserByName(USER.getName());
 
     verify(userRepository).deleteByName(USER.getName());
+  }
+
+  @Test
+  public void testUpdateUserPassword() {
+    when(userRepository.findById(USER.getId())).thenReturn(Optional.of(USER));
+    when(passwordEncoder.encode("newPasswordOO12_")).thenReturn("newPasswordOO12_" + "encoded");
+
+    userService.updateUserPassword(USER.getId(), "newPasswordOO12_");
+
+    verify(userRepository).save(userCaptor.capture());
+    assertEquals("newPasswordOO12_encoded", userCaptor.getValue().getPassword());
+  }
+
+  @Test
+  public void testCheckUserCredentials() {
+    when(userRepository.findByName(USER.getName())).thenReturn(Optional.of(USER));
+    when(passwordEncoder.matches(USER.getPassword(), USER.getPassword())).thenReturn(true);
+    Credentials credentials = Credentials.builder().password(USER.getPassword()).name(USER.getName()).build();
+
+    CredentialsStatus result = userService.checkUserCredentials(credentials);
+
+    assertEquals(CredentialsStatus.VALID, result);
   }
 }
