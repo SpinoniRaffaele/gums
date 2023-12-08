@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rspinoni.gums.model.Credentials;
+import com.rspinoni.gums.model.CredentialsStatus;
 import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.service.UserService;
 
@@ -71,5 +73,17 @@ public class UserController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateUser(@RequestBody User user) {
     userService.updateUser(user);
+  }
+
+  @PutMapping("/{id}/password")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updatePassword(@PathVariable String id, @RequestBody User user) {
+    userService.updateUserPassword(id, user.getPassword());
+  }
+
+  @PostMapping("/checkCredentials")
+  @ResponseStatus(HttpStatus.OK)
+  public CredentialsStatus checkUserCredentials(@RequestBody Credentials credentials) {
+    return userService.checkUserCredentials(credentials);
   }
 }

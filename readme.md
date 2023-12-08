@@ -6,6 +6,5 @@ The application stores data in the NoSQL MongoDB.
 
 ## TODO
 - Move to reactive implementation
-- hash passwords
 - Build UI with Three.js
 - Add docker support and export as a docker image

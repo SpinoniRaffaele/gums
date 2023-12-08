@@ -5,10 +5,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rspinoni.gums.exceptions.InvalidRequestException;
 import com.rspinoni.gums.exceptions.NotFoundException;
+import com.rspinoni.gums.model.Credentials;
+import com.rspinoni.gums.model.CredentialsStatus;
 import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.repository.UserRepository;
 import com.rspinoni.gums.service.utils.EmailValidator;
@@ -23,14 +26,16 @@ public class UserService {
 
   private final PasswordValidator passwordValidator;
 
-  //todo: encrypt password with BCryptPasswordEncoder once added spring-security dependency
+  private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserService(UserRepository userRepository, EmailValidator emailValidator, PasswordValidator passwordValidator)
+  public UserService(UserRepository userRepository, EmailValidator emailValidator, PasswordValidator passwordValidator,
+      PasswordEncoder passwordEncoder)
   {
     this.userRepository = userRepository;
     this.emailValidator = emailValidator;
     this.passwordValidator = passwordValidator;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public User getUserByName(String name) {
@@ -67,6 +72,7 @@ public class UserService {
 
   public void createUser(User user) {
     validateUserCreation(user);
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setId(UUID.randomUUID().toString());
     userRepository.insert(user);
   }
@@ -74,6 +80,22 @@ public class UserService {
   public void updateUser(User user) {
     validateUserUpdate(user);
     userRepository.save(user);
+  }
+
+  public void updateUserPassword(String id, String password) {
+    passwordValidator.validatePassword(password);
+    User user = getUserById(id);
+    user.setPassword(passwordEncoder.encode(password));
+    userRepository.save(user);
+  }
+
+  public CredentialsStatus checkUserCredentials(Credentials credentials) {
+    User user = getUserByName(credentials.getName());
+    if (passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
+      return CredentialsStatus.VALID;
+    } else {
+      return CredentialsStatus.INVALID;
+    }
   }
 
   private void validateUser(User user) {
@@ -113,6 +135,7 @@ public class UserService {
       if (!oldUser.getName().equals(user.getName())) {
         ensureUniqueName(user, users);
       }
+      user.setPassword(oldUser.getPassword());
       validateUser(user);
     } else {
       throw new InvalidRequestException("No user with the specified ID has been found in the database");
