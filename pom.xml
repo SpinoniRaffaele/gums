@@ -14,6 +14,7 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <org.springframework.version>6.0.11</org.springframework.version>
+    <org.springframework.security.version>6.2.0</org.springframework.security.version>
     <slf4jVersion>2.0.5</slf4jVersion>
     <mongodb.version>4.11.0</mongodb.version>
     <testcontainer.version>1.18.1</testcontainer.version>
@@ -72,6 +73,21 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
       <version>${org.springframework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${org.springframework.security.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>${org.springframework.security.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>${org.springframework.security.version}</version>
     </dependency>
 
     <!--mongo-->
