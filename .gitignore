@@ -1,2 +1,5 @@
 .idea
 target
+gums-ui/node_modules
+gums-ui/dist
+gums-ui/.angular
