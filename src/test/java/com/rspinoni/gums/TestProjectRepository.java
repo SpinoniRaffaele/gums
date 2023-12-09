@@ -21,11 +21,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.rspinoni.gums.config.MongoDBTestContainerConfig;
+import com.rspinoni.gums.config.SecurityConfig;
 import com.rspinoni.gums.model.Project;
 import com.rspinoni.gums.repository.ProjectRepository;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { MongoDBTestContainerConfig.class})
+@ContextConfiguration(classes = { MongoDBTestContainerConfig.class, SecurityConfig.class })
 @Testcontainers
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

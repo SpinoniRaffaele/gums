@@ -18,7 +18,6 @@ import com.rspinoni.gums.security.ApiKeyFilter;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
 @PropertySource("classpath:gums.properties")
 public class SecurityConfig {
 
@@ -34,6 +33,7 @@ public class SecurityConfig {
   //Stateless security enforced with API KEY header,
   //csrf disabled since it is useless in a stateless environment
   @Bean
+  @Profile("prod")
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .csrf(AbstractHttpConfigurer::disable)
