@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { GraphSectionComponent } from './graph-section/graph-section.component';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -10,9 +11,12 @@ import { GraphSectionComponent } from './graph-section/graph-section.component';
     GraphSectionComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+      HttpClientModule
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
