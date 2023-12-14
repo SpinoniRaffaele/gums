@@ -18,9 +18,25 @@ The application is meant to be a toy project that plays with spring, in particul
 - Maven
 - Github action
 
+In the frontend it uses:
+- Angular
+- Three.js
+- Karma
+
 The choice of not using spring boot is intentional, the goal is to understand how spring works under the hood.
+
+## UI Demo
+The full project is not deployed anywhere, 
+but the frontend app with fake backend calls is available in the project
+in order to run it, you need to have node 18 installed and then run the following commands:
+```bash
+cd gums-ui
+npm install
+npm run start:mock
+```
+Then you can open your browser at http://localhost:4200
 
 ## TODO
 - Move to reactive implementation
 - Build UI with Three.js
-- Add docker support and export as a docker image
+- Add docker and export the microservice as a docker image
