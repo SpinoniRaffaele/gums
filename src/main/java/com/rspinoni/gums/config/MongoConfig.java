@@ -20,12 +20,6 @@ import com.mongodb.MongoClientSettings;
 @EnableMongoRepositories(basePackages = {"com.rspinoni.gums.repository"})
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-  @Value("${db.mongo.user}")
-  private String user;
-
-  @Value("${db.mongo.password}")
-  private String password;
-
   @Value("${db.mongo.host}")
   private String host;
 
@@ -43,7 +37,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
   @Override
   protected void configureClientSettings(MongoClientSettings.Builder builder) {
     builder.applyConnectionString(new ConnectionString(
-        "mongodb://" + user + ":" + password + "@" + host + ":" + port + "/" + database));
+        "mongodb://" + host + ":" + port + "/" + database));
   }
 
   @Override

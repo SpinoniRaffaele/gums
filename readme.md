@@ -25,6 +25,15 @@ In the frontend it uses:
 
 The choice of not using spring boot is intentional, the goal is to understand how spring works under the hood.
 
+## Run the backend application
+In order to run the application you need to have docker installed and then run the following command
+from the root directory of the project:
+```bash
+docker compose up
+```
+it will pull the mongo image and start the application on port 8080 you can access the application at 
+http://localhost:8080/gums-1/
+
 ## UI Demo
 The full project is not deployed anywhere, 
 but the frontend app with fake backend calls is available in the project

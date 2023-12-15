@@ -6,7 +6,7 @@
 
   <groupId>com.rspioni.gums</groupId>
   <artifactId>gums</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1</version>
   <packaging>war</packaging>
 
   <properties>

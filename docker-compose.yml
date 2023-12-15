@@ -1,0 +1,14 @@
+version: "1"
+services:
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+    container_name: "mongo"
+  gums:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: "gums"
+    links:
+      - mongo
