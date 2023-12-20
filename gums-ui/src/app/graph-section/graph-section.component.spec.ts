@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GraphSectionComponent } from './graph-section.component';
+import { HttpClient, HttpHandler } from "@angular/common/http";
 
 describe('GraphSectionComponent', () => {
   let component: GraphSectionComponent;
@@ -8,7 +9,8 @@ describe('GraphSectionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GraphSectionComponent]
+      declarations: [GraphSectionComponent],
+      providers: [HttpClient, HttpHandler]
     });
     fixture = TestBed.createComponent(GraphSectionComponent);
     component = fixture.componentInstance;
