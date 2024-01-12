@@ -1,11 +1,11 @@
+const usersMock = require("./user");
 const PROXY_CONFIG = {
-  '/': {
-    'target': 'http://localhost:8080',
+  '/gums-1': {
     'bypass': function (req, res, proxyOptions) {
       switch (req.url) {
-        case '/users':
+        case '/gums-1/user':
           console.log(req.method);
-          res.end(JSON.stringify({response: "ok"}));
+          res.end(JSON.stringify(usersMock.users));
           return true;
       }
     }

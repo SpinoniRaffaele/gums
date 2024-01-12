@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "author": "Raffaele Spinoni",
   "scripts": {
-    "start:mock": "ng serve --proxy-config proxy.conf.js",
+    "start:mock": "ng serve --proxy-config mock-data/proxy.conf.js",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
-    "test": "ng test"
+    "test": "ng test",
+    "test:ci": "ng test --karma-config=karma.config.ci.js"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +19,8 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@ngrx/effects": "^16.2.0",
+    "@ngrx/store": "^16.2.0",
     "rxjs": "~7.8.0",
     "three": "^0.159.0",
     "tslib": "^2.3.0",
