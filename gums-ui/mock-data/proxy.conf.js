@@ -4,9 +4,14 @@ const PROXY_CONFIG = {
     'bypass': function (req, res, proxyOptions) {
       switch (req.url) {
         case '/gums-1/user':
-          console.log(req.method);
-          res.end(JSON.stringify(usersMock.users));
-          return true;
+          if (req.method === "GET") {
+            res.end(JSON.stringify(usersMock.users));
+            return true;
+          }
+          if (req.method === "POST") {
+            res.end();
+            return true;
+          }
       }
     }
   }

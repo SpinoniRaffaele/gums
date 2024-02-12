@@ -17,8 +17,22 @@ export class User {
       public name: string,
       public email: string,
       public age: number,
-      isAdmin: boolean
+      public isAdmin: boolean
   ) {}
+}
+
+export class FullUser extends User {
+  constructor(
+      public id: string,
+      public name: string,
+      public email: string,
+      public age: number,
+      public isAdmin: boolean,
+      public adminKey: string,
+      public password: string
+  ) {
+    super(id, name, email, age, isAdmin);
+  }
 }
 
 export class Project {

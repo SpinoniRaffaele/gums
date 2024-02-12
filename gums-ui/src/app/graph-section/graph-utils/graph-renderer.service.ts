@@ -20,27 +20,29 @@ export class GraphRendererService {
 
   elements = [];
 
-  USER_COLOR = 0xff0000;
+  readonly USER_COLOR = 0xff0000;
 
-  INITIAL_CUBE_SIZE = 10;
+  readonly INITIAL_CUBE_SIZE = 10;
+
+  readonly WIDTH_PERCENTAGE = 0.75;
 
   constructor(private readonly physicsService: PhysicsService) {}
 
   renderGraph(graphState: GraphState) {
-      this.elements = this.addRandomUsers(graphState.users);
+    this.addRandomUsers(graphState.users);
   }
 
   initializeScene(domElementRenderer) {
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(window.innerWidth * this.WIDTH_PERCENTAGE, window.innerHeight);
     domElementRenderer.appendChild(this.renderer.domElement);
 
     this.clock = new THREE.Clock();
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color("rgb(44,45,57)");
+    this.scene.background = new THREE.Color("rgb(52,58,69)");
     this.camera = new THREE.PerspectiveCamera(
         75,
-        window.innerWidth / window.innerHeight,
+        window.innerWidth * this.WIDTH_PERCENTAGE / window.innerHeight,
         0.1,
         1000
     );
@@ -58,17 +60,19 @@ export class GraphRendererService {
   }
 
   addRandomUsers(users: User[]) {
-    const result: Element[] = [];
     for (let user of users) {
       const particleGeometry = new THREE.SphereGeometry(1, 8, 8);
-      const particleMaterial = new THREE.MeshBasicMaterial({color: this.USER_COLOR});
+      const particleMaterial = new THREE.MeshBasicMaterial({color: this.generateRandomColor()});
       const userNativeElement = new THREE.Mesh(particleGeometry, particleMaterial);
       userNativeElement.position.x = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
       userNativeElement.position.y = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
       userNativeElement.position.z = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
       this.scene.add(userNativeElement);
-      result.push(new Element(userNativeElement, ElementType.USER, new THREE.Vector3(0, 0, 0), user.id));
+      this.elements.push(new Element(userNativeElement, ElementType.USER, new THREE.Vector3(0, 0, 0), user.id));
     }
-    return result;
+  }
+  
+  generateRandomColor(): string {
+    return "#" + Math.floor(Math.random() * 16777215).toString(16);
   }
 }
