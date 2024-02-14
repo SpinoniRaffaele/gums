@@ -38,7 +38,7 @@ export class UserService {
       .subscribe({
         next: _ => {
           this.store.dispatch(AddUserCompleted({ newUser: user }))
-          this.graphRenderer.addRandomUsers([user]);
+          this.graphRenderer.renderNewUsers([user]);
         },
         error: error => {
           alert(error.error.message);

@@ -27,7 +27,7 @@ export class PhysicsService {
     }
   }
 
-  getTotalForce(element: Element, elements: Element[]): THREE.Vector3 {
+  private getTotalForce(element: Element, elements: Element[]): THREE.Vector3 {
     let totalForce = new THREE.Vector3(0, 0, 0);
     for (let otherElement of elements) {
       if (element.nativeObject.id !== otherElement.nativeObject.id) {
@@ -43,7 +43,7 @@ export class PhysicsService {
     return totalForce;
   }
 
-  getRepulsiveForce(distance) {
+  private getRepulsiveForce(distance) {
     if (distance > this.MAX_DISTANCE) {
       return 0;
     } else {
