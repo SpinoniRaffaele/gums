@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "gums-ui:build:production"
+              "buildTarget": "gums-ui:build:production"
             },
             "development": {
-              "browserTarget": "gums-ui:build:development"
+              "buildTarget": "gums-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gums-ui:build"
+            "buildTarget": "gums-ui:build"
           }
         },
         "test": {
