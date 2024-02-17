@@ -46,5 +46,5 @@ npm run start:mock
 Then you can open your browser at http://localhost:4200
 
 ## TODO
-- Move to reactive implementation
+- Complete Cucumber tests
 - Build UI with Three.js
