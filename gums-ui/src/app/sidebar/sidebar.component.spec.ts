@@ -5,23 +5,65 @@ import { UserService } from '../shared/user.service';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { provideMockStore } from '@ngrx/store/testing';
+import { FullUser } from '../graph-section/graph-utils/graph.datamodel';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
+  let mockUserService = { addUser: jest.fn() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SidebarComponent],
       imports: [ReactiveFormsModule],
-      providers: [UserService, FormBuilder, HttpClient, HttpHandler, provideMockStore()]
+      providers: [
+        {provide: UserService, useValue: mockUserService},
+        FormBuilder
+      ]
     });
     fixture = TestBed.createComponent(SidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should add valid user', () => {
+    jest.spyOn(mockUserService, 'addUser');
+    component.userFormGroup.controls['name'].setValue('John Doe');
+    component.userFormGroup.controls['age'].setValue(24);
+    component.userFormGroup.controls['email'].setValue('email');
+    component.userFormGroup.controls['password'].setValue('password');
+    component.userFormGroup.controls['isAdmin'].setValue(false);
+
+    component.addUser();
+
+    expect(mockUserService.addUser).toHaveBeenCalledWith(
+        new FullUser("DUMMY", "John Doe", "email", 24, false, "", "password"));
+  });
+
+  it('should not add invalid user', () => {
+    jest.spyOn(mockUserService, 'addUser');
+    component.userFormGroup.controls['name'].setValue('');
+    component.userFormGroup.controls['age'].setValue(25);
+    component.userFormGroup.controls['email'].setValue('email');
+    component.userFormGroup.controls['password'].setValue('password');
+    component.userFormGroup.controls['isAdmin'].setValue(false);
+
+    component.addUser();
+
+    expect(mockUserService.addUser).toHaveBeenCalledTimes(0);
+  });
+
+  it('should not add admin user without adminKey', () => {
+    jest.spyOn(mockUserService, 'addUser');
+    component.userFormGroup.controls['name'].setValue('john doe');
+    component.userFormGroup.controls['age'].setValue(25);
+    component.userFormGroup.controls['email'].setValue('email');
+    component.userFormGroup.controls['password'].setValue('password');
+    component.userFormGroup.controls['isAdmin'].setValue(true);
+    component.userFormGroup.controls['adminKey'].setValue('');
+
+    component.addUser();
+
+    expect(mockUserService.addUser).toHaveBeenCalledTimes(0);
   });
 });

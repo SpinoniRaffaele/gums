@@ -42,7 +42,7 @@ export class SidebarComponent {
     }
   }
 
-  isUserFormValid() {
+  private isUserFormValid() {
     const isAdmin = this.userFormGroup.controls['isAdmin'].value;
     const adminKey = this.userFormGroup.controls['adminKey'].value;
     return this.userFormGroup.valid && ((isAdmin && adminKey !== '') || !isAdmin);
