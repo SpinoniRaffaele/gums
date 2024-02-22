@@ -21,7 +21,7 @@ The application is meant to be a toy project that plays with spring, in particul
 In the frontend it uses:
 - Angular
 - Three.js
-- Karma
+- Jest
 
 The choice of not using spring boot is intentional, the goal is to understand how spring works under the hood.
 
@@ -47,4 +47,4 @@ Then you can open your browser at http://localhost:4200
 
 ## TODO
 - Complete Cucumber tests
-- Build UI with Three.js
+- complete UI with Three.js
