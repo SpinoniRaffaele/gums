@@ -8,11 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,7 +26,6 @@ import com.rspinoni.gums.repository.UserRepository;
 @ContextConfiguration(classes = {MongoDBTestContainerConfig.class, SecurityConfig.class})
 @Testcontainers
 @ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestUserRepository {
 
   private static final String ID = UUID.randomUUID().toString();
@@ -43,13 +39,12 @@ public class TestUserRepository {
   @Autowired
   private UserRepository userRepository;
 
-  @AfterAll
-  public static void cleanUp(@Autowired UserRepository userRepository) {
+  @AfterEach
+  public void cleanUp() {
     userRepository.deleteAll();
   }
 
   @Test
-  @Order(0)
   public void testInsert() {
     userRepository.insert(USER_1);
 
@@ -57,16 +52,16 @@ public class TestUserRepository {
   }
 
   @Test
-  @Order(1)
   public void testRetrieval() {
+    userRepository.insert(USER_1);
     Optional<User> user = userRepository.findById(ID);
     assertFalse(user.isEmpty());
     assertEquals("UserName", user.get().getName(), "User name should be UserName");
   }
 
   @Test
-  @Order(2)
   public void testUpdate() {
+    userRepository.insert(USER_1);
     userRepository.save(USER_1_MODIFIED);
 
     List<User> users = userRepository.findAll();
@@ -82,8 +77,8 @@ public class TestUserRepository {
   }
 
   @Test
-  @Order(3)
   public void testGetByName() {
+    userRepository.insert(USER_1_MODIFIED);
     Optional<User> user = userRepository.findByName("UserName");
     assertFalse(user.isEmpty());
     assertEquals("UserName", user.get().getName(), "User name should be UserName");
@@ -91,16 +86,16 @@ public class TestUserRepository {
   }
 
   @Test
-  @Order(4)
   public void testDeleteById() {
+    userRepository.insert(USER_1);
     userRepository.deleteById(ID);
 
     List<User> users = userRepository.findAll();
 
     assertEquals(0, users.size());
   }
+
   @Test
-  @Order(5)
   public void testDeleteByName() {
     userRepository.insert(USER_1);
     userRepository.deleteByName("UserName");

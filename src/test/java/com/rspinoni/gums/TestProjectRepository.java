@@ -8,11 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,7 +26,6 @@ import com.rspinoni.gums.repository.ProjectRepository;
 @ContextConfiguration(classes = { MongoDBTestContainerConfig.class, SecurityConfig.class })
 @Testcontainers
 @ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestProjectRepository {
 
   private static final String ID = UUID.randomUUID().toString();
@@ -59,13 +55,12 @@ public class TestProjectRepository {
   @Autowired
   private ProjectRepository projectRepository;
 
-  @AfterAll
-  public static void cleanUp(@Autowired ProjectRepository projectRepository) {
+  @AfterEach
+  public void cleanUp() {
     projectRepository.deleteAll();
   }
 
   @Test
-  @Order(1)
   public void testInsert() {
     projectRepository.insert(PROJECT);
 
@@ -82,8 +77,8 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(2)
   public void testRetrieveById() {
+    projectRepository.insert(PROJECT);
     projectRepository.insert(PROJECT_2);
     Project project = projectRepository.findById(ID).get();
 
@@ -98,8 +93,9 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(3)
   public void testRetrieveByName() {
+    projectRepository.insert(PROJECT);
+    projectRepository.insert(PROJECT_2);
     List<Project> projects = projectRepository.findAllByName("name");
 
     assertEquals(2, projects.size());
@@ -110,8 +106,9 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(4)
   public void testRetrieveByOwnerId() {
+    projectRepository.insert(PROJECT);
+    projectRepository.insert(PROJECT_2);
     List<Project> projects = projectRepository.findAllByOwnerId("ownerId");
 
     assertEquals(1, projects.size());
@@ -119,8 +116,9 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(5)
   public void testRetrieveByOwnerIdAndName() {
+    projectRepository.insert(PROJECT);
+    projectRepository.insert(PROJECT_2);
     List<Project> projects = projectRepository.findAllByNameAndOwnerId("name", "ownerId");
 
     assertEquals(1, projects.size());
@@ -128,8 +126,9 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(6)
   public void testDeleteByName() {
+    projectRepository.insert(PROJECT);
+    projectRepository.insert(PROJECT_2);
     projectRepository.deleteAllByName("name");
 
     List<Project> projects = projectRepository.findAll();
@@ -137,7 +136,6 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(7)
   public void testDeleteByOwnerId() {
     projectRepository.insert(PROJECT);
     projectRepository.insert(PROJECT_2);
@@ -149,9 +147,9 @@ public class TestProjectRepository {
   }
 
   @Test
-  @Order(8)
   public void testDeleteByOwnerIdAndName() {
     projectRepository.insert(PROJECT);
+    projectRepository.insert(PROJECT_2);
     projectRepository.deleteAllByNameAndOwnerId("name", "ownerId");
 
     List<Project> projects = projectRepository.findAll();

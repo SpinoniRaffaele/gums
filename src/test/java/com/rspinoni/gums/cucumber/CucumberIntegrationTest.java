@@ -1,4 +1,4 @@
-package com.rspinoni.gums;
+package com.rspinoni.gums.cucumber;
 
 import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;
@@ -12,6 +12,8 @@ import com.rspinoni.gums.config.MongoDBTestContainerConfig;
 import com.rspinoni.gums.config.SecurityConfig;
 import com.rspinoni.gums.controller.ProjectController;
 import com.rspinoni.gums.controller.UserController;
+import com.rspinoni.gums.repository.ProjectRepository;
+import com.rspinoni.gums.repository.UserRepository;
 import io.cucumber.spring.CucumberContextConfiguration;
 
 @Suite
@@ -28,4 +30,10 @@ public class CucumberIntegrationTest {
 
   @Autowired
   protected ProjectController projectController;
+
+  @Autowired
+  protected UserRepository userRepo;
+
+  @Autowired
+  protected ProjectRepository projectRepo;
 }
