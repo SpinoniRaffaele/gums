@@ -2,9 +2,10 @@ import { Injectable } from "@angular/core";
 import { GraphState } from "../graph.reducer";
 import { Element, ElementType, User } from "./graph.datamodel";
 import * as THREE from 'three';
-import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
+import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { PhysicsService } from "./physics.service";
+import gsap from "gsap";
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +30,17 @@ export class GraphRendererService {
 
   labelRenderer;
 
-  readonly USER_COLOR = 0xff0000;
+  pointedObject = undefined;
+
+  orbit;
 
   readonly INITIAL_CUBE_SIZE = 10;
 
   readonly WIDTH_PERCENTAGE = 0.75;
+
+  readonly ANIMATION_DURATION = 1;
+
+  readonly RELATIVE_DISTANCE_AFTER_FOCUS = 1.3;
 
   constructor(private readonly physicsService: PhysicsService) {}
 
@@ -56,18 +63,15 @@ export class GraphRendererService {
 
     this.initializeCamera();
 
-    const light = new THREE.DirectionalLight( 0xffffff, 3 );
-    this.scene.add( light );
+    this.initializeLights();
 
     this.pointer = new THREE.Vector2();
     this.raycaster = new THREE.Raycaster();
 
-    window.addEventListener( 'pointermove', (event) => {
-      this.pointer.x = ((event.clientX - (window.innerWidth * (1 - this.WIDTH_PERCENTAGE))) / (window.innerWidth * this.WIDTH_PERCENTAGE)) * 2 - 1;
-      this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    });
+    this.createMouseMovementListener();
+    this.createFocusClickEventListener();
 
-    const orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
+    this.orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
 
     const animate = () => {
       requestAnimationFrame(animate);
@@ -87,7 +91,22 @@ export class GraphRendererService {
     this.labelRenderer.setSize( window.innerWidth * this.WIDTH_PERCENTAGE, window.innerHeight );
     this.labelRenderer.domElement.style.position = 'absolute';
     this.labelRenderer.domElement.style.top = '0px';
+    this.labelRenderer.domElement.style.color = 'white';
     domElementRenderer.appendChild( this.labelRenderer.domElement );
+  }
+
+  private createMouseMovementListener() {
+    window.addEventListener( 'pointermove', (event) => {
+      this.pointer.x = ((event.clientX - (window.innerWidth * (1 - this.WIDTH_PERCENTAGE))) / (window.innerWidth * this.WIDTH_PERCENTAGE)) * 2 - 1;
+      this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    });
+  }
+
+  private initializeLights() {
+    const light = new THREE.DirectionalLight( 0xcccccc, 3 );
+    this.scene.add( light );
+    const ambientLight = new THREE.AmbientLight( 0xbbbbbb );
+    this.scene.add( ambientLight );
   }
 
   private initializeCamera() {
@@ -109,7 +128,7 @@ export class GraphRendererService {
 
   private addRandomUsers(users: User[]) {
     for (let user of users) {
-      const particleGeometry = new THREE.SphereGeometry(1, 20, 20);
+      const particleGeometry = new THREE.SphereGeometry(2, 40, 40);
       const particleMaterial = new THREE.MeshStandardMaterial({color: this.generateRandomColor()});
       const userNativeElement = new THREE.Mesh(particleGeometry, particleMaterial);
       userNativeElement.position.x = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
@@ -126,12 +145,14 @@ export class GraphRendererService {
   private updateRaycaster() {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const intersects = this.raycaster.intersectObjects(this.scene.children, false);
+    this.pointedObject = undefined;
     if (this.intersected) {
       this.intersected.material.emissive.setHex(0x000000);
     }
     if (intersects.length > 0) {
+      this.pointedObject = intersects[0].object;
       this.intersected = intersects[0].object;
-      intersects[0].object.material.emissive.setHex(0x858585);
+      intersects[0].object.material.emissive.setHex(0x432063);
     }
   }
   
@@ -148,5 +169,27 @@ export class GraphRendererService {
     userNameLabel.position.set( userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z );
     userNameLabel.center.set( 0, 0 );
     userNativeElement.add( userNameLabel );
+  }
+
+  private createFocusClickEventListener() {
+    window.addEventListener('click', (e) => {
+      if (this.pointedObject) {
+        var aabb = new THREE.Box3().setFromObject( this.pointedObject );
+        var center = aabb.getCenter( new THREE.Vector3() );
+
+        gsap.to( this.camera.position, {
+          duration: this.ANIMATION_DURATION,
+          x: center.x * this.RELATIVE_DISTANCE_AFTER_FOCUS,
+          y: center.y * this.RELATIVE_DISTANCE_AFTER_FOCUS,
+          z: center.z * this.RELATIVE_DISTANCE_AFTER_FOCUS,
+          onUpdate: () => {
+            this.orbit.update();
+          },
+          onComplete: () => {
+            this.orbit.update();
+          }
+        } );
+      }
+    });
   }
 }
