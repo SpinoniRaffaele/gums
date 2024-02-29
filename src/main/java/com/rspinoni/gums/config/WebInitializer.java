@@ -19,7 +19,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
   @Override
   protected Class<?>[] getRootConfigClasses() {
-    return new Class[]{SecurityConfig.class};
+    return new Class[]{SecurityConfig.class, HttpSessionConfig.class};
   }
 
   @Override
