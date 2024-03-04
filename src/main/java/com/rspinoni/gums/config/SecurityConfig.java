@@ -1,9 +1,11 @@
 package com.rspinoni.gums.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +19,14 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
+@PropertySource("classpath:gums.properties")
 public class SecurityConfig {
+
+  @Value("${application.admin.password}")
+  private String adminPassword;
+
+  @Value("${application.admin.username}")
+  private String adminUsername;
 
   @Bean
   PasswordEncoder encoder(){
@@ -29,6 +38,7 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
         .authorizeHttpRequests((authorize) -> authorize
+            .requestMatchers("/auth/login").permitAll()
             .anyRequest().authenticated()
         )
         .requestCache((requestCache) -> requestCache
@@ -44,6 +54,6 @@ public class SecurityConfig {
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth, PasswordEncoder encoder) throws Exception {
     auth.inMemoryAuthentication()
-        .withUser(User.withUsername("user").password(encoder.encode("password")).roles("USER").build());
+        .withUser(User.withUsername(adminUsername).password(encoder.encode(adminPassword)).roles("ADMIN").build());
   }
 }

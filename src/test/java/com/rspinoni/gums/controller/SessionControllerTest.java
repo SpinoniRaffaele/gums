@@ -1,7 +1,6 @@
 package com.rspinoni.gums.controller;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,15 +15,13 @@ public class SessionControllerTest {
   @Mock
   private HttpSession session;
 
-  private final SessionController controller = new SessionController();
+  private final SessionController controller = new SessionController(10);
 
   @Test
   public void testLogin() {
-    when(session.getId()).thenReturn("124");
+    controller.login(session);
 
-    String result = controller.login(session);
-
-    assert result.equals("124");
+    verify(session).setMaxInactiveInterval(10);
   }
 
   @Test

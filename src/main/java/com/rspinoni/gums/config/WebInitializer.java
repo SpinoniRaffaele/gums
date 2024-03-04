@@ -19,12 +19,12 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
   @Override
   protected Class<?>[] getRootConfigClasses() {
-    return new Class[]{SecurityConfig.class, HttpSessionConfig.class};
+    return new Class[]{};
   }
 
   @Override
   protected Class<?>[] getServletConfigClasses() {
-    return new Class[]{MongoConfig.class, WebConfig.class};
+    return new Class[]{MongoConfig.class, WebConfig.class, SecurityConfig.class, HttpSessionConfig.class};
   }
 
   @Override

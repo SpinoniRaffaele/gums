@@ -1,5 +1,6 @@
 package com.rspinoni.gums.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -11,18 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/auth")
 @PropertySource("classpath:gums.properties")
 public class SessionController {
 
-  @Value("${application.session.timeout}")
-  private int sessionTimeout;
+  private final int sessionTimeout;
+
+  @Autowired
+  public SessionController(@Value("${application.session.timeout}") int sessionTimeout) {
+    this.sessionTimeout = sessionTimeout;
+  }
 
   @GetMapping("/login")
   @ResponseStatus(HttpStatus.OK)
-  public String login(HttpSession session) {
+  public void login(HttpSession session) {
     session.setMaxInactiveInterval(sessionTimeout);
-    return session.getId();
   }
 
   @GetMapping("/logout")
