@@ -2,6 +2,7 @@ package com.rspinoni.gums.controller.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,6 +17,12 @@ import com.rspinoni.gums.model.exception.ErrorMessage;
  */
 @ControllerAdvice
 public class GeneralExceptionController {
+
+  @ExceptionHandler(value = AuthenticationException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ResponseEntity<ErrorMessage> handleAuthenticationException() {
+    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+  }
 
   @ExceptionHandler(value = InvalidRequestException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)

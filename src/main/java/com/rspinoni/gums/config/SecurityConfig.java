@@ -14,8 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.NullRequestCache;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
@@ -28,9 +31,17 @@ public class SecurityConfig {
   @Value("${application.admin.username}")
   private String adminUsername;
 
+  @Autowired
+  private AuthenticationEntryPoint authenticationEntryPoint;
+
   @Bean
   PasswordEncoder encoder(){
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  HandlerExceptionResolver handlerExceptionResolver() {
+    return new ExceptionHandlerExceptionResolver();
   }
 
   @Bean
@@ -45,6 +56,9 @@ public class SecurityConfig {
             .requestCache(new NullRequestCache())
         )
         .httpBasic(Customizer.withDefaults())
+        .exceptionHandling((exceptionHandling) -> exceptionHandling
+            .authenticationEntryPoint(authenticationEntryPoint)
+        )
         .sessionManagement((sessionManagement) -> sessionManagement
             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
