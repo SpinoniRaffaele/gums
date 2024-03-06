@@ -1,4 +1,4 @@
-package com.rspinoni.gums.config;
+package com.rspinoni.gums.config.security;
 
 import javax.sql.DataSource;
 

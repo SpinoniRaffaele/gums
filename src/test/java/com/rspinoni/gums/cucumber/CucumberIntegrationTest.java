@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.rspinoni.gums.config.MongoDBTestContainerConfig;
-import com.rspinoni.gums.config.SecurityConfig;
+import com.rspinoni.gums.config.security.SecurityConfig;
 import com.rspinoni.gums.controller.ProjectController;
 import com.rspinoni.gums.controller.UserController;
 import com.rspinoni.gums.repository.ProjectRepository;

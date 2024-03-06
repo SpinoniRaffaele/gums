@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.rspinoni.gums.config.MongoDBTestContainerConfig;
-import com.rspinoni.gums.config.SecurityConfig;
+import com.rspinoni.gums.config.security.SecurityConfig;
 import com.rspinoni.gums.model.User;
 import com.rspinoni.gums.repository.UserRepository;
 

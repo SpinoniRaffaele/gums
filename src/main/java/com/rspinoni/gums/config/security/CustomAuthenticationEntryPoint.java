@@ -1,4 +1,4 @@
-package com.rspinoni.gums.security;
+package com.rspinoni.gums.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -12,8 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+  private final HandlerExceptionResolver handlerExceptionResolver;
+
   @Autowired
-  private HandlerExceptionResolver handlerExceptionResolver;
+  public CustomAuthenticationEntryPoint(HandlerExceptionResolver handlerExceptionResolver) {
+    this.handlerExceptionResolver = handlerExceptionResolver;
+  }
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,

@@ -1,4 +1,4 @@
-package com.rspinoni.gums.config;
+package com.rspinoni.gums.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +10,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +19,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
@@ -40,14 +41,10 @@ public class SecurityConfig {
   }
 
   @Bean
-  HandlerExceptionResolver handlerExceptionResolver() {
-    return new ExceptionHandlerExceptionResolver();
-  }
-
-  @Bean
   @Profile("prod")
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
+        .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests((authorize) -> authorize
             .requestMatchers("/auth/login").permitAll()
             .anyRequest().authenticated()
@@ -63,6 +60,12 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
         .build();
+  }
+
+  @Bean
+  @Profile("test")
+  public HandlerExceptionResolver exceptionResolver() {
+    return new DefaultHandlerExceptionResolver();
   }
 
   @Autowired

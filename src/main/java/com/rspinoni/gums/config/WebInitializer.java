@@ -5,6 +5,8 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.rspinoni.gums.config.security.HttpSessionConfig;
+import com.rspinoni.gums.config.security.SecurityConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 
