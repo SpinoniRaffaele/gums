@@ -90,8 +90,8 @@ public class UserService {
   }
 
   public CredentialsStatus checkUserCredentials(Credentials credentials) {
-    User user = getUserByName(credentials.getName());
-    if (passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
+    User user = getUserByName(credentials.name());
+    if (passwordEncoder.matches(credentials.password(), user.getPassword())) {
       return CredentialsStatus.VALID;
     } else {
       return CredentialsStatus.INVALID;

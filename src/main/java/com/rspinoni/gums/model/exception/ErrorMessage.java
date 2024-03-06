@@ -1,11 +1,3 @@
 package com.rspinoni.gums.model.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-@Data
-@AllArgsConstructor
-public class ErrorMessage {
-
-    private String message;
-}
+public record ErrorMessage(String message) { }
