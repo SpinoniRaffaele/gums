@@ -13,15 +13,18 @@ The application is meant to be a toy project that plays with spring, in particul
 - Spring Security
 - JUnit 5
 - Mockito
+- Cucumber
 - MongoDB
 - Lombok
-- Maven
-- Github action
 
 In the frontend it uses:
 - Angular
 - Three.js
 - Jest
+
+Building/CI:
+- Maven
+- Github action
 
 The choice of not using spring boot is intentional, the goal is to understand how spring works under the hood.
 
