@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
@@ -44,7 +45,13 @@ public class SecurityConfig {
   @Profile("prod")
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
-        .csrf(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)  // disable csrf as the application is stateless and not using cookies
+        .headers(headers ->
+        headers.xssProtection(
+            xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK) // enable xss protection
+        ).contentSecurityPolicy(
+            cps -> cps.policyDirectives("script-src 'self'")  // allow js scripts only from the same origin
+        ))
         .authorizeHttpRequests((authorize) -> authorize
             .requestMatchers("/auth/login").permitAll()
             .anyRequest().authenticated()
@@ -52,7 +59,7 @@ public class SecurityConfig {
         .requestCache((requestCache) -> requestCache
             .requestCache(new NullRequestCache())
         )
-        .httpBasic(Customizer.withDefaults())
+        .httpBasic(Customizer.withDefaults())  // use basic authentication for login
         .exceptionHandling((exceptionHandling) -> exceptionHandling
             .authenticationEntryPoint(authenticationEntryPoint)
         )
