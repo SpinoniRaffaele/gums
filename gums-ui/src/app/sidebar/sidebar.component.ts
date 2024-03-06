@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../shared/user.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FullUser } from '../graph-section/graph-utils/graph.datamodel';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +15,7 @@ export class SidebarComponent {
   
   constructor(
     private userService: UserService,
+    private loginService: AuthService,
     private formBuilder: FormBuilder
   ) {
     this.userFormGroup = this.formBuilder.group(
@@ -40,6 +42,10 @@ export class SidebarComponent {
     } else {
       alert("invalid user data");
     }
+  }
+
+  logout() {
+    this.loginService.logout();
   }
 
   private isUserFormValid() {

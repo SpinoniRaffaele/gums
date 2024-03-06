@@ -1,0 +1,5 @@
+<form [formGroup]="loginFormGroup">
+    <input type="text" placeholder="username" [formControl]="loginFormGroup.controls['username']">
+    <input type="password" placeholder="password" [formControl]="loginFormGroup.controls['password']">
+    <button type="submit" (click)="submit()">Login</button>
+</form>

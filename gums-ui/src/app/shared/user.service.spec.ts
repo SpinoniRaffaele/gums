@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { provideMockStore } from '@ngrx/store/testing';
 import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
 import { of } from 'rxjs';
