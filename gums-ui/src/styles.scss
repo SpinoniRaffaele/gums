@@ -1,4 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'sass:map';
+@import "../node_modules/@angular/material/core/theming/palette";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.login-form {
+  height: 100%;
+  width: 100%;
+}
+
+.center {
+  width: min-content;
+  margin: 0 auto;
+}
+
+.background-color {
+  background-color: map.get($dark-theme-background-palette, background);
+}
+
+.background-transparent {
+  background-color: transparent;
+}
+
+.no-border {
+  border: none;
+}
+
+.text-color {
+  color: map.get($dark-theme-foreground-palette, text);
+}
+
+.min-width-p {
+  min-width: min-content;
+  padding: 10%;
+}

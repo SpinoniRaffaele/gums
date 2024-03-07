@@ -11,6 +11,8 @@ export class LoginComponent {
 
   loginFormGroup: FormGroup;
 
+  hide = true;
+
   constructor(
       private loginService: AuthService,
       private formBuilder: FormBuilder

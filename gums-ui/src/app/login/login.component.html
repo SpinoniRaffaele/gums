@@ -1,5 +1,29 @@
-<form [formGroup]="loginFormGroup">
-    <input type="text" placeholder="username" [formControl]="loginFormGroup.controls['username']">
-    <input type="password" placeholder="password" [formControl]="loginFormGroup.controls['password']">
-    <button type="submit" (click)="submit()">Login</button>
+<form [formGroup]="loginFormGroup" class="login-form background-color">
+    <br>
+        <H1 class="center title text-color">Login</H1>
+        <br>
+    <mat-card class="min-width-p center">
+        <br>
+    <div class="center">
+            <mat-form-field appearance="outline">
+                <mat-label>Enter your Username</mat-label>
+                <input type="text" matInput placeholder="Username" [formControl]="loginFormGroup.controls['username']">
+            </mat-form-field>
+        </div>
+        <div class="center">
+            <mat-form-field appearance="outline">
+                <mat-label>Enter your password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" [formControl]="loginFormGroup.controls['password']">
+                <button mat-icon-button matSuffix (click)="hide = !hide"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide"
+                        class="background-transparent no-border">
+                    <mat-icon style="color: white">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="center">
+            <button mat-raised-button color="primary" type="submit" (click)="submit()" class="center">Login</button>
+        </div>
+        <br>
+    </mat-card>
 </form>
