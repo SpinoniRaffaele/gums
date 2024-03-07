@@ -1,10 +1,10 @@
-<form [formGroup]="loginFormGroup" class="login-form background-color">
+<form [formGroup]="loginFormGroup" class="full-screen background-color">
     <br>
-        <H1 class="center title text-color">Login</H1>
-        <br>
+    <H1 class="center-text text-color">Login</H1>
+    <br>
     <mat-card class="min-width-p center">
         <br>
-    <div class="center">
+        <div class="center">
             <mat-form-field appearance="outline">
                 <mat-label>Enter your Username</mat-label>
                 <input type="text" matInput placeholder="Username" [formControl]="loginFormGroup.controls['username']">

@@ -4,7 +4,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.login-form {
+.full-screen {
   height: 100%;
   width: 100%;
 }
@@ -12,6 +12,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .center {
   width: min-content;
   margin: 0 auto;
+}
+
+.center-text {
+    text-align: center;
 }
 
 .background-color {
