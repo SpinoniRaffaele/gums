@@ -6,8 +6,7 @@ import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent {
 

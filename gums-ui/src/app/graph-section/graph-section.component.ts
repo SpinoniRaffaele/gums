@@ -4,8 +4,7 @@ import { GraphRendererService } from "./graph-utils/graph-renderer.service";
 
 @Component({
   selector: 'app-graph-section',
-  templateUrl: './graph-section.component.html',
-  styleUrls: ['./graph-section.component.scss']
+  templateUrl: './graph-section.component.html'
 })
 export class GraphSectionComponent implements OnInit {
 
