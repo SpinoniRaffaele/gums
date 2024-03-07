@@ -12,6 +12,13 @@ import { RouterModule } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { LoginComponent } from './login/login.component';
 import { routes } from './router/router-config';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -26,10 +33,18 @@ import { routes } from './router/router-config';
     HttpClientModule,
     ReactiveFormsModule,
     StoreModule.forRoot({[GRAPH_REDUCER]: graphReducer}),
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatSlideToggleModule,
+    MatFormField,
+    MatInputModule,
+    MatLabel,
+    MatIcon,
+    MatButton,
+    MatCard
   ],
   providers: [
-      HttpClientModule
+      HttpClientModule,
+      provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })
