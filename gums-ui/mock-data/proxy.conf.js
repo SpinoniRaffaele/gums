@@ -6,12 +6,18 @@ const PROXY_CONFIG = {
         case '/gums-1/user':
           if (req.method === "GET") {
             res.end(JSON.stringify(usersMock.users));
-            return true;
           }
           if (req.method === "POST") {
             res.end();
-            return true;
           }
+          break;
+        case '/gums-1/auth/login':
+          res.setHeader('x-auth-token', 'fake-token');
+          res.end();
+          break;
+        case '/gums-1/auth/logout':
+          res.end();
+          break;
       }
     }
   }

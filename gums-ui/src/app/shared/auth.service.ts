@@ -21,10 +21,13 @@ export class AuthService {
         .subscribe({
           next: (res) => {
             const authToken = res.headers.get(this.AUTH_HEADER_NAME);
-            sessionStorage.setItem(this.AUTH_HEADER_NAME, authToken);
-            this.router.navigate(['/admin']);
+            if (authToken) {
+              sessionStorage.setItem(this.AUTH_HEADER_NAME, authToken);
+              this.router.navigate(['/admin']);
+            } else {
+              alert('Login failed, token not found.');
+            }
           },
-
           error: (_) => {
             alert('Login failed, check your credentials.');
           }
