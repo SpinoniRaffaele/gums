@@ -73,3 +73,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .no-wrap {
   white-space: nowrap;
 }
+
+.canvas-info {
+  position: absolute;
+  width: 75%;
+  height: 10%;
+  padding-top: 45vh;
+  padding-bottom: 45vh;
+  text-align: center;
+  z-index: 100;
+  display:block;
+}

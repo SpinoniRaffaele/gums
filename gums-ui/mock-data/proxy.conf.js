@@ -1,4 +1,7 @@
 const usersMock = require("./user");
+
+let newId = 10;
+
 const PROXY_CONFIG = {
   '/gums-1': {
     'bypass': function (req, res, proxyOptions) {
@@ -8,7 +11,13 @@ const PROXY_CONFIG = {
             res.end(JSON.stringify(usersMock.users));
           }
           if (req.method === "POST") {
-            res.end();
+            res.end(JSON.stringify({
+              id: newId++,
+              name: 'user' + newId,
+              age: 12,
+              email: 'email@test.com',
+              isAdmin: false
+            }));
           }
           if (req.method === "PUT") {
             res.end();

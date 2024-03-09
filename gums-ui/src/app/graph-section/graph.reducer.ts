@@ -72,3 +72,7 @@ export const select = createFeatureSelector<GraphState>(GRAPH_REDUCER);
 export const selectSelectedUser = createSelector(select, (state: GraphState) => {
   return state.users.find(user => user.id === state.selectedUserId);
 });
+
+export const selectNoElementsToDisplay = createSelector(select, (state: GraphState) => {
+  return state.users.length === 0 && state.projects.length === 0;
+});
