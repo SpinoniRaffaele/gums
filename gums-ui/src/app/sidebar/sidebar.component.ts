@@ -31,7 +31,8 @@ export class SidebarComponent implements OnDestroy {
         this.selectedUser = user;
         if (user) {
           this.dialog.open(UserDialogComponent, {
-            data: {mode: UserDialogMode.Edit, user: this.selectedUser}
+            data: {mode: UserDialogMode.Edit, user: this.selectedUser},
+            minWidth: '30%'
           });
         }
       }

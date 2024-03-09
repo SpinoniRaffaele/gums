@@ -36,9 +36,9 @@ export class UserService {
   addUser(user: FullUser) {
     this.httpClient.post(this.BASE_USER_PATH, user, { headers: this.loginService.getAuthHeader() })
       .subscribe({
-        next: _ => {
-          this.store.dispatch(AddUserCompleted({ newUser: user }))
-          this.graphRenderer.renderNewUsers([user]);
+        next: res => {
+          this.store.dispatch(AddUserCompleted({ newUser: res as User }))
+          this.graphRenderer.renderNewUsers([res as User]);
         },
         error: error => {
           alert(error.error.message);

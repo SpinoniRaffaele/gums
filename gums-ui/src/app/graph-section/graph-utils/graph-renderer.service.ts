@@ -186,12 +186,18 @@ export class GraphRendererService {
     const userNameDiv = document.createElement( 'div' );
     userNameDiv.className = 'text textarea main-action';
     userNameDiv.textContent = labelContent;
-    userNameDiv.style.backgroundColor = 'transparent';
+    this.styleUserLabel(userNameDiv);
     this.userNameDivs.push(userNameDiv);
     const userNameLabel = new CSS2DObject( userNameDiv );
     userNameLabel.position.set( userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z );
     userNameLabel.center.set( 0, 0 );
     userNativeElement.add( userNameLabel );
+  }
+
+  private styleUserLabel(usernameDiv: HTMLElement) {
+    usernameDiv.style.backgroundColor = 'rgba(12, 12, 12, 0.5)';
+    usernameDiv.style.padding = '5px';
+    usernameDiv.style.borderRadius = '5px';
   }
 
   private updateUserLabel(labelContent, userNativeElement) {
