@@ -58,6 +58,11 @@ export class GraphRendererService {
     this.addRandomUsers(users);
   }
 
+  renderUserUpdate(user: User) {
+    const element = this.elements.find((element: Element) => element.id === user.id);
+    this.updateUserLabel(user.name, element.nativeObject);
+  }
+
   initializeScene(domElementRenderer) {
     this.initializeRenderer(domElementRenderer);
     this.initializeLabelRenderer(domElementRenderer);
@@ -187,6 +192,10 @@ export class GraphRendererService {
     userNameLabel.position.set( userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z );
     userNameLabel.center.set( 0, 0 );
     userNativeElement.add( userNameLabel );
+  }
+
+  private updateUserLabel(labelContent, userNativeElement) {
+    userNativeElement.children[0].element.textContent = labelContent;
   }
 
   private createFocusClickEventListener() {

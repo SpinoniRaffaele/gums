@@ -10,6 +10,9 @@ const PROXY_CONFIG = {
           if (req.method === "POST") {
             res.end();
           }
+          if (req.method === "PUT") {
+            res.end();
+          }
           break;
         case '/gums-1/auth/login':
           res.setHeader('x-auth-token', 'fake-token');

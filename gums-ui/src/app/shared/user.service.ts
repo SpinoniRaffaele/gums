@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
-import { AddUserCompleted, GetUsersCompleted } from "../graph-section/graph.action";
+import { AddUserCompleted, EditUserCompleted, GetUsersCompleted } from "../graph-section/graph.action";
 import { GraphRendererService } from "../graph-section/graph-utils/graph-renderer.service";
-import { FullUser } from '../graph-section/graph-utils/graph.datamodel';
+import { FullUser, User } from '../graph-section/graph-utils/graph.datamodel';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -44,5 +44,18 @@ export class UserService {
           alert(error.error.message);
         }
       });
+  }
+
+  editUser(user: User) {
+    this.httpClient.put(this.BASE_USER_PATH, user, { headers: this.loginService.getAuthHeader() })
+        .subscribe({
+          next: _ => {
+            this.store.dispatch(EditUserCompleted({ editedUser: user }));
+            this.graphRenderer.renderUserUpdate(user);
+          },
+          error: error => {
+            alert(error.error.message);
+          }
+        });
   }
 }

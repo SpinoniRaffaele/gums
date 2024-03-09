@@ -1,7 +1,7 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { FullUser } from '../../graph-section/graph-utils/graph.datamodel';
+import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel';
 import { UserService } from '../../shared/user.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class UserDialogComponent {
           email: new FormControl(
               data.mode === UserDialogMode.Edit ? data.user.email : '', [Validators.required]),
           password: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.password : '', [Validators.required]),
+              data.mode === UserDialogMode.Edit ? data.user.password : '', []),
           isAdmin: new FormControl(
               data.mode === UserDialogMode.Edit ? data.user.isAdmin : false, []),
           adminKey: new FormControl(
@@ -40,16 +40,16 @@ export class UserDialogComponent {
 
   submitForm() {
     if (this.isUserFormValid()) {
+      const name = this.userFormGroup.controls['name'].value;
+      const age = this.userFormGroup.controls['age'].value;
+      const email = this.userFormGroup.controls['email'].value;
+      const password = this.userFormGroup.controls['password'].value;
+      const isAdmin = this.userFormGroup.controls['isAdmin'].value;
+      const adminKey = this.userFormGroup.controls['adminKey'].value;
       if (this.data.mode === UserDialogMode.Create) {
-        const name = this.userFormGroup.controls['name'].value;
-        const age = this.userFormGroup.controls['age'].value;
-        const email = this.userFormGroup.controls['email'].value;
-        const password = this.userFormGroup.controls['password'].value;
-        const isAdmin = this.userFormGroup.controls['isAdmin'].value;
-        const adminKey = this.userFormGroup.controls['adminKey'].value;
         this.userService.addUser(new FullUser("DUMMY", name, email, age, isAdmin, adminKey, password));
       } else {
-        //todo: edit user
+        this.userService.editUser(new User(this.data.user.id, name, email, age, isAdmin));
       }
       this.dialogRef.close();
     } else {
@@ -64,7 +64,9 @@ export class UserDialogComponent {
   private isUserFormValid() {
     const isAdmin = this.userFormGroup.controls['isAdmin'].value;
     const adminKey = this.userFormGroup.controls['adminKey'].value;
-    return this.userFormGroup.valid && ((isAdmin && adminKey !== '') || !isAdmin);
+    const isPasswordValid = this.data.mode === 'Edit' ? true :
+        this.userFormGroup.controls['password'].value?.length >= 8;
+    return this.userFormGroup.valid && ((isAdmin && adminKey !== '') || !isAdmin) && isPasswordValid;
   }
 }
 

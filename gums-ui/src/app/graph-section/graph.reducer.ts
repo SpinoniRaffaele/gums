@@ -1,5 +1,11 @@
 import { Project, User } from "./graph-utils/graph.datamodel";
-import { AddUserCompleted, GetUsersCompleted, SelectUserCompleted, UnselectUserCompleted } from "./graph.action";
+import {
+  AddUserCompleted,
+  EditUserCompleted,
+  GetUsersCompleted,
+  SelectUserCompleted,
+  UnselectUserCompleted
+} from "./graph.action";
 import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 
 export const GRAPH_REDUCER = 'graph';
@@ -21,7 +27,8 @@ export const graphReducer = createReducer(
   on(GetUsersCompleted, getUserCompletedAction),
   on(AddUserCompleted, addUserCompletedAction),
   on(SelectUserCompleted, selectUserCompleted),
-  on(UnselectUserCompleted, unselectUserCompleted)
+  on(UnselectUserCompleted, unselectUserCompleted),
+  on(EditUserCompleted, editUserCompletedAction)
 )
 
 function getUserCompletedAction(state: GraphState, action) {
@@ -50,6 +57,14 @@ function unselectUserCompleted(state: GraphState) {
     ...state,
     selectedUserId: null
   }
+}
+
+function editUserCompletedAction(state: GraphState, action) {
+  return {
+    ...state,
+    users: state.users.map(user => user.id === action.editedUser.id ? action.editedUser : user),
+    selectedUserId: null
+  };
 }
 
 export const select = createFeatureSelector<GraphState>(GRAPH_REDUCER);
