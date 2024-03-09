@@ -129,9 +129,12 @@ class ProjectControllerTest {
 
   @Test
   public void testCreateProject() {
-    projectController.createProject(PROJECT);
+    when(projectService.createProject(PROJECT)).thenReturn(PROJECT);
+
+    Project result = projectController.createProject(PROJECT);
 
     verify(projectService).createProject(PROJECT);
+    assertEquals(PROJECT, result);
   }
 
   @Test

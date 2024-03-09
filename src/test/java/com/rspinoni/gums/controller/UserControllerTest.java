@@ -85,9 +85,12 @@ class UserControllerTest {
 
   @Test
   public void testCreateUser() {
-    userController.createUser(USER);
+    when(userService.createUser(USER)).thenReturn(USER);
+
+    User result = userController.createUser(USER);
 
     verify(userService).createUser(USER);
+    assertEquals(USER, result);
   }
 
   @Test

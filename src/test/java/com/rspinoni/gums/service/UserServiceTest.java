@@ -60,8 +60,9 @@ class UserServiceTest {
 
   @Test
   public void testValidUserCreation() {
-    userService.createUser(USER);
+    when(userRepository.insert(USER)).thenReturn(USER);
 
+    User result = userService.createUser(USER);
     verify(userRepository).insert(userCaptor.capture());
 
     assertEquals(USER.getName(), userCaptor.getValue().getName());
@@ -70,6 +71,8 @@ class UserServiceTest {
     assertEquals(USER.getPassword(), userCaptor.getValue().getPassword());
     assertEquals(USER.isAdmin(), userCaptor.getValue().isAdmin());
     assertNotNull(userCaptor.getValue().getId());
+    assertNotNull(result);
+    assertEquals(userCaptor.getValue(), result);
   }
 
   @Test

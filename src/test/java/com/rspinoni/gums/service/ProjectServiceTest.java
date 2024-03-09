@@ -3,6 +3,7 @@ package com.rspinoni.gums.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -71,12 +72,14 @@ class ProjectServiceTest {
 
     when(projectRepository.findAll()).thenReturn(Collections.emptyList());
     when(userService.getAllUsers()).thenReturn(Collections.singletonList(USER));
+    when(projectRepository.insert(any(Project.class))).thenReturn(PROJECT);
 
-    projectService.createProject(inputProject);
+    Project result = projectService.createProject(inputProject);
 
     verify(projectRepository).insert(projectArgumentCaptor.capture());
     assertEquals(inputProject.getName(), projectArgumentCaptor.getValue().getName());
     assertNotNull(projectArgumentCaptor.getValue().getId());
+    assertEquals(result, PROJECT);
   }
 
   @Test

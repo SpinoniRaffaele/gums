@@ -70,11 +70,11 @@ public class UserService {
     userRepository.deleteById(id);
   }
 
-  public void createUser(User user) {
+  public User createUser(User user) {
     validateUserCreation(user);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setId(UUID.randomUUID().toString());
-    userRepository.insert(user);
+    return userRepository.insert(user);
   }
 
   public void updateUser(User user) {

@@ -25,10 +25,10 @@ public class ProjectService {
     this.userService = userService;
   }
 
-  public void createProject(Project project) {
+  public Project createProject(Project project) {
     project.setId(UUID.randomUUID().toString());
     validateProjectCreation(project);
-    projectRepository.insert(project);
+    return projectRepository.insert(project);
   }
 
   public void updateProject(Project project) {

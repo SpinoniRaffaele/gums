@@ -82,8 +82,8 @@ public class ProjectController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void createProject(@RequestBody Project project) {
-    projectService.createProject(project);
+  public Project createProject(@RequestBody Project project) {
+    return projectService.createProject(project);
   }
 
   @PutMapping
