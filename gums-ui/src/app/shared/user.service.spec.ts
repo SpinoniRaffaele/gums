@@ -5,11 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { provideMockStore } from '@ngrx/store/testing';
 import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
 import { of } from 'rxjs';
+import { User } from '../graph-section/graph-utils/graph.datamodel';
 
 describe('test ServiceService', () => {
   let service: UserService;
-  let graphRendererServiceMock = {renderGraph: jest.fn(), renderNewUsers: jest.fn()};
-  let httpClientMock = {get: jest.fn(), post: jest.fn()};
+  let graphRendererServiceMock = {renderGraph: jest.fn(), renderNewUsers: jest.fn(), renderUserUpdate: jest.fn()};
+  let httpClientMock = {get: jest.fn(), post: jest.fn(), put: jest.fn()};
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -27,14 +28,25 @@ describe('test ServiceService', () => {
     jest.spyOn(graphRendererServiceMock, 'renderGraph');
     service.getUsers();
     expect(httpClientMock.get).toHaveBeenCalledWith('/gums-1/user', expect.anything());
-    expect(graphRendererServiceMock.renderGraph).toHaveBeenCalledWith({projects: [], users: [{name: 'test'}]});
+    expect(graphRendererServiceMock.renderGraph).toHaveBeenCalledWith(
+        {projects: [], users: [{name: 'test'}], selectedUserId: null});
   });
 
   it('should add user and update the graph', () => {
-    jest.spyOn(httpClientMock, 'post').mockReturnValue(of(null));
+    const user = new User("id", "name", "email", 12, true);
+    jest.spyOn(httpClientMock, 'post').mockReturnValue(of(user));
     jest.spyOn(graphRendererServiceMock, 'renderNewUsers');
     service.addUser({name: 'test'} as any);
     expect(httpClientMock.post).toHaveBeenCalledWith('/gums-1/user', {name: 'test'}, expect.anything());
-    expect(graphRendererServiceMock.renderNewUsers).toHaveBeenCalledWith([{name: 'test'}]);
+    expect(graphRendererServiceMock.renderNewUsers).toHaveBeenCalledWith([user]);
+  });
+
+  it('should edit user and update the graph', () => {
+    jest.spyOn(httpClientMock, 'put').mockReturnValue(of(null));
+    jest.spyOn(graphRendererServiceMock, 'renderUserUpdate');
+    const user = new User("id", "name", "email", 12, true);
+    service.editUser(user);
+    expect(httpClientMock.put).toHaveBeenCalledWith('/gums-1/user', user, expect.anything());
+    expect(graphRendererServiceMock.renderUserUpdate).toHaveBeenCalledWith(user);
   });
 });

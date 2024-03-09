@@ -1,25 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarComponent } from './sidebar.component';
-import { UserService } from '../shared/user.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { FullUser } from '../graph-section/graph-utils/graph.datamodel';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
+import { provideMockStore } from '@ngrx/store/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { UserDialogMode } from '../dialog/user-dialog/user-dialog.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
-  let mockUserService = { addUser: jest.fn() };
   const mockAuthService = { logout: jest.fn(), login: jest.fn() };
+  const mockMatDialog = { open: jest.fn() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SidebarComponent],
       imports: [ReactiveFormsModule],
       providers: [
-        {provide: UserService, useValue: mockUserService},
         {provide: AuthService, useValue: mockAuthService},
-        FormBuilder
+        provideMockStore(),
+        {provide: MatDialog, useValue: mockMatDialog}
       ]
     });
     fixture = TestBed.createComponent(SidebarComponent);
@@ -27,51 +28,22 @@ describe('SidebarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should add valid user', () => {
-    jest.spyOn(mockUserService, 'addUser');
-    component.userFormGroup.controls['name'].setValue('John Doe');
-    component.userFormGroup.controls['age'].setValue(24);
-    component.userFormGroup.controls['email'].setValue('email');
-    component.userFormGroup.controls['password'].setValue('password');
-    component.userFormGroup.controls['isAdmin'].setValue(false);
 
-    component.addUser();
-
-    expect(mockUserService.addUser).toHaveBeenCalledWith(
-        new FullUser("DUMMY", "John Doe", "email", 24, false, "", "password"));
-  });
-
-  it('should not add invalid user', () => {
-    jest.spyOn(mockUserService, 'addUser');
-    component.userFormGroup.controls['name'].setValue('');
-    component.userFormGroup.controls['age'].setValue(25);
-    component.userFormGroup.controls['email'].setValue('email');
-    component.userFormGroup.controls['password'].setValue('password');
-    component.userFormGroup.controls['isAdmin'].setValue(false);
-
-    component.addUser();
-
-    expect(mockUserService.addUser).toHaveBeenCalledTimes(0);
-  });
-
-  it('should not add admin user without adminKey', () => {
-    jest.spyOn(mockUserService, 'addUser');
-    component.userFormGroup.controls['name'].setValue('john doe');
-    component.userFormGroup.controls['age'].setValue(25);
-    component.userFormGroup.controls['email'].setValue('email');
-    component.userFormGroup.controls['password'].setValue('password');
-    component.userFormGroup.controls['isAdmin'].setValue(true);
-    component.userFormGroup.controls['adminKey'].setValue('');
-
-    component.addUser();
-
-    expect(mockUserService.addUser).toHaveBeenCalledTimes(0);
-  });
 
   it('should correctly logout', () => {
     jest.spyOn(mockAuthService, 'logout');
     component.logout();
 
     expect(mockAuthService.logout).toHaveBeenCalled();
+  });
+
+  it('should correctly open a dialog for a new user', () => {
+    jest.spyOn(mockMatDialog, 'open');
+    component.newUser();
+
+    expect(mockMatDialog.open).toHaveBeenCalledWith(expect.anything(), {
+      data: {mode: UserDialogMode.Create},
+      minWidth: '30%'
+    });
   });
 });

@@ -1,6 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { UserService } from '../shared/user.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent, UserDialogMode } from '../dialog/user-dialog/user-dialog.component';
@@ -15,14 +13,11 @@ import { Subscription } from 'rxjs';
 })
 export class SidebarComponent implements OnDestroy {
 
-  userFormGroup: FormGroup;
   selectedUser: FullUser;
   subscriptions: Subscription[] = [];
   
   constructor(
-    private userService: UserService,
     private loginService: AuthService,
-    private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private store: Store
   ) {
