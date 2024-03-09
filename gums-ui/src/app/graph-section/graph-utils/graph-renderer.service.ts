@@ -6,6 +6,8 @@ import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRe
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { PhysicsService } from "./physics.service";
 import gsap from "gsap";
+import { Store } from '@ngrx/store';
+import { SelectUserCompleted, UnselectUserCompleted } from '../graph.action';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,7 @@ export class GraphRendererService {
 
   pointer;
 
-  elements = [];
+  elements: Element[] = [];
 
   intersected;
 
@@ -34,6 +36,10 @@ export class GraphRendererService {
 
   orbit;
 
+  isFocusedOnUser = false;
+
+  userNameDivs = [];
+
   readonly INITIAL_CUBE_SIZE = 10;
 
   readonly WIDTH_PERCENTAGE = 0.75;
@@ -42,7 +48,7 @@ export class GraphRendererService {
 
   readonly RELATIVE_DISTANCE_AFTER_FOCUS = 1.3;
 
-  constructor(private readonly physicsService: PhysicsService) {}
+  constructor(private readonly physicsService: PhysicsService, private readonly store: Store) {}
 
   renderGraph(graphState: GraphState) {
     this.addRandomUsers(graphState.users);
@@ -71,13 +77,24 @@ export class GraphRendererService {
     this.createMouseMovementListener();
     this.createFocusClickEventListener();
 
-    this.orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
+    this.initializeOrbitAndHisListeners();
 
     const animate = () => {
       requestAnimationFrame(animate);
       this.render();
     }
     animate();
+  }
+
+  private initializeOrbitAndHisListeners() {
+    this.orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
+    this.orbit.addEventListener('change', () => {
+      if (this.isFocusedOnUser) {
+        this.isFocusedOnUser = false;
+        this.userNameDivs.forEach((div) => {div.style.opacity = '1';});
+        this.store.dispatch(UnselectUserCompleted());
+      }
+    });
   }
 
   private initializeRenderer(domElementRenderer) {
@@ -162,9 +179,10 @@ export class GraphRendererService {
 
   private addUser2DLabel(labelContent, userNativeElement) {
     const userNameDiv = document.createElement( 'div' );
-    userNameDiv.className = 'label';
+    userNameDiv.className = 'text textarea main-action';
     userNameDiv.textContent = labelContent;
     userNameDiv.style.backgroundColor = 'transparent';
+    this.userNameDivs.push(userNameDiv);
     const userNameLabel = new CSS2DObject( userNameDiv );
     userNameLabel.position.set( userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z );
     userNameLabel.center.set( 0, 0 );
@@ -174,8 +192,9 @@ export class GraphRendererService {
   private createFocusClickEventListener() {
     window.addEventListener('click', (e) => {
       if (this.pointedObject) {
-        var aabb = new THREE.Box3().setFromObject( this.pointedObject );
-        var center = aabb.getCenter( new THREE.Vector3() );
+        const id = this.pointedObject.id;
+        const aabb = new THREE.Box3().setFromObject( this.pointedObject );
+        const center = aabb.getCenter( new THREE.Vector3() );
 
         gsap.to( this.camera.position, {
           duration: this.ANIMATION_DURATION,
@@ -187,6 +206,10 @@ export class GraphRendererService {
           },
           onComplete: () => {
             this.orbit.update();
+            const selectedElement = this.elements.find((element: Element) => element.nativeObject.id === id);
+            this.store.dispatch(SelectUserCompleted({selectedUserId: selectedElement.id}));
+            this.isFocusedOnUser = true;
+            this.userNameDivs.forEach((div) => {div.style.opacity = '0';});
           }
         } );
       }

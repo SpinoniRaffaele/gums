@@ -19,6 +19,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
+import { UserDialogComponent } from './dialog/user-dialog/user-dialog.component';
+import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import { MatCard } from '@angular/material/card';
     GraphSectionComponent,
     SidebarComponent,
     AdminPanelComponent,
-    LoginComponent
+    LoginComponent,
+    UserDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,10 @@ import { MatCard } from '@angular/material/card';
     MatLabel,
     MatIcon,
     MatButton,
-    MatCard
+    MatCard,
+    MatDialogContent,
+    MatDialogActions,
+    MatCheckbox
   ],
   providers: [
       HttpClientModule,

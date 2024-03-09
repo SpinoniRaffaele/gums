@@ -65,11 +65,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center;
 }
 
-.add-user-button {
-  background-color: #30333D;
-}
-
 .main-grid {
   display: grid;
   grid-template-columns: 25% auto;
+}
+
+.no-wrap {
+  white-space: nowrap;
 }

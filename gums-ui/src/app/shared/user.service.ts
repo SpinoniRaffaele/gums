@@ -25,7 +25,7 @@ export class UserService {
       .subscribe({
         next: (data: any) => {
           this.store.dispatch(GetUsersCompleted({ users: data }));
-          this.graphRenderer.renderGraph({projects: [], users: data});
+          this.graphRenderer.renderGraph({projects: [], users: data, selectedUserId: null});
         },
         error: error => {
           alert(error.error.message);

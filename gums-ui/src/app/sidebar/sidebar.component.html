@@ -5,30 +5,17 @@
         M<a class="small">anagement</a>
         S<a class="small">ystem</a>
     </div>
-
-    <div class="center text">
-        <form [formGroup]="userFormGroup">
-            <input type="text" placeholder="name" [formControl]="userFormGroup.controls['name']">
-            <br>
-            <input type="number" placeholder="age" [formControl]="userFormGroup.controls['age']">
-            <br>
-            <input type="email" placeholder="email" [formControl]="userFormGroup.controls['email']">
-            <br>
-            <input type="password" placeholder="password" [formControl]="userFormGroup.controls['password']">
-            <br>
-            Admin <input type="checkbox" placeholder="Admin" [formControl]="userFormGroup.controls['isAdmin']">
-            <br>
-            <div *ngIf="userFormGroup.controls['isAdmin'].value === true">
-                <input type="text" placeholder="admin key" [formControl]="userFormGroup.controls['adminKey']">
-            </div>
-            <br>
-            <button class="add-user-button text" (click)="addUser()" type="submit">
-                Add User
-            </button>
-            <br>
-            <button class="text" (click)="logout()" type="submit">
-                Logout
-            </button>
-        </form>
+    <div class="center no-wrap">
+        <button mat-raised-button color="primary" type="submit" (click)="newUser()" class="center">
+            <mat-icon style="color: white">person_add_alt_1</mat-icon>
+            Add User
+        </button>
+    </div>
+    <br>
+    <div class="center">
+        <button mat-raised-button color="warn" type="submit" (click)="logout()" class="center">
+            <mat-icon style="color: white">logout</mat-icon>
+            Logout
+        </button>
     </div>
 </div>
