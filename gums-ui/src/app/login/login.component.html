@@ -16,6 +16,7 @@
                 <input matInput [type]="hide ? 'password' : 'text'" [formControl]="loginFormGroup.controls['password']">
                 <button mat-icon-button matSuffix (click)="hide = !hide"
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide"
+                        type="button"
                         class="background-transparent no-border">
                     <mat-icon style="color: white">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
