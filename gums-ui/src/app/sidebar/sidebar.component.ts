@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { selectSelectedUser } from '../graph-section/graph.reducer';
 import { FullUser } from '../graph-section/graph-utils/graph.datamodel';
 import { Subscription } from 'rxjs';
+import { UnselectUserCompleted } from '../graph-section/graph.action';
 
 @Component({
   selector: 'app-sidebar',
@@ -25,9 +26,12 @@ export class SidebarComponent implements OnDestroy {
       if (user !== this.selectedUser) {
         this.selectedUser = user;
         if (user) {
-          this.dialog.open(UserDialogComponent, {
+          const dialogRef = this.dialog.open(UserDialogComponent, {
             data: {mode: UserDialogMode.Edit, user: this.selectedUser},
             minWidth: '30%'
+          });
+          dialogRef.afterClosed().subscribe(() => {
+            this.store.dispatch(UnselectUserCompleted());
           });
         }
       }

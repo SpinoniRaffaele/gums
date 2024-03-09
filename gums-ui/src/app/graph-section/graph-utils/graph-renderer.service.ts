@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { GraphState } from "../graph.reducer";
+import { GraphState, selectSelectedUser } from "../graph.reducer";
 import { Element, ElementType, User } from "./graph.datamodel";
 import * as THREE from 'three';
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
@@ -48,7 +48,14 @@ export class GraphRendererService {
 
   readonly RELATIVE_DISTANCE_AFTER_FOCUS = 1.3;
 
-  constructor(private readonly physicsService: PhysicsService, private readonly store: Store) {}
+  constructor(private readonly physicsService: PhysicsService, private readonly store: Store) {
+    this.store.select(selectSelectedUser).subscribe((user: User) => {
+      if (!user) {
+        this.userNameDivs.forEach((div) => {div.style.opacity = '1';});
+      }
+      this.isFocusedOnUser = !!user;
+    });
+  }
 
   renderGraph(graphState: GraphState) {
     this.addRandomUsers(graphState.users);
@@ -95,8 +102,6 @@ export class GraphRendererService {
     this.orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
     this.orbit.addEventListener('change', () => {
       if (this.isFocusedOnUser) {
-        this.isFocusedOnUser = false;
-        this.userNameDivs.forEach((div) => {div.style.opacity = '1';});
         this.store.dispatch(UnselectUserCompleted());
       }
     });
@@ -166,15 +171,17 @@ export class GraphRendererService {
 
   private updateRaycaster() {
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const intersects = this.raycaster.intersectObjects(this.scene.children, false);
-    this.pointedObject = undefined;
-    if (this.intersected) {
-      this.intersected.material.emissive.setHex(0x000000);
-    }
-    if (intersects.length > 0) {
-      this.pointedObject = intersects[0].object;
-      this.intersected = intersects[0].object;
-      intersects[0].object.material.emissive.setHex(0x432063);
+    if (!this.isFocusedOnUser) {
+      const intersects = this.raycaster.intersectObjects(this.scene.children, false);
+      this.pointedObject = undefined;
+      if (this.intersected) {
+        this.intersected.material.emissive.setHex(0x000000);
+      }
+      if (intersects.length > 0) {
+        this.pointedObject = intersects[0].object;
+        this.intersected = intersects[0].object;
+        intersects[0].object.material.emissive.setHex(0x432063);
+      }
     }
   }
   
@@ -223,10 +230,9 @@ export class GraphRendererService {
             this.orbit.update();
             const selectedElement = this.elements.find((element: Element) => element.nativeObject.id === id);
             this.store.dispatch(SelectUserCompleted({selectedUserId: selectedElement.id}));
-            this.isFocusedOnUser = true;
             this.userNameDivs.forEach((div) => {div.style.opacity = '0';});
           }
-        } );
+        });
       }
     });
   }
