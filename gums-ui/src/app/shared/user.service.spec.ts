@@ -9,8 +9,13 @@ import { User } from '../graph-section/graph-utils/graph.datamodel';
 
 describe('test ServiceService', () => {
   let service: UserService;
-  let graphRendererServiceMock = {renderGraph: jest.fn(), renderNewUsers: jest.fn(), renderUserUpdate: jest.fn()};
-  let httpClientMock = {get: jest.fn(), post: jest.fn(), put: jest.fn()};
+  const graphRendererServiceMock = {
+    renderGraph: jest.fn(),
+    renderNewUsers: jest.fn(),
+    renderUserUpdate: jest.fn(),
+    renderUserDelete: jest.fn()
+  };
+  const httpClientMock = {get: jest.fn(), post: jest.fn(), put: jest.fn(), delete: jest.fn()};
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,5 +53,14 @@ describe('test ServiceService', () => {
     service.editUser(user);
     expect(httpClientMock.put).toHaveBeenCalledWith('/gums-1/user', user, expect.anything());
     expect(graphRendererServiceMock.renderUserUpdate).toHaveBeenCalledWith(user);
+  });
+
+  it('should delete the user and update the graph', function () {
+    jest.spyOn(httpClientMock, 'delete').mockReturnValue(of(null));
+    jest.spyOn(graphRendererServiceMock, 'renderUserDelete');
+
+    service.deleteUser("id");
+    expect(httpClientMock.delete).toHaveBeenCalledWith('/gums-1/user/id', expect.anything());
+    expect(graphRendererServiceMock.renderUserDelete).toHaveBeenCalledWith("id");
   });
 });

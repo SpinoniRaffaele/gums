@@ -1,6 +1,6 @@
 import { graphReducer, initialState } from './graph.reducer';
 import {
-  AddUserCompleted,
+  AddUserCompleted, DeleteUserCompleted,
   EditUserCompleted,
   GetUsersCompleted,
   SelectUserCompleted,
@@ -58,6 +58,13 @@ describe('GraphReducer', () => {
         { editedUser: new User("1", "John", "mail", 12, false) }));
 
     expect(state.users).toEqual([new User("1", "John", "mail", 12, false)]);
+    expect(state.selectedUserId).toBeNull();
+    expect(state.projects).toEqual([]);
+  });
+
+  it('should delete the user', () => {
+    const state = graphReducer(initialStateWithUser, DeleteUserCompleted( { deletedUserId: "1" }));
+    expect(state.users).toEqual([]);
     expect(state.selectedUserId).toBeNull();
     expect(state.projects).toEqual([]);
   });

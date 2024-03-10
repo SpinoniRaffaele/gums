@@ -61,6 +61,13 @@ export class UserDialogComponent {
     this.dialogRef.close();
   }
 
+  deleteUser() {
+    if (this.data.mode === UserDialogMode.Edit) {
+      this.userService.deleteUser(this.data.user.id);
+      this.dialogRef.close();
+    }
+  }
+
   private isUserFormValid() {
     const isAdmin = this.userFormGroup.controls['isAdmin'].value;
     const adminKey = this.userFormGroup.controls['adminKey'].value;

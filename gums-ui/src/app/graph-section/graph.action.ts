@@ -10,3 +10,5 @@ export const SelectUserCompleted = createAction('[Graph Action] Select User comp
 export const UnselectUserCompleted = createAction('[Graph Action] Unselect User completed');
 export const EditUserCompleted = createAction('[Graph Action] Edit User completed',
     props<{editedUser: User}>());
+export const DeleteUserCompleted = createAction('[Graph Action] Delete User completed',
+    props<{deletedUserId: string}>());

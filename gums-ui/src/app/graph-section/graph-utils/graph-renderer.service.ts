@@ -38,7 +38,7 @@ export class GraphRendererService {
 
   isFocusedOnUser = false;
 
-  userNameDivs = [];
+  userNameDivsById = new Map<string, any>();
 
   readonly INITIAL_CUBE_SIZE = 10;
 
@@ -51,7 +51,7 @@ export class GraphRendererService {
   constructor(private readonly physicsService: PhysicsService, private readonly store: Store) {
     this.store.select(selectSelectedUser).subscribe((user: User) => {
       if (!user) {
-        this.userNameDivs.forEach((div) => {div.style.opacity = '1';});
+        this.userNameDivsById.forEach((div) => {div.style.opacity = '1';});
       }
       this.isFocusedOnUser = !!user;
     });
@@ -68,6 +68,13 @@ export class GraphRendererService {
   renderUserUpdate(user: User) {
     const element = this.elements.find((element: Element) => element.id === user.id);
     this.updateUserLabel(user.name, element.nativeObject);
+  }
+
+  renderUserDelete(userId: string) {
+    const element = this.elements.find((element: Element) => element.id === userId);
+    this.scene.remove(element.nativeObject);
+    this.userNameDivsById.get(userId).remove();
+    this.elements = this.elements.filter((element: Element) => element.id !== userId);
   }
 
   initializeScene(domElementRenderer) {
@@ -162,7 +169,7 @@ export class GraphRendererService {
       userNativeElement.position.y = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
       userNativeElement.position.z = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
 
-      this.addUser2DLabel(user.name, userNativeElement);
+      this.addUser2DLabel(user.name, user.id, userNativeElement);
 
       this.scene.add(userNativeElement);
       this.elements.push(new Element(userNativeElement, ElementType.USER, new THREE.Vector3(0, 0, 0), user.id));
@@ -189,12 +196,12 @@ export class GraphRendererService {
     return "#" + Math.floor(Math.random() * 16777215).toString(16);
   }
 
-  private addUser2DLabel(labelContent, userNativeElement) {
+  private addUser2DLabel(labelContent, userId, userNativeElement) {
     const userNameDiv = document.createElement( 'div' );
     userNameDiv.className = 'text textarea main-action';
     userNameDiv.textContent = labelContent;
     this.styleUserLabel(userNameDiv);
-    this.userNameDivs.push(userNameDiv);
+    this.userNameDivsById.set(userId, userNameDiv);
     const userNameLabel = new CSS2DObject( userNameDiv );
     userNameLabel.position.set( userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z );
     userNameLabel.center.set( 0, 0 );
@@ -229,8 +236,10 @@ export class GraphRendererService {
           onComplete: () => {
             this.orbit.update();
             const selectedElement = this.elements.find((element: Element) => element.nativeObject.id === id);
-            this.store.dispatch(SelectUserCompleted({selectedUserId: selectedElement.id}));
-            this.userNameDivs.forEach((div) => {div.style.opacity = '0';});
+            if (selectedElement) {
+              this.store.dispatch(SelectUserCompleted({selectedUserId: selectedElement.id}));
+              this.userNameDivsById.forEach((div) => {div.style.opacity = '0';});
+            }
           }
         });
       }

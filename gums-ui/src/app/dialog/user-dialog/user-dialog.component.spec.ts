@@ -10,7 +10,7 @@ describe('UserDialogComponent', () => {
   let component: UserDialogComponent;
   let fixture: ComponentFixture<UserDialogComponent>;
   const mockDialogRef = {close: jest.fn()};
-  const mockUserService = {addUser: jest.fn(), editUser: jest.fn()};
+  const mockUserService = {addUser: jest.fn(), editUser: jest.fn(), deleteUser: jest.fn()};
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -98,6 +98,21 @@ describe('UserDialogComponent', () => {
         new User("id", "new name", "email", 25, false));
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
+
+  it('should correctly delete user', () => {
+    jest.spyOn(mockUserService, 'deleteUser');
+    jest.spyOn(mockDialogRef, 'close');
+    component.data = {
+      mode: 'Edit',
+      user: new FullUser("id", "John Doe", "email", 25, false, "", "password")
+    };
+
+    component.deleteUser();
+
+    expect(mockUserService.deleteUser).toHaveBeenCalledWith("id");
+    expect(mockDialogRef.close).toHaveBeenCalled();
+  });
+
 
   it('on close click should close dialog', () => {
     jest.spyOn(mockDialogRef, 'close');

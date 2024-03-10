@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
-import { AddUserCompleted, EditUserCompleted, GetUsersCompleted } from "../graph-section/graph.action";
+import {
+  AddUserCompleted,
+  DeleteUserCompleted,
+  EditUserCompleted,
+  GetUsersCompleted
+} from "../graph-section/graph.action";
 import { GraphRendererService } from "../graph-section/graph-utils/graph-renderer.service";
 import { FullUser, User } from '../graph-section/graph-utils/graph.datamodel';
 import { AuthService } from './auth.service';
@@ -52,6 +57,19 @@ export class UserService {
           next: _ => {
             this.store.dispatch(EditUserCompleted({ editedUser: user }));
             this.graphRenderer.renderUserUpdate(user);
+          },
+          error: error => {
+            alert(error.error.message);
+          }
+        });
+  }
+
+  deleteUser(id: string) {
+    this.httpClient.delete(this.BASE_USER_PATH + "/" + id, { headers: this.loginService.getAuthHeader() })
+        .subscribe({
+          next: _ => {
+            this.store.dispatch(DeleteUserCompleted({ deletedUserId: id }));
+            this.graphRenderer.renderUserDelete(id);
           },
           error: error => {
             alert(error.error.message);
