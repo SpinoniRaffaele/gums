@@ -28,7 +28,7 @@ describe('Auth Service', () => {
 
     service.login('user', 'password');
 
-    expect(httpClientMock.get).toHaveBeenCalledWith('/gums-1/auth/login',
+    expect(httpClientMock.get).toHaveBeenCalledWith('/gums/auth/login',
         expect.objectContaining({headers: expect.objectContaining({lazyUpdate: expect.arrayContaining(
     [{"name": "Authorization", "op": "s", "value": "Basic dXNlcjpwYXNzd29yZA=="}])})}));
     expect(routerMock.navigate).toHaveBeenCalledWith(['/admin']);
@@ -42,6 +42,6 @@ describe('Auth Service', () => {
 
     service.logout();
 
-    expect(httpClientMock.get).toHaveBeenCalledWith('/gums-1/auth/logout', {headers: 'token'});
+    expect(httpClientMock.get).toHaveBeenCalledWith('/gums/auth/logout', {headers: 'token'});
   });
 });

@@ -34,7 +34,7 @@ describe('test ServiceService', () => {
     jest.spyOn(httpClientMock, 'get').mockReturnValue(of([{name: 'test'}]));
     jest.spyOn(graphRendererServiceMock, 'renderGraph');
     service.getUsers();
-    expect(httpClientMock.get).toHaveBeenCalledWith('/gums-1/user', expect.anything());
+    expect(httpClientMock.get).toHaveBeenCalledWith('/gums/user', expect.anything());
     expect(graphRendererServiceMock.renderGraph).toHaveBeenCalledWith(
         {projects: [], users: [{name: 'test'}], selectedUserId: null});
   });
@@ -44,7 +44,7 @@ describe('test ServiceService', () => {
     jest.spyOn(httpClientMock, 'post').mockReturnValue(of(user));
     jest.spyOn(graphRendererServiceMock, 'renderNewUsers');
     service.addUser({name: 'test'} as any);
-    expect(httpClientMock.post).toHaveBeenCalledWith('/gums-1/user', {name: 'test'}, expect.anything());
+    expect(httpClientMock.post).toHaveBeenCalledWith('/gums/user', {name: 'test'}, expect.anything());
     expect(graphRendererServiceMock.renderNewUsers).toHaveBeenCalledWith([user]);
   });
 
@@ -53,7 +53,7 @@ describe('test ServiceService', () => {
     jest.spyOn(graphRendererServiceMock, 'renderUserUpdate');
     const user = new User("id", "name", "email", 12, true);
     service.editUser(user);
-    expect(httpClientMock.put).toHaveBeenCalledWith('/gums-1/user', user, expect.anything());
+    expect(httpClientMock.put).toHaveBeenCalledWith('/gums/user', user, expect.anything());
     expect(graphRendererServiceMock.renderUserUpdate).toHaveBeenCalledWith(user);
   });
 
@@ -62,7 +62,7 @@ describe('test ServiceService', () => {
     jest.spyOn(graphRendererServiceMock, 'renderUserDelete');
 
     service.deleteUser("id");
-    expect(httpClientMock.delete).toHaveBeenCalledWith('/gums-1/user/id', expect.anything());
+    expect(httpClientMock.delete).toHaveBeenCalledWith('/gums/user/id', expect.anything());
     expect(graphRendererServiceMock.renderUserDelete).toHaveBeenCalledWith("id");
   });
 });

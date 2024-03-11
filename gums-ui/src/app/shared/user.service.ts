@@ -18,7 +18,7 @@ import { snackbarDuration } from '../app.datamodel';
 })
 export class UserService {
 
-  readonly BASE_USER_PATH = "/gums-1/user";
+  readonly BASE_USER_PATH = "/gums/user";
 
   readonly errorMessage = "An error has occurred while sending the request";
 

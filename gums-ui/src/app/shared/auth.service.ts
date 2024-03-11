@@ -9,7 +9,7 @@ import { snackbarDuration } from '../app.datamodel';
 })
 export class AuthService {
 
-  readonly BASE_AUTH_PATH = "/gums-1/auth";
+  readonly BASE_AUTH_PATH = "/gums/auth";
 
   readonly AUTH_HEADER_NAME = 'x-auth-token';
 

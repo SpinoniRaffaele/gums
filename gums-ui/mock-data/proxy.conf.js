@@ -3,9 +3,9 @@ const usersMock = require("./user");
 let newId = 10;
 
 const PROXY_CONFIG = {
-  '/gums-1': {
+  '/gums': {
     'bypass': function (req, res, proxyOptions) {
-      if (req.url.startsWith('/gums-1/user')) {
+      if (req.url.startsWith('/gums/user')) {
         if (req.method === "GET") {
           res.end(JSON.stringify(usersMock.users));
           return;
@@ -29,12 +29,12 @@ const PROXY_CONFIG = {
           return;
         }
       }
-      if (req.url.startsWith('/gums-1/auth/login')) {
+      if (req.url.startsWith('/gums/auth/login')) {
         res.setHeader('x-auth-token', 'fake-token');
         res.end();
         return;
       }
-      if (req.url.startsWith('/gums-1/auth/logout')) {
+      if (req.url.startsWith('/gums/auth/logout')) {
         res.end();
         return;
       }

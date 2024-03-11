@@ -35,7 +35,7 @@ from the root directory of the project:
 docker compose up
 ```
 it will pull the mongo image and start the application on port 8080 you can access the application at 
-http://localhost:8080/gums-1/
+http://localhost:8080/gums/
 
 ## UI Demo
 The full project is not deployed anywhere, 
