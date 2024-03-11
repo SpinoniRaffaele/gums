@@ -28,15 +28,15 @@ const PROXY_CONFIG = {
           res.end();
           return;
         }
-        if (req.url.startsWith('/gums-1/auth/login')) {
-          res.setHeader('x-auth-token', 'fake-token');
-          res.end();
-          return;
-        }
-        if (req.url.startsWith('/gums-1/auth/logout')) {
-          res.end();
-          return;
-        }
+      }
+      if (req.url.startsWith('/gums-1/auth/login')) {
+        res.setHeader('x-auth-token', 'fake-token');
+        res.end();
+        return;
+      }
+      if (req.url.startsWith('/gums-1/auth/logout')) {
+        res.end();
+        return;
       }
     }
   }
