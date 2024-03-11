@@ -3,10 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('Auth Service', () => {
   const httpClientMock = {get: jest.fn()};
   const routerMock = {navigate: jest.fn()};
+  const mockSnackBar = {open: jest.fn()};
   let service;
 
   beforeEach(() => {
@@ -14,6 +16,7 @@ describe('Auth Service', () => {
       providers: [
         {provide: HttpClient, useValue: httpClientMock},
         {provide: Router, useValue: routerMock},
+        {provide: MatSnackBar, userValue: mockSnackBar}
       ]
     });
     service = TestBed.inject(AuthService);

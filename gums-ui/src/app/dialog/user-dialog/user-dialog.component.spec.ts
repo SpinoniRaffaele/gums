@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { UserService } from '../../shared/user.service';
 import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('UserDialogComponent', () => {
   let component: UserDialogComponent;
@@ -19,7 +20,8 @@ describe('UserDialogComponent', () => {
         {provide: MatDialogRef, useValue: mockDialogRef},
         FormBuilder,
         {provide: MAT_DIALOG_DATA, useValue: {}},
-        {provide: UserService, useValue: mockUserService}
+        {provide: UserService, useValue: mockUserService},
+        {provide: MatSnackBar, useValue: {open: jest.fn()}}
       ]
     })
     .compileComponents();

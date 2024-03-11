@@ -3,6 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel';
 import { UserService } from '../../shared/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { snackbarDuration } from '../../app.datamodel';
 
 @Component({
   selector: 'app-user-dialog',
@@ -15,7 +17,8 @@ export class UserDialogComponent {
       public dialogRef: MatDialogRef<UserDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: {mode: 'Create' | 'Edit', user?: FullUser},
       private formBuilder: FormBuilder,
-      private userService: UserService
+      private userService: UserService,
+      private snackBar: MatSnackBar
   ) {
     this.userFormGroup = this.formBuilder.group(
         {
@@ -53,7 +56,7 @@ export class UserDialogComponent {
       }
       this.dialogRef.close();
     } else {
-      alert("invalid user data");
+      this.snackBar.open("Invalid user data", "Ok", { duration: snackbarDuration });
     }
   }
 

@@ -10,6 +10,8 @@ import {
 import { GraphRendererService } from "../graph-section/graph-utils/graph-renderer.service";
 import { FullUser, User } from '../graph-section/graph-utils/graph.datamodel';
 import { AuthService } from './auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { snackbarDuration } from '../app.datamodel';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,8 @@ export class UserService {
     private httpClient: HttpClient,
     private readonly loginService: AuthService,
     private readonly store: Store,
-    private readonly graphRenderer: GraphRendererService
+    private readonly graphRenderer: GraphRendererService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   getUsers() {
@@ -33,7 +36,7 @@ export class UserService {
           this.graphRenderer.renderGraph({projects: [], users: data, selectedUserId: null});
         },
         error: error => {
-          alert(error.error.message);
+          this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });
         }
       });
   }
@@ -46,7 +49,7 @@ export class UserService {
           this.graphRenderer.renderNewUsers([res as User]);
         },
         error: error => {
-          alert(error.error.message);
+          this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });
         }
       });
   }
@@ -59,8 +62,7 @@ export class UserService {
             this.graphRenderer.renderUserUpdate(user);
           },
           error: error => {
-            alert(error.error.message);
-          }
+            this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });          }
         });
   }
 
@@ -72,8 +74,7 @@ export class UserService {
             this.graphRenderer.renderUserDelete(id);
           },
           error: error => {
-            alert(error.error.message);
-          }
+            this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });          }
         });
   }
 }

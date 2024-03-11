@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { snackbarDuration } from '../app.datamodel';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +16,8 @@ export class LoginComponent {
 
   constructor(
       private loginService: AuthService,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private snackBar: MatSnackBar
   ) {
     this.loginFormGroup = this.formBuilder.group(
         {
@@ -29,7 +32,7 @@ export class LoginComponent {
       this.loginService.login(
           this.loginFormGroup.get('username').value, this.loginFormGroup.get('password').value);
     } else {
-      alert('Please fill in the form');
+      this.snackBar.open("Please fill in the form", "Ok", {duration: snackbarDuration});
     }
   }
 }

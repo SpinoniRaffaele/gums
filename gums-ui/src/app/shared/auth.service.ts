@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { snackbarDuration } from '../app.datamodel';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,11 @@ export class AuthService {
 
   readonly AUTH_HEADER_NAME = 'x-auth-token';
 
-  constructor(private readonly httpClient: HttpClient, private readonly router: Router) {}
+  constructor(
+      private readonly httpClient: HttpClient,
+      private readonly router: Router,
+      private readonly snackBar: MatSnackBar
+  ) {}
 
   login(username: string, password: string) {
     const headers: HttpHeaders = new HttpHeaders()
@@ -25,11 +31,13 @@ export class AuthService {
               sessionStorage.setItem(this.AUTH_HEADER_NAME, authToken);
               this.router.navigate(['/admin']);
             } else {
-              alert('Login failed, token not found.');
+              this.snackBar.open('Login failed, token not found.', 'Ok',
+                  {duration: snackbarDuration});
             }
           },
           error: (_) => {
-            alert('Login failed, check your credentials.');
+            this.snackBar.open('Login failed, check your credentials.', 'Ok',
+                {duration: snackbarDuration});
           }
         });
   }
@@ -42,7 +50,8 @@ export class AuthService {
             this.router.navigate(['/login']);
           },
           error: (_) => {
-            alert('Logout failed, are you logged in?');
+            this.snackBar.open('Logout failed, are you logged in?', 'Ok',
+                {duration: snackbarDuration});
           }
         });
   }

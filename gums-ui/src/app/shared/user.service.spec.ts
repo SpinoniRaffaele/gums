@@ -6,6 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
 import { of } from 'rxjs';
 import { User } from '../graph-section/graph-utils/graph.datamodel';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('test ServiceService', () => {
   let service: UserService;
@@ -22,7 +23,8 @@ describe('test ServiceService', () => {
       providers: [
         {provide: HttpClient, useValue: httpClientMock},
         provideMockStore(),
-        {provide: GraphRendererService, useValue: graphRendererServiceMock}
+        {provide: GraphRendererService, useValue: graphRendererServiceMock},
+        {provide: MatSnackBar, useValue: {open: jest.fn()}}
       ]
     });
     service = TestBed.inject(UserService);

@@ -2,11 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('Login Component', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let component: LoginComponent;
   const mockAuthService = { login: jest.fn(), logout: jest.fn() };
+  const mockSnackBar = { open: jest.fn() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -14,7 +16,8 @@ describe('Login Component', () => {
       imports: [ReactiveFormsModule],
       providers: [
         { provide: AuthService, useValue: mockAuthService },
-        FormBuilder
+        FormBuilder,
+        { provide: MatSnackBar, useValue: mockSnackBar }
       ]
     });
     fixture = TestBed.createComponent(LoginComponent);
@@ -40,5 +43,6 @@ describe('Login Component', () => {
     component.submit();
 
     expect(mockAuthService.login).toHaveBeenCalledTimes(0);
+    expect(mockSnackBar.open).toHaveBeenCalled();
   });
 });
