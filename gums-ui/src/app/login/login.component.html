@@ -13,7 +13,10 @@
         <div class="center">
             <mat-form-field appearance="outline">
                 <mat-label>Enter your password</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" [formControl]="loginFormGroup.controls['password']">
+                <input matInput
+                        [type]="hide ? 'password' : 'text'"
+                        [formControl]="loginFormGroup.controls['password']"
+                        placeholder="Password">
                 <button mat-icon-button matSuffix (click)="hide = !hide"
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide"
                         type="button"
