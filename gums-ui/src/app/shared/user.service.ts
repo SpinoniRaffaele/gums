@@ -20,6 +20,8 @@ export class UserService {
 
   readonly BASE_USER_PATH = "/gums-1/user";
 
+  readonly errorMessage = "An error has occurred while sending the request";
+
   constructor(
     private httpClient: HttpClient,
     private readonly loginService: AuthService,
@@ -36,7 +38,7 @@ export class UserService {
           this.graphRenderer.renderGraph({projects: [], users: data, selectedUserId: null});
         },
         error: error => {
-          this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });
+          this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
         }
       });
   }
@@ -49,7 +51,7 @@ export class UserService {
           this.graphRenderer.renderNewUsers([res as User]);
         },
         error: error => {
-          this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });
+          this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
         }
       });
   }
@@ -62,7 +64,8 @@ export class UserService {
             this.graphRenderer.renderUserUpdate(user);
           },
           error: error => {
-            this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });          }
+            this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
+          }
         });
   }
 
@@ -74,7 +77,8 @@ export class UserService {
             this.graphRenderer.renderUserDelete(id);
           },
           error: error => {
-            this.snackBar.open(error.error.message, "Ok", { duration: snackbarDuration });          }
+            this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
+          }
         });
   }
 }
