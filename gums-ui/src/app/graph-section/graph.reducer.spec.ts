@@ -1,12 +1,12 @@
 import { graphReducer, initialState } from './graph.reducer';
 import {
   AddUserCompleted, DeleteUserCompleted,
-  EditUserCompleted,
+  EditUserCompleted, GetProjectsCompleted,
   GetUsersCompleted,
-  SelectUserCompleted,
-  UnselectUserCompleted
+  SelectElementCompleted,
+  UnselectElementCompleted
 } from './graph.action';
-import { User } from './graph-utils/graph.datamodel';
+import { Project, User } from './graph-utils/graph.datamodel';
 
 describe('GraphReducer', () => {
   const initialStateWithUser = {
@@ -19,7 +19,7 @@ describe('GraphReducer', () => {
     const state = graphReducer(initialState, GetUsersCompleted({ users: users }));
 
     expect(state.users).toEqual(users);
-    expect(state.selectedUserId).toBeNull();
+    expect(state.selectedId).toBeNull();
     expect(state.projects).toEqual([]);
   });
 
@@ -28,15 +28,15 @@ describe('GraphReducer', () => {
     const state = graphReducer(initialState, AddUserCompleted({ newUser: user }));
 
     expect(state.users).toEqual([user]);
-    expect(state.selectedUserId).toBeNull();
+    expect(state.selectedId).toBeNull();
     expect(state.projects).toEqual([]);
   });
 
   it('should select a user', () => {
-    const state = graphReducer(initialStateWithUser, SelectUserCompleted({ selectedUserId: "1" }));
+    const state = graphReducer(initialStateWithUser, SelectElementCompleted({ selectedId: "1" }));
 
     expect(state.users).toEqual(initialStateWithUser.users);
-    expect(state.selectedUserId).toEqual("1");
+    expect(state.selectedId).toEqual("1");
     expect(state.projects).toEqual([]);
   });
 
@@ -46,10 +46,10 @@ describe('GraphReducer', () => {
       users: [new User("1", "John", "mail", 12, true)],
       selectedUserId: "1"
     }
-    const state = graphReducer(initialStateWithSelectedUser, UnselectUserCompleted());
+    const state = graphReducer(initialStateWithSelectedUser, UnselectElementCompleted());
 
     expect(state.users).toEqual(initialStateWithSelectedUser.users);
-    expect(state.selectedUserId).toBeNull();
+    expect(state.selectedId).toBeNull();
     expect(state.projects).toEqual([]);
   });
 
@@ -58,14 +58,23 @@ describe('GraphReducer', () => {
         { editedUser: new User("1", "John", "mail", 12, false) }));
 
     expect(state.users).toEqual([new User("1", "John", "mail", 12, false)]);
-    expect(state.selectedUserId).toBeNull();
+    expect(state.selectedId).toBeNull();
     expect(state.projects).toEqual([]);
   });
 
   it('should delete the user', () => {
     const state = graphReducer(initialStateWithUser, DeleteUserCompleted( { deletedUserId: "1" }));
     expect(state.users).toEqual([]);
-    expect(state.selectedUserId).toBeNull();
+    expect(state.selectedId).toBeNull();
     expect(state.projects).toEqual([]);
+  });
+
+  it('should set the projects', () => {
+    const projects = [new Project("1", "Proj1", "{}", [], [], "user1", {})];
+    const state = graphReducer(initialState, GetProjectsCompleted({ projects: projects }));
+
+    expect(state.projects).toEqual(projects);
+    expect(state.selectedId).toBeNull();
+    expect(state.users).toEqual([]);
   });
 });

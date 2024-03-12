@@ -3,6 +3,7 @@ import { UserService } from "../shared/user.service";
 import { GraphRendererService } from "./graph-utils/graph-renderer.service";
 import { Store } from '@ngrx/store';
 import { selectNoElementsToDisplay } from './graph.reducer';
+import { ProjectService } from '../shared/project.service';
 
 @Component({
   selector: 'app-graph-section',
@@ -14,7 +15,8 @@ export class GraphSectionComponent implements OnInit {
 
   constructor(
       private userService: UserService,
-      private readonly graphRenderer: GraphRendererService,
+      private projectService: ProjectService,
+      private graphRenderer: GraphRendererService,
       private store: Store
   ) {
   }
@@ -22,6 +24,7 @@ export class GraphSectionComponent implements OnInit {
   ngOnInit() {
     this.graphRenderer.initializeScene(document.getElementById("3d-renderer"));
     this.userService.getUsers();
+    this.projectService.getProjects();
     this.store.select(selectNoElementsToDisplay).subscribe(noElementsToDisplay => {
       this.noElementsToDisplay = noElementsToDisplay;
     })

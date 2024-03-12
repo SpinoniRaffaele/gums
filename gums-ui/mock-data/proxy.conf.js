@@ -1,4 +1,5 @@
 const usersMock = require("./user");
+const projectsMock = require("./projects");
 
 let newId = 10;
 
@@ -26,6 +27,12 @@ const PROXY_CONFIG = {
         }
         if (req.method === "DELETE") {
           res.end();
+          return;
+        }
+      }
+      if (req.url.startsWith('/gums/project')) {
+        if (req.method === "GET") {
+          res.end(JSON.stringify(projectsMock.projects));
           return;
         }
       }

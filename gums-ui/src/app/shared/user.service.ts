@@ -11,7 +11,7 @@ import { GraphRendererService } from "../graph-section/graph-utils/graph-rendere
 import { FullUser, User } from '../graph-section/graph-utils/graph.datamodel';
 import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { snackbarDuration } from '../app.datamodel';
+import { errorMessage, snackbarDuration } from '../app.datamodel';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,6 @@ import { snackbarDuration } from '../app.datamodel';
 export class UserService {
 
   readonly BASE_USER_PATH = "/gums/user";
-
-  readonly errorMessage = "An error has occurred while sending the request";
 
   constructor(
     private httpClient: HttpClient,
@@ -35,10 +33,10 @@ export class UserService {
       .subscribe({
         next: (data: any) => {
           this.store.dispatch(GetUsersCompleted({ users: data }));
-          this.graphRenderer.renderGraph({projects: [], users: data, selectedUserId: null});
+          this.graphRenderer.renderNewUsers(data);
         },
         error: error => {
-          this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
+          this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
         }
       });
   }
@@ -51,7 +49,7 @@ export class UserService {
           this.graphRenderer.renderNewUsers([res as User]);
         },
         error: error => {
-          this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
+          this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
         }
       });
   }
@@ -64,7 +62,7 @@ export class UserService {
             this.graphRenderer.renderUserUpdate(user);
           },
           error: error => {
-            this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
+            this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
           }
         });
   }
@@ -77,7 +75,7 @@ export class UserService {
             this.graphRenderer.renderUserDelete(id);
           },
           error: error => {
-            this.snackBar.open(this.errorMessage, "Ok", { duration: snackbarDuration });
+            this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
           }
         });
   }

@@ -5,12 +5,14 @@ import { GraphRendererService } from './graph-utils/graph-renderer.service';
 import { UserService } from '../shared/user.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
+import { ProjectService } from '../shared/project.service';
 
 describe('GraphSectionComponent', () => {
   let component: GraphSectionComponent;
   let fixture: ComponentFixture<GraphSectionComponent>;
-  let userServiceMock = {getUsers: jest.fn()};
-  let graphRendererServiceMock = {initializeScene: jest.fn()};
+  const userServiceMock = {getUsers: jest.fn()};
+  const graphRendererServiceMock = {initializeScene: jest.fn()};
+  const projectServiceMock = {getProjects: jest.fn()};
   let store;
 
   beforeEach(() => {
@@ -18,6 +20,7 @@ describe('GraphSectionComponent', () => {
       declarations: [GraphSectionComponent],
       providers: [
         {provide: UserService, useValue: userServiceMock},
+        {provide: ProjectService, useValue: projectServiceMock},
         {provide: GraphRendererService, useValue: graphRendererServiceMock},
         provideMockStore({users: [], projects: []} as any),
       ]
@@ -28,13 +31,15 @@ describe('GraphSectionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should render the scene and retrieve the users', () => {
+  it('should render the scene and retrieve the users and projects', () => {
     jest.spyOn(userServiceMock, 'getUsers');
+    jest.spyOn(projectServiceMock, 'getProjects');
     jest.spyOn(graphRendererServiceMock, 'initializeScene');
     component.ngOnInit();
 
     expect(graphRendererServiceMock.initializeScene).toHaveBeenCalled();
     expect(userServiceMock.getUsers).toHaveBeenCalled();
+    expect(projectServiceMock.getProjects).toHaveBeenCalled();
   });
 
   it('should render the message if no elements are retrieved', () => {

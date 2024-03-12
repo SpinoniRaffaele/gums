@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
-import { GraphState, selectSelectedUser } from "../graph.reducer";
-import { Element, ElementType, User } from "./graph.datamodel";
+import { selectSelectedElement } from "../graph.reducer";
+import { Element, ElementType, Project, User } from "./graph.datamodel";
 import * as THREE from 'three';
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { PhysicsService } from "./physics.service";
 import gsap from "gsap";
 import { Store } from '@ngrx/store';
-import { SelectUserCompleted, UnselectUserCompleted } from '../graph.action';
+import { SelectElementCompleted, UnselectElementCompleted } from '../graph.action';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +36,11 @@ export class GraphRendererService {
 
   orbit;
 
-  isFocusedOnUser = false;
+  isFocusedOnElement = false;
 
-  userNameDivsById = new Map<string, any>();
+  elementLabelDivsById = new Map<string, any>();
 
-  readonly INITIAL_CUBE_SIZE = 10;
+  readonly INITIAL_CUBE_SIZE = 15;
 
   readonly WIDTH_PERCENTAGE = 0.75;
 
@@ -49,16 +49,16 @@ export class GraphRendererService {
   readonly RELATIVE_DISTANCE_AFTER_FOCUS = 1.3;
 
   constructor(private readonly physicsService: PhysicsService, private readonly store: Store) {
-    this.store.select(selectSelectedUser).subscribe((user: User) => {
-      if (!user) {
-        this.userNameDivsById.forEach((div) => {div.style.opacity = '1';});
+    this.store.select(selectSelectedElement).subscribe((selected) => {
+      if (!selected.element) {
+        this.elementLabelDivsById.forEach((div) => {div.style.opacity = '1';});
       }
-      this.isFocusedOnUser = !!user;
+      this.isFocusedOnElement = !!selected.element;
     });
   }
 
-  renderGraph(graphState: GraphState) {
-    this.addRandomUsers(graphState.users);
+  renderProjects(projects: Project[]) {
+    this.addRandomProjects(projects);
   }
 
   renderNewUsers(users: User[]) {
@@ -67,13 +67,13 @@ export class GraphRendererService {
 
   renderUserUpdate(user: User) {
     const element = this.elements.find((element: Element) => element.id === user.id);
-    this.updateUserLabel(user.name, element.nativeObject);
+    this.updateElementLabel(user.name, element.nativeObject);
   }
 
   renderUserDelete(userId: string) {
     const element = this.elements.find((element: Element) => element.id === userId);
     this.scene.remove(element.nativeObject);
-    this.userNameDivsById.get(userId).remove();
+    this.elementLabelDivsById.get(userId).remove();
     this.elements = this.elements.filter((element: Element) => element.id !== userId);
   }
 
@@ -108,8 +108,8 @@ export class GraphRendererService {
   private initializeOrbitAndHisListeners() {
     this.orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
     this.orbit.addEventListener('change', () => {
-      if (this.isFocusedOnUser) {
-        this.store.dispatch(UnselectUserCompleted());
+      if (this.isFocusedOnElement) {
+        this.store.dispatch(UnselectElementCompleted());
       }
     });
   }
@@ -162,23 +162,40 @@ export class GraphRendererService {
 
   private addRandomUsers(users: User[]) {
     for (let user of users) {
-      const particleGeometry = new THREE.SphereGeometry(2, 40, 40);
+      const particleGeometry = new THREE.CapsuleGeometry(2, 2, 40, 40);
       const particleMaterial = new THREE.MeshStandardMaterial({color: this.generateRandomColor()});
       const userNativeElement = new THREE.Mesh(particleGeometry, particleMaterial);
       userNativeElement.position.x = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
       userNativeElement.position.y = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
       userNativeElement.position.z = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
 
-      this.addUser2DLabel(user.name, user.id, userNativeElement);
+      this.addElement2DLabel(user.name, user.id, userNativeElement);
 
       this.scene.add(userNativeElement);
       this.elements.push(new Element(userNativeElement, ElementType.USER, new THREE.Vector3(0, 0, 0), user.id));
     }
   }
 
+  private addRandomProjects(projects: Project[]) {
+    for (let project of projects) {
+      const boxGeometry = new THREE.OctahedronGeometry(2);
+      const boxMaterial = new THREE.MeshStandardMaterial({color: this.generateRandomColor()});
+      const projectNativeElement = new THREE.Mesh(boxGeometry, boxMaterial);
+      projectNativeElement.position.x = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
+      projectNativeElement.position.y = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
+      projectNativeElement.position.z = Math.random() * this.INITIAL_CUBE_SIZE - this.INITIAL_CUBE_SIZE / 2;
+
+      this.addElement2DLabel(project.name, project.id, projectNativeElement);
+
+      this.scene.add(projectNativeElement);
+      this.elements.push(
+          new Element(projectNativeElement, ElementType.PROJECT, new THREE.Vector3(0, 0, 0), project.id));
+    }
+  }
+
   private updateRaycaster() {
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    if (!this.isFocusedOnUser) {
+    if (!this.isFocusedOnElement) {
       const intersects = this.raycaster.intersectObjects(this.scene.children, false);
       this.pointedObject = undefined;
       if (this.intersected) {
@@ -196,30 +213,30 @@ export class GraphRendererService {
     return "#" + Math.floor(Math.random() * 16777215).toString(16);
   }
 
-  private addUser2DLabel(labelContent, userId, userNativeElement) {
-    const userNameDiv = document.createElement( 'div' );
-    userNameDiv.className = 'text textarea main-action';
-    userNameDiv.textContent = labelContent;
-    this.styleUserLabel(userNameDiv);
-    this.userNameDivsById.set(userId, userNameDiv);
-    const userNameLabel = new CSS2DObject( userNameDiv );
-    userNameLabel.position.set( userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z );
-    userNameLabel.center.set( 0, 0 );
-    userNativeElement.add( userNameLabel );
+  private addElement2DLabel(labelContent, id, userNativeElement) {
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'text textarea main-action';
+    labelDiv.textContent = labelContent;
+    this.styleElementLabel(labelDiv);
+    this.elementLabelDivsById.set(id, labelDiv);
+    const label = new CSS2DObject(labelDiv);
+    label.position.set(userNativeElement.position.x, userNativeElement.position.y, userNativeElement.position.z);
+    label.center.set(0, 0);
+    userNativeElement.add(label);
   }
 
-  private styleUserLabel(usernameDiv: HTMLElement) {
+  private styleElementLabel(usernameDiv: HTMLElement) {
     usernameDiv.style.backgroundColor = 'rgba(12, 12, 12, 0.5)';
     usernameDiv.style.padding = '5px';
     usernameDiv.style.borderRadius = '5px';
   }
 
-  private updateUserLabel(labelContent, userNativeElement) {
+  private updateElementLabel(labelContent, userNativeElement) {
     userNativeElement.children[0].element.textContent = labelContent;
   }
 
   private createFocusClickEventListener() {
-    window.addEventListener('click', (e) => {
+    window.addEventListener('click', (_) => {
       if (this.pointedObject) {
         const id = this.pointedObject.id;
         const aabb = new THREE.Box3().setFromObject( this.pointedObject );
@@ -237,8 +254,8 @@ export class GraphRendererService {
             this.orbit.update();
             const selectedElement = this.elements.find((element: Element) => element.nativeObject.id === id);
             if (selectedElement) {
-              this.store.dispatch(SelectUserCompleted({selectedUserId: selectedElement.id}));
-              this.userNameDivsById.forEach((div) => {div.style.opacity = '0';});
+              this.store.dispatch(SelectElementCompleted({selectedId: selectedElement.id}));
+              this.elementLabelDivsById.forEach((div) => {div.style.opacity = '0';});
             }
           }
         });

@@ -11,7 +11,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 describe('test ServiceService', () => {
   let service: UserService;
   const graphRendererServiceMock = {
-    renderGraph: jest.fn(),
     renderNewUsers: jest.fn(),
     renderUserUpdate: jest.fn(),
     renderUserDelete: jest.fn()
@@ -32,11 +31,10 @@ describe('test ServiceService', () => {
 
   it('should get users and update the graph', () => {
     jest.spyOn(httpClientMock, 'get').mockReturnValue(of([{name: 'test'}]));
-    jest.spyOn(graphRendererServiceMock, 'renderGraph');
+    jest.spyOn(graphRendererServiceMock, 'renderNewUsers');
     service.getUsers();
     expect(httpClientMock.get).toHaveBeenCalledWith('/gums/user', expect.anything());
-    expect(graphRendererServiceMock.renderGraph).toHaveBeenCalledWith(
-        {projects: [], users: [{name: 'test'}], selectedUserId: null});
+    expect(graphRendererServiceMock.renderNewUsers).toHaveBeenCalledWith([{name: 'test'}]);
   });
 
   it('should add user and update the graph', () => {

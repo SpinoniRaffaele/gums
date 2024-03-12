@@ -3,10 +3,10 @@ import { AuthService } from '../shared/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent, UserDialogMode } from '../dialog/user-dialog/user-dialog.component';
 import { Store } from '@ngrx/store';
-import { selectSelectedUser } from '../graph-section/graph.reducer';
-import { FullUser } from '../graph-section/graph-utils/graph.datamodel';
+import { selectSelectedElement } from '../graph-section/graph.reducer';
+import { ElementType, Project, User } from '../graph-section/graph-utils/graph.datamodel';
 import { Subscription } from 'rxjs';
-import { UnselectUserCompleted } from '../graph-section/graph.action';
+import { UnselectElementCompleted } from '../graph-section/graph.action';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +14,6 @@ import { UnselectUserCompleted } from '../graph-section/graph.action';
 })
 export class SidebarComponent implements OnDestroy {
 
-  selectedUser: FullUser;
   subscriptions: Subscription[] = [];
   
   constructor(
@@ -22,18 +21,19 @@ export class SidebarComponent implements OnDestroy {
     private dialog: MatDialog,
     private store: Store
   ) {
-    this.subscriptions.push(this.store.select(selectSelectedUser).subscribe((user: FullUser) => {
-      if (user !== this.selectedUser) {
-        this.selectedUser = user;
-        if (user) {
-          const dialogRef = this.dialog.open(UserDialogComponent, {
-            data: {mode: UserDialogMode.Edit, user: this.selectedUser},
-            minWidth: '30%'
-          });
-          dialogRef.afterClosed().subscribe(() => {
-            this.store.dispatch(UnselectUserCompleted());
-          });
-        }
+    this.subscriptions.push(this.store.select(selectSelectedElement)
+        .subscribe((selected: {element: User | Project, type: ElementType}) => {
+      if (!selected.element) return;
+      if (selected.type === ElementType.USER) {
+        const dialogRef = this.dialog.open(UserDialogComponent, {
+          data: {mode: UserDialogMode.Edit, user: selected.element},
+          minWidth: '30%'
+        });
+        dialogRef.afterClosed().subscribe(() => {
+          this.store.dispatch(UnselectElementCompleted());
+        });
+      } else {
+        //todo: edit project
       }
     }));
   }

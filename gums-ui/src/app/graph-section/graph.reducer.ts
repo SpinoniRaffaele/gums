@@ -1,23 +1,23 @@
-import { Project, User } from "./graph-utils/graph.datamodel";
+import { ElementType, Project, User } from "./graph-utils/graph.datamodel";
 import {
   AddUserCompleted, DeleteUserCompleted,
-  EditUserCompleted,
+  EditUserCompleted, GetProjectsCompleted,
   GetUsersCompleted,
-  SelectUserCompleted,
-  UnselectUserCompleted
+  SelectElementCompleted,
+  UnselectElementCompleted
 } from "./graph.action";
 import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 
 export const GRAPH_REDUCER = 'graph';
 
 export const initialState: GraphState = {
-  selectedUserId: null,
+  selectedId: null,
   users: [],
   projects: []
 }
 
 export interface GraphState {
-  selectedUserId: string;
+  selectedId: string;
   users: User[];
   projects: Project[];
 }
@@ -26,10 +26,11 @@ export const graphReducer = createReducer(
   initialState,
   on(GetUsersCompleted, getUserCompletedAction),
   on(AddUserCompleted, addUserCompletedAction),
-  on(SelectUserCompleted, selectUserCompleted),
-  on(UnselectUserCompleted, unselectUserCompleted),
+  on(SelectElementCompleted, selectElementCompleted),
+  on(UnselectElementCompleted, unselectElementCompleted),
   on(EditUserCompleted, editUserCompletedAction),
-  on(DeleteUserCompleted, deleteUserCompletedAction)
+  on(DeleteUserCompleted, deleteUserCompletedAction),
+  on(GetProjectsCompleted, getProjectsCompletedAction)
 )
 
 function getUserCompletedAction(state: GraphState, action) {
@@ -46,17 +47,17 @@ function addUserCompletedAction(state: GraphState, action) {
   }
 }
 
-function selectUserCompleted(state: GraphState, action) {
+function selectElementCompleted(state: GraphState, action) {
   return {
     ...state,
-    selectedUserId: action.selectedUserId
+    selectedId: action.selectedId
   }
 }
 
-function unselectUserCompleted(state: GraphState) {
+function unselectElementCompleted(state: GraphState) {
   return {
     ...state,
-    selectedUserId: null
+    selectedId: null
   }
 }
 
@@ -64,7 +65,7 @@ function editUserCompletedAction(state: GraphState, action) {
   return {
     ...state,
     users: state.users.map(user => user.id === action.editedUser.id ? action.editedUser : user),
-    selectedUserId: null
+    selectedId: null
   };
 }
 
@@ -72,14 +73,23 @@ function deleteUserCompletedAction(state: GraphState, action) {
   return {
     ...state,
     users: state.users.filter(user => user.id !== action.deletedUserId),
-    selectedUserId: null
+    selectedId: null
+  };
+}
+
+function getProjectsCompletedAction(state: GraphState, action) {
+  return {
+    ...state,
+    projects: action.projects
   };
 }
 
 export const select = createFeatureSelector<GraphState>(GRAPH_REDUCER);
 
-export const selectSelectedUser = createSelector(select, (state: GraphState) => {
-  return state.users.find(user => user.id === state.selectedUserId);
+export const selectSelectedElement = createSelector(select, (state: GraphState) => {
+  const project = state.projects.find(project => project.id === state.selectedId);
+  return project ? {element: project, type: ElementType.PROJECT} :
+      {element: state.users.find(user => user.id === state.selectedId), type: ElementType.USER};
 });
 
 export const selectNoElementsToDisplay = createSelector(select, (state: GraphState) => {
