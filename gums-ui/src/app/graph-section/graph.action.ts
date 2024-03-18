@@ -18,3 +18,5 @@ export const EditProjectCompleted = createAction('[Graph Action] Edit Project co
     props<{project: Project}>());
 export const DeleteProjectCompleted = createAction('[Graph Action] Delete Project completed',
     props<{projectId: string}>());
+export const CreateProjectCompleted = createAction('[Graph Action] Create Project completed',
+    props<{project: Project}>());

@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 import { Project } from '../graph-section/graph-utils/graph.datamodel';
 
 describe('ProjectService', () => {
-  const httpClientMock = { get: jest.fn(), put: jest.fn(), delete: jest.fn() };
+  const httpClientMock = { get: jest.fn(), put: jest.fn(), delete: jest.fn(), post: jest.fn() };
   const graphRendererServiceMock = {
     renderProjects: jest.fn(),
     renderElementUpdate: jest.fn(),
@@ -63,6 +63,19 @@ describe('ProjectService', () => {
 
     expect(httpClientMock.delete).toHaveBeenCalledWith('/gums/project/1', expect.anything());
     expect(graphRendererServiceMock.renderElementDelete).toHaveBeenCalledWith("1");
+    expect(store.dispatch).toHaveBeenCalled();
+  });
+
+  it('should create the project and update the graph', () => {
+    const project = new Project('id', 'name', 'content', [], [], 'ownerId', []);
+    jest.spyOn(httpClientMock, 'post').mockReturnValue(of(project));
+    jest.spyOn(graphRendererServiceMock, 'renderProjects');
+    jest.spyOn(store, 'dispatch');
+
+    service.createProject(project);
+
+    expect(httpClientMock.post).toHaveBeenCalledWith('/gums/project', project, expect.anything());
+    expect(graphRendererServiceMock.renderProjects).toHaveBeenCalledWith([project]);
     expect(store.dispatch).toHaveBeenCalled();
   });
 });

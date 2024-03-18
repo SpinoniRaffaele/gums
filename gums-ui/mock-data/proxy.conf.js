@@ -35,6 +35,21 @@ const PROXY_CONFIG = {
           res.end();
           return;
         }
+        if (req.method === "POST") {
+          res.end(JSON.stringify({
+            id: newId,
+            name: "project" + newId,
+            linkedProjectIds: ["projId0"],
+            content: {},
+            collaboratorIds: [
+              "55252615-b947-4bb6-a5ce-62a9340aec55",
+              "55252615-b947-4bb6-a5ce-62a9340aec66"
+            ],
+            ownerId: "55252615-b947-4bb6-a5ce-62a9340aec55",
+            properties: {"key": "val"}
+          }));
+          return;
+        }
       }
       if (req.url.startsWith('/gums/auth/login')) {
         res.setHeader('x-auth-token', 'fake-token');

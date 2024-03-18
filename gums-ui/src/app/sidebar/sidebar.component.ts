@@ -45,6 +45,13 @@ export class SidebarComponent implements OnDestroy {
     });
   }
 
+  newProject() {
+    this.dialog.open(ProjectDialogComponent, {
+      data: {mode: DialogMode.Create},
+      minWidth: '30%'
+    });
+  }
+
   logout() {
     this.loginService.logout();
   }

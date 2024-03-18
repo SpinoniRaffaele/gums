@@ -1,6 +1,6 @@
 import { graphReducer, initialState } from './graph.reducer';
 import {
-  AddUserCompleted, DeleteProjectCompleted, DeleteUserCompleted, EditProjectCompleted,
+  AddUserCompleted, CreateProjectCompleted, DeleteProjectCompleted, DeleteUserCompleted, EditProjectCompleted,
   EditUserCompleted, GetProjectsCompleted,
   GetUsersCompleted,
   SelectElementCompleted,
@@ -113,6 +113,15 @@ describe('GraphReducer', () => {
     }, DeleteProjectCompleted({ projectId: "1" }));
 
     expect(state.projects).toEqual([]);
+    expect(state.selectedId).toBeNull();
+    expect(state.users).toEqual([]);
+  });
+
+  it('should create the project', () => {
+    const project = new Project("1", "Proj1", "{}", [], [], "user1", {});
+    const state = graphReducer(initialState, CreateProjectCompleted({ project: project }));
+
+    expect(state.projects).toEqual([project]);
     expect(state.selectedId).toBeNull();
     expect(state.users).toEqual([]);
   });

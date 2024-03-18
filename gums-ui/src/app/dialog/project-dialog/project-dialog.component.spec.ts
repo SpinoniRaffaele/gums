@@ -12,7 +12,7 @@ describe('ProjectDialogComponent', () => {
   let component: ProjectDialogComponent;
   let fixture: ComponentFixture<ProjectDialogComponent>;
   const mockDialogRef = {close: jest.fn()};
-  const mockProjectService = {editProject: jest.fn(), deleteProject: jest.fn()};
+  const mockProjectService = {editProject: jest.fn(), deleteProject: jest.fn(), createProject: jest.fn()};
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -33,6 +33,23 @@ describe('ProjectDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should correctly create project', () => {
+    jest.spyOn(mockProjectService, 'createProject');
+    jest.spyOn(mockDialogRef, 'close');
+    component.data = {
+      mode: DialogMode.Create
+    };
+    component.projectFormGroup.controls['name'].setValue('new name');
+    component.projectFormGroup.controls['content'].setValue("{\"new\": \"content\"}");
+    component.projectFormGroup.controls['ownerId'].setValue("owner");
+
+    component.submitForm();
+
+    expect(mockProjectService.createProject).toHaveBeenCalledWith(
+        new Project("DUMMY", "new name", "{\"new\": \"content\"}", [], [], "owner", {}));
+    expect(mockDialogRef.close).toHaveBeenCalled();
   });
 
   it('should correctly edit project', () => {

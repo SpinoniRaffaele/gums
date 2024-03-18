@@ -39,7 +39,7 @@ export class ProjectDialogComponent {
           linkedProjectIds: this.formBuilder.array(
               data.mode === DialogMode.Edit ? this.stringsToArrayOfControls(data.project.linkedProjectIds) : []),
           ownerId: new FormControl(
-              data.mode === DialogMode.Edit ? data.project.ownerId : false, []),
+              data.mode === DialogMode.Edit ? data.project.ownerId : "", []),
           properties: this.formBuilder.array(
               data.mode === DialogMode.Edit ? this.propertiesControls : []),
         }
@@ -55,7 +55,14 @@ export class ProjectDialogComponent {
       const ownerId = this.projectFormGroup.controls['ownerId'].value;
       const properties = this.projectFormGroup.controls['properties'].value;
       if (this.data.mode === DialogMode.Create) {
-        // todo: add new project
+        this.projectService.createProject(new Project(
+            "DUMMY",
+            name,
+            content,
+            collaboratorIds,
+            linkedProjectIds,
+            ownerId,
+            this.propertiesToObject(properties)));
       } else {
         this.projectService.editProject(new Project(
             this.data.project.id,
