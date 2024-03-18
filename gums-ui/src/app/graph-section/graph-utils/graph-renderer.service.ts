@@ -70,11 +70,11 @@ export class GraphRendererService {
     this.updateElementLabel(name, element.nativeObject);
   }
 
-  renderUserDelete(userId: string) {
-    const element = this.elements.find((element: Element) => element.id === userId);
+  renderElementDelete(id: string) {
+    const element = this.elements.find((element: Element) => element.id === id);
     this.scene.remove(element.nativeObject);
-    this.elementLabelDivsById.get(userId).remove();
-    this.elements = this.elements.filter((element: Element) => element.id !== userId);
+    this.elementLabelDivsById.get(id).remove();
+    this.elements = this.elements.filter((element: Element) => element.id !== id);
   }
 
   initializeScene(domElementRenderer) {

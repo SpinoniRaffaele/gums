@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { errorMessage, snackbarDuration } from '../app.datamodel';
-import { EditProjectCompleted, GetProjectsCompleted } from '../graph-section/graph.action';
+import { DeleteProjectCompleted, EditProjectCompleted, GetProjectsCompleted } from '../graph-section/graph.action';
 import { Project } from '../graph-section/graph-utils/graph.datamodel';
 
 @Injectable({
@@ -42,6 +42,20 @@ export class ProjectService {
             this.store.dispatch(EditProjectCompleted({project: project}));
             this.graphRenderer.renderElementUpdate(project.id, project.name);
             this.snackBar.open('Project updated', 'Ok', { duration: snackbarDuration });
+          },
+          error: _ => {
+            this.snackBar.open(errorMessage, 'Ok', { duration: snackbarDuration });
+          }
+        });
+  }
+
+  deleteProject(projectId: string) {
+    this.httpClient.delete(this.BASE_PROJECT_PATH + "/" + projectId, {headers: this.loginService.getAuthHeader()})
+        .subscribe({
+          next: (_) => {
+            this.store.dispatch(DeleteProjectCompleted({projectId: projectId}));
+            this.graphRenderer.renderElementDelete(projectId);
+            this.snackBar.open('Project deleted', 'Ok', { duration: snackbarDuration });
           },
           error: _ => {
             this.snackBar.open(errorMessage, 'Ok', { duration: snackbarDuration });

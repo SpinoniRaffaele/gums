@@ -21,11 +21,7 @@ const PROXY_CONFIG = {
           }));
           return;
         }
-        if (req.method === "PUT") {
-          res.end();
-          return;
-        }
-        if (req.method === "DELETE") {
+        if (req.method === "PUT" || req.method === "DELETE") {
           res.end();
           return;
         }
@@ -35,7 +31,7 @@ const PROXY_CONFIG = {
           res.end(JSON.stringify(projectsMock.projects));
           return;
         }
-        if (req.method === "PUT") {
+        if (req.method === "PUT" || req.method === "DELETE") {
           res.end();
           return;
         }

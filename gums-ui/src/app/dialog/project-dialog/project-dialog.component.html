@@ -79,4 +79,5 @@
 <mat-dialog-actions align="center">
     <button mat-raised-button (click)="onCloseClick()">Close</button>
     <button mat-raised-button color="primary" (click)="submitForm()">Save</button>
+    <button *ngIf="data.mode === 'Edit'" mat-raised-button color="warn" (click)="deleteProject()">Delete</button>
 </mat-dialog-actions>

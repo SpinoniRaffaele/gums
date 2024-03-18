@@ -91,6 +91,13 @@ export class ProjectDialogComponent {
     this.projectFormGroup.controls[field].removeAt(indexOfDeletion);
   }
 
+  deleteProject() {
+    if (this.data.mode === DialogMode.Edit) {
+      this.projectService.deleteProject(this.data.project.id);
+      this.dialogRef.close();
+    }
+  }
+
   private propertiesToObject(values: string[]) {
     const result = {};
     this.properties.forEach((key, index) => {

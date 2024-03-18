@@ -13,7 +13,7 @@ describe('test ServiceService', () => {
   const graphRendererServiceMock = {
     renderNewUsers: jest.fn(),
     renderUserUpdate: jest.fn(),
-    renderUserDelete: jest.fn(),
+    renderElementDelete: jest.fn(),
     renderElementUpdate: jest.fn()
   };
   const httpClientMock = {get: jest.fn(), post: jest.fn(), put: jest.fn(), delete: jest.fn()};
@@ -58,10 +58,10 @@ describe('test ServiceService', () => {
 
   it('should delete the user and update the graph', function () {
     jest.spyOn(httpClientMock, 'delete').mockReturnValue(of(null));
-    jest.spyOn(graphRendererServiceMock, 'renderUserDelete');
+    jest.spyOn(graphRendererServiceMock, 'renderElementDelete');
 
     service.deleteUser("id");
     expect(httpClientMock.delete).toHaveBeenCalledWith('/gums/user/id', expect.anything());
-    expect(graphRendererServiceMock.renderUserDelete).toHaveBeenCalledWith("id");
+    expect(graphRendererServiceMock.renderElementDelete).toHaveBeenCalledWith("id");
   });
 });

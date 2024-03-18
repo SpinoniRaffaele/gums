@@ -12,7 +12,7 @@ describe('ProjectDialogComponent', () => {
   let component: ProjectDialogComponent;
   let fixture: ComponentFixture<ProjectDialogComponent>;
   const mockDialogRef = {close: jest.fn()};
-  const mockProjectService = {editProject: jest.fn()};
+  const mockProjectService = {editProject: jest.fn(), deleteProject: jest.fn()};
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -66,5 +66,19 @@ describe('ProjectDialogComponent', () => {
 
     expect(mockProjectService.editProject).not.toHaveBeenCalled();
     expect(mockDialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('should delete', () => {
+    jest.spyOn(mockProjectService, 'deleteProject');
+    jest.spyOn(mockDialogRef, 'close');
+    component.data = {
+      mode: DialogMode.Edit,
+      project: new Project("id", "John Doe", "{}", [],[], "user1", {})
+    };
+
+    component.deleteProject();
+
+    expect(mockProjectService.deleteProject).toHaveBeenCalledWith("id");
+    expect(mockDialogRef.close).toHaveBeenCalled();
   });
 });

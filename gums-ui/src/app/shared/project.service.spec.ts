@@ -8,8 +8,12 @@ import { of } from 'rxjs';
 import { Project } from '../graph-section/graph-utils/graph.datamodel';
 
 describe('ProjectService', () => {
-  const httpClientMock = { get: jest.fn(), put: jest.fn() };
-  const graphRendererServiceMock = { renderProjects: jest.fn(), renderElementUpdate: jest.fn() };
+  const httpClientMock = { get: jest.fn(), put: jest.fn(), delete: jest.fn() };
+  const graphRendererServiceMock = {
+    renderProjects: jest.fn(),
+    renderElementUpdate: jest.fn(),
+    renderElementDelete: jest.fn()
+  };
   let service;
   let store;
 
@@ -47,6 +51,18 @@ describe('ProjectService', () => {
 
     expect(httpClientMock.put).toHaveBeenCalledWith('/gums/project/id', project, expect.anything());
     expect(graphRendererServiceMock.renderElementUpdate).toHaveBeenCalledWith(project.id, project.name);
+    expect(store.dispatch).toHaveBeenCalled();
+  });
+
+  it('should delete the project and update the graph', () => {
+    jest.spyOn(httpClientMock, 'delete').mockReturnValue(of({}));
+    jest.spyOn(graphRendererServiceMock, 'renderElementDelete');
+    jest.spyOn(store, 'dispatch');
+
+    service.deleteProject("1");
+
+    expect(httpClientMock.delete).toHaveBeenCalledWith('/gums/project/1', expect.anything());
+    expect(graphRendererServiceMock.renderElementDelete).toHaveBeenCalledWith("1");
     expect(store.dispatch).toHaveBeenCalled();
   });
 });

@@ -72,7 +72,7 @@ export class UserService {
         .subscribe({
           next: _ => {
             this.store.dispatch(DeleteUserCompleted({ deletedUserId: id }));
-            this.graphRenderer.renderUserDelete(id);
+            this.graphRenderer.renderElementDelete(id);
           },
           error: error => {
             this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
