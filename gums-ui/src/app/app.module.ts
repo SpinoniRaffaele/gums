@@ -22,6 +22,8 @@ import { MatCard } from '@angular/material/card';
 import { UserDialogComponent } from './dialog/user-dialog/user-dialog.component';
 import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { ProjectDialogComponent } from './dialog/project-dialog/project-dialog.component';
+import { MatDivider } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
     SidebarComponent,
     AdminPanelComponent,
     LoginComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    ProjectDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
     MatCard,
     MatDialogContent,
     MatDialogActions,
-    MatCheckbox
+    MatCheckbox,
+    MatDivider
   ],
   providers: [
       HttpClientModule,

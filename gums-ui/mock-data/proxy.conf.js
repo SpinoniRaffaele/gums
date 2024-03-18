@@ -35,6 +35,10 @@ const PROXY_CONFIG = {
           res.end(JSON.stringify(projectsMock.projects));
           return;
         }
+        if (req.method === "PUT") {
+          res.end();
+          return;
+        }
       }
       if (req.url.startsWith('/gums/auth/login')) {
         res.setHeader('x-auth-token', 'fake-token');

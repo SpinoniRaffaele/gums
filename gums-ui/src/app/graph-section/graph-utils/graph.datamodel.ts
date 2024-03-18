@@ -7,8 +7,8 @@ export class Element {
 }
 
 export enum ElementType {
-  USER,
-  PROJECT
+  USER = "user",
+  PROJECT = "project"
 }
 
 export class User {
@@ -40,8 +40,8 @@ export class Project {
       public id: string,
       public name: string,
       public content: any,
-      public collaboratorIds: String[],
-      public linkedProjectIds: String[],
+      public collaboratorIds: string[],
+      public linkedProjectIds: string[],
       public ownerId: String,
       public properties: any,
   ) {}

@@ -85,3 +85,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   z-index: 100;
   display:block;
 }
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}

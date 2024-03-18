@@ -6,6 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import { UserService } from '../../shared/user.service';
 import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogMode } from '../dialog.metadata';
 
 describe('UserDialogComponent', () => {
   let component: UserDialogComponent;
@@ -38,7 +39,7 @@ describe('UserDialogComponent', () => {
   it('should add valid user', () => {
     jest.spyOn(mockUserService, 'addUser');
     jest.spyOn(mockDialogRef, 'close');
-    component.data = {mode: 'Create'};
+    component.data = {mode: DialogMode.Create};
     component.userFormGroup.controls['name'].setValue('John Doe');
     component.userFormGroup.controls['age'].setValue(24);
     component.userFormGroup.controls['email'].setValue('email');
@@ -54,7 +55,7 @@ describe('UserDialogComponent', () => {
 
   it('should not add invalid user', () => {
     jest.spyOn(mockUserService, 'addUser');
-    component.data = {mode: 'Create'};
+    component.data = {mode: DialogMode.Create};
     component.userFormGroup.controls['name'].setValue('');
     component.userFormGroup.controls['age'].setValue(25);
     component.userFormGroup.controls['email'].setValue('email');
@@ -68,7 +69,7 @@ describe('UserDialogComponent', () => {
 
   it('should not add admin user without adminKey', () => {
     jest.spyOn(mockUserService, 'addUser');
-    component.data = {mode: 'Create'};
+    component.data = {mode: DialogMode.Create};
     component.userFormGroup.controls['name'].setValue('john doe');
     component.userFormGroup.controls['age'].setValue(25);
     component.userFormGroup.controls['email'].setValue('email');
@@ -85,7 +86,7 @@ describe('UserDialogComponent', () => {
     jest.spyOn(mockUserService, 'editUser');
     jest.spyOn(mockDialogRef, 'close');
     component.data = {
-      mode: 'Edit',
+      mode: DialogMode.Edit,
       user: new FullUser("id", "John Doe", "email", 25, false, "", "password")
     };
     component.userFormGroup.controls['name'].setValue('new name');
@@ -105,7 +106,7 @@ describe('UserDialogComponent', () => {
     jest.spyOn(mockUserService, 'deleteUser');
     jest.spyOn(mockDialogRef, 'close');
     component.data = {
-      mode: 'Edit',
+      mode: DialogMode.Edit,
       user: new FullUser("id", "John Doe", "email", 25, false, "", "password")
     };
 

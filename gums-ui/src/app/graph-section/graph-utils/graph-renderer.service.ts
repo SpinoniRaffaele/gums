@@ -65,9 +65,9 @@ export class GraphRendererService {
     this.addRandomUsers(users);
   }
 
-  renderUserUpdate(user: User) {
-    const element = this.elements.find((element: Element) => element.id === user.id);
-    this.updateElementLabel(user.name, element.nativeObject);
+  renderElementUpdate(id: string, name: string) {
+    const element = this.elements.find((element: Element) => element.id === id);
+    this.updateElementLabel(name, element.nativeObject);
   }
 
   renderUserDelete(userId: string) {

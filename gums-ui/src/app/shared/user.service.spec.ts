@@ -13,7 +13,8 @@ describe('test ServiceService', () => {
   const graphRendererServiceMock = {
     renderNewUsers: jest.fn(),
     renderUserUpdate: jest.fn(),
-    renderUserDelete: jest.fn()
+    renderUserDelete: jest.fn(),
+    renderElementUpdate: jest.fn()
   };
   const httpClientMock = {get: jest.fn(), post: jest.fn(), put: jest.fn(), delete: jest.fn()};
 
@@ -52,7 +53,7 @@ describe('test ServiceService', () => {
     const user = new User("id", "name", "email", 12, true);
     service.editUser(user);
     expect(httpClientMock.put).toHaveBeenCalledWith('/gums/user', user, expect.anything());
-    expect(graphRendererServiceMock.renderUserUpdate).toHaveBeenCalledWith(user);
+    expect(graphRendererServiceMock.renderElementUpdate).toHaveBeenCalledWith(user.id, user.name);
   });
 
   it('should delete the user and update the graph', function () {

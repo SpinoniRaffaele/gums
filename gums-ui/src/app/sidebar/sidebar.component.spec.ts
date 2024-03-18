@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { UserDialogMode } from '../dialog/user-dialog/user-dialog.component';
+import { DialogMode } from '../dialog/dialog.metadata';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -42,7 +42,7 @@ describe('SidebarComponent', () => {
     component.newUser();
 
     expect(mockMatDialog.open).toHaveBeenCalledWith(expect.anything(), {
-      data: {mode: UserDialogMode.Create},
+      data: {mode: DialogMode.Create},
       minWidth: '30%'
     });
   });

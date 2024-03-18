@@ -59,7 +59,7 @@ export class UserService {
         .subscribe({
           next: _ => {
             this.store.dispatch(EditUserCompleted({ editedUser: user }));
-            this.graphRenderer.renderUserUpdate(user);
+            this.graphRenderer.renderElementUpdate(user.id, user.name);
           },
           error: error => {
             this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });

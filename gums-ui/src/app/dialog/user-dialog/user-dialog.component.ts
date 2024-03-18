@@ -5,6 +5,7 @@ import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel'
 import { UserService } from '../../shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { snackbarDuration } from '../../app.datamodel';
+import { DialogMode } from '../dialog.metadata';
 
 @Component({
   selector: 'app-user-dialog',
@@ -15,7 +16,7 @@ export class UserDialogComponent {
   userFormGroup;
   constructor(
       public dialogRef: MatDialogRef<UserDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: {mode: 'Create' | 'Edit', user?: FullUser},
+      @Inject(MAT_DIALOG_DATA) public data: {mode: DialogMode, user?: FullUser},
       private formBuilder: FormBuilder,
       private userService: UserService,
       private snackBar: MatSnackBar
@@ -23,20 +24,20 @@ export class UserDialogComponent {
     this.userFormGroup = this.formBuilder.group(
         {
           name: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.name : '', [Validators.required]),
+              data.mode === DialogMode.Edit ? data.user.name : '', [Validators.required]),
           age: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.age : '', []),
+              data.mode === DialogMode.Edit ? data.user.age : '', []),
           email: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.email : '', [Validators.required]),
+              data.mode === DialogMode.Edit ? data.user.email : '', [Validators.required]),
           password: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.password : '', []),
+              data.mode === DialogMode.Edit ? data.user.password : '', []),
           isAdmin: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.isAdmin : false, []),
+              data.mode === DialogMode.Edit ? data.user.isAdmin : false, []),
           adminKey: new FormControl(
-              data.mode === UserDialogMode.Edit ? data.user.adminKey : '', []),
+              data.mode === DialogMode.Edit ? data.user.adminKey : '', []),
         }
     );
-    if (data.mode === UserDialogMode.Edit) {
+    if (data.mode === DialogMode.Edit) {
       this.userFormGroup.get('isAdmin').disable();
     }
   }
@@ -49,7 +50,7 @@ export class UserDialogComponent {
       const password = this.userFormGroup.controls['password'].value;
       const isAdmin = this.userFormGroup.controls['isAdmin'].value;
       const adminKey = this.userFormGroup.controls['adminKey'].value;
-      if (this.data.mode === UserDialogMode.Create) {
+      if (this.data.mode === DialogMode.Create) {
         this.userService.addUser(new FullUser("DUMMY", name, email, age, isAdmin, adminKey, password));
       } else {
         this.userService.editUser(new User(this.data.user.id, name, email, age, isAdmin));
@@ -65,7 +66,7 @@ export class UserDialogComponent {
   }
 
   deleteUser() {
-    if (this.data.mode === UserDialogMode.Edit) {
+    if (this.data.mode === DialogMode.Edit) {
       this.userService.deleteUser(this.data.user.id);
       this.dialogRef.close();
     }
@@ -78,9 +79,4 @@ export class UserDialogComponent {
         this.userFormGroup.controls['password'].value?.length >= 8;
     return this.userFormGroup.valid && ((isAdmin && adminKey !== '') || !isAdmin) && isPasswordValid;
   }
-}
-
-export enum UserDialogMode {
-  Create = 'Create',
-  Edit = 'Edit'
 }

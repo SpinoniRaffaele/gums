@@ -14,3 +14,5 @@ export const DeleteUserCompleted = createAction('[Graph Action] Delete User comp
     props<{deletedUserId: string}>());
 export const GetProjectsCompleted = createAction('[Graph Action] Get Projects completed',
     props<{projects: Project[]}>());
+export const EditProjectCompleted = createAction('[Graph Action] Edit Project completed',
+    props<{project: Project}>());

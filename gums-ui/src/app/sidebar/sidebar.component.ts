@@ -1,12 +1,14 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { MatDialog } from '@angular/material/dialog';
-import { UserDialogComponent, UserDialogMode } from '../dialog/user-dialog/user-dialog.component';
+import { UserDialogComponent } from '../dialog/user-dialog/user-dialog.component';
 import { Store } from '@ngrx/store';
 import { selectSelectedElement } from '../graph-section/graph.reducer';
 import { ElementType, Project, User } from '../graph-section/graph-utils/graph.datamodel';
 import { Subscription } from 'rxjs';
 import { UnselectElementCompleted } from '../graph-section/graph.action';
+import { DialogMode } from '../dialog/dialog.metadata';
+import { ProjectDialogComponent } from '../dialog/project-dialog/project-dialog.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,28 +24,27 @@ export class SidebarComponent implements OnDestroy {
     private store: Store
   ) {
     this.subscriptions.push(this.store.select(selectSelectedElement)
-        .subscribe((selected: {element: User | Project, type: ElementType}) => {
-      if (!selected.element) return;
-      if (selected.type === ElementType.USER) {
-        const dialogRef = this.dialog.open(UserDialogComponent, {
-          data: {mode: UserDialogMode.Edit, user: selected.element},
-          minWidth: '30%'
-        });
-        dialogRef.afterClosed().subscribe(() => {
-          this.store.dispatch(UnselectElementCompleted());
-        });
-      } else {
-        //todo: edit project
-      }
-    }));
+        .subscribe((selected: { element: User | Project, type: ElementType }) => {
+          if (!selected.element) return;
+          const dialogComponent: any = selected.type === ElementType.USER ?
+              UserDialogComponent : ProjectDialogComponent;
+          const dialogRef = this.dialog.open(dialogComponent, {
+                data: {mode: DialogMode.Edit, [selected.type.valueOf()]: selected.element},
+                minWidth: '30%'
+              });
+          dialogRef.afterClosed().subscribe(() => {
+            this.store.dispatch(UnselectElementCompleted());
+          });
+        }));
   }
 
   newUser() {
     this.dialog.open(UserDialogComponent, {
-      data: {mode: UserDialogMode.Create},
+      data: {mode: DialogMode.Create},
       minWidth: '30%'
     });
   }
+
   logout() {
     this.loginService.logout();
   }

@@ -1,0 +1,82 @@
+<h2 mat-dialog-title class="text">{{data.mode}} Project</h2>
+<mat-dialog-content>
+    <form [formGroup]="projectFormGroup" class="center min-width-p">
+        <br>
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [formControl]="projectFormGroup.controls['name']">
+        </mat-form-field>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <mat-form-field appearance="outline">
+            <mat-label>Content</mat-label>
+            <textarea matInput [formControl]="projectFormGroup.controls['content']">
+                </textarea>
+        </mat-form-field>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <p>Collaborator Ids</p>
+        <div *ngFor="let collaboratorIdControl of projectFormGroup.controls['collaboratorIds'].controls; let i = index">
+            <mat-form-field appearance="outline">
+                <mat-label>Collaborator Id - {{i + 1}}</mat-label>
+                <button mat-icon-button matSuffix (click)="delete(collaboratorIdControl.value, 'collaboratorIds')"
+                        type="button"
+                        [disabled]="collaboratorIdControl.value === projectFormGroup.controls['ownerId'].value"
+                        [class.disabled]="collaboratorIdControl.value === projectFormGroup.controls['ownerId'].value"
+                        class="background-transparent no-border">
+                    <mat-icon style="color: white">delete_outline</mat-icon>
+                </button>
+                <input matInput type="text" [formControl]="collaboratorIdControl">
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="secondary" (click)="add('collaboratorIds')" class="center">
+            <mat-icon style="color: white">add</mat-icon>
+            Add
+        </button>
+        <br>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <p>Linked project Ids</p>
+        <div *ngFor="let projectIdControl of projectFormGroup.controls['linkedProjectIds'].controls; let i = index">
+            <mat-form-field appearance="outline">
+                <mat-label>Linked project Id - {{i + 1}}</mat-label>
+                <input matInput type="text" [formControl]="projectIdControl">
+                <button mat-icon-button matSuffix (click)="delete(projectIdControl.value, 'linkedProjectIds')"
+                        type="button"
+                        class="background-transparent no-border">
+                    <mat-icon style="color: white">delete_outline</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="secondary" (click)="add('linkedProjectIds')" class="center">
+            <mat-icon style="color: white">add</mat-icon>
+            Add
+        </button>
+        <br>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <mat-form-field appearance="outline">
+            <mat-label>Owner Id</mat-label>
+            <input matInput type="text" [formControl]="projectFormGroup.controls['ownerId']">
+        </mat-form-field>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <p>Properties</p>
+        <div *ngFor="let property of properties; let i = index">
+            <mat-form-field appearance="outline">
+                <mat-label>{{property}}</mat-label>
+                <input matInput type="text" [formControl]="propertiesControls[i]">
+            </mat-form-field>
+        </div>
+        <br>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-raised-button (click)="onCloseClick()">Close</button>
+    <button mat-raised-button color="primary" (click)="submitForm()">Save</button>
+</mat-dialog-actions>

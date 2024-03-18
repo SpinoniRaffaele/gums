@@ -1,6 +1,6 @@
 import { ElementType, Project, User } from "./graph-utils/graph.datamodel";
 import {
-  AddUserCompleted, DeleteUserCompleted,
+  AddUserCompleted, DeleteUserCompleted, EditProjectCompleted,
   EditUserCompleted, GetProjectsCompleted,
   GetUsersCompleted,
   SelectElementCompleted,
@@ -30,7 +30,8 @@ export const graphReducer = createReducer(
   on(UnselectElementCompleted, unselectElementCompleted),
   on(EditUserCompleted, editUserCompletedAction),
   on(DeleteUserCompleted, deleteUserCompletedAction),
-  on(GetProjectsCompleted, getProjectsCompletedAction)
+  on(GetProjectsCompleted, getProjectsCompletedAction),
+  on(EditProjectCompleted, editProjectsCompletedAction)
 )
 
 function getUserCompletedAction(state: GraphState, action) {
@@ -81,6 +82,13 @@ function getProjectsCompletedAction(state: GraphState, action) {
   return {
     ...state,
     projects: action.projects
+  };
+}
+
+function editProjectsCompletedAction(state: GraphState, action) {
+  return {
+    ...state,
+    projects: state.projects.map(project => project.id === action.project.id ? action.project : project),
   };
 }
 
