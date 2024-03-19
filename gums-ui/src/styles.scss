@@ -67,7 +67,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .main-grid {
   display: grid;
-  grid-template-columns: 25% auto;
+  grid-template-columns: 25% 75%;
 }
 
 .no-wrap {

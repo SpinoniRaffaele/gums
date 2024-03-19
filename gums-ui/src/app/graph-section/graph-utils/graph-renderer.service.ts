@@ -151,6 +151,13 @@ export class GraphRendererService {
       1000
     );
     this.camera.position.z = 50;
+
+    window.addEventListener( 'resize', () => {
+      this.camera.aspect = window.innerWidth * this.WIDTH_PERCENTAGE / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth * this.WIDTH_PERCENTAGE, window.innerHeight);
+      this.labelRenderer.setSize(window.innerWidth * this.WIDTH_PERCENTAGE, window.innerHeight);
+    });
   }
 
   private render() {
