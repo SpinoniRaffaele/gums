@@ -1,0 +1,8 @@
+{
+  "/gums/*": {
+    "target": "http://gums:8080/",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

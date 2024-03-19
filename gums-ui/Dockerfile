@@ -1,22 +1,18 @@
 # base node image
-FROM node:18 as build
+FROM node:18
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install --omit=dev
 
 # Copy local code to the container
 COPY . .
 
-# Build production app
+# Build production appdo
 RUN npm run build
 
-FROM nginx:latest
+EXPOSE 4200
 
-# Copy the build output to replace the default nginx contents.
-COPY --from=build /usr/src/app/dist/gums-ui /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
+CMD ["npm", "run", "start:container"]

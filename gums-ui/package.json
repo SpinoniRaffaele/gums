@@ -5,6 +5,7 @@
   "scripts": {
     "start:mock": "ng serve --proxy-config mock-data/proxy.conf.js",
     "start": "ng serve --proxy-config proxy.conf.json",
+    "start:container": "ng serve --proxy-config proxy.conf.container.json --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test"
   },

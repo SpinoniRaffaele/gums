@@ -6,7 +6,7 @@ RUN mvn clean install -DskipTests
 
 FROM tomcat
 
-ENV GUMS_API_KEY=test
+ENV MONGO_HOST=mongo
 
 COPY --from=maven-builder target/*.war /usr/local/tomcat/webapps/
 

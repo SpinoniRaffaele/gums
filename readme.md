@@ -16,6 +16,7 @@ The application is meant to be a toy project that plays with spring, in particul
 - Cucumber
 - MongoDB
 - Lombok
+- H2
 
 In the frontend it uses:
 - Angular
@@ -24,29 +25,26 @@ In the frontend it uses:
 
 Building/CI:
 - Maven
+- Docker
+- Docker compose
 - Github action
 
 The choice of not using spring boot is intentional, the goal is to understand how spring works under the hood.
 
-## Run the backend application
+## Run the fullstack application
 In order to run the application you need to have docker installed and then run the following command
 from the root directory of the project:
 ```bash
 docker compose up
 ```
-it will pull the mongo image and start the application on port 8080 you can access the application at 
-http://localhost:8080/gums/
+it will:
+- pull the mongo image
+- build and start the backend application, exposed on port 8080
+- build and start the frontend application, exposed on port 32769
 
-## UI Demo
-The full project is not deployed anywhere, 
-but the frontend app with fake backend calls is available in the project
-in order to run it, you need to have node 18 installed and then run the following commands:
-```bash
-cd gums-ui
-npm install
-npm run start:mock
-```
-Then you can open your browser at http://localhost:4200
+Then you can open your browser at
+http://localhost:32769
 
 ## TODO
-- complete UI with Three.js
+- fix UI bug on dialog opening
+- use project names and collaborators name instead of ids in the UI
