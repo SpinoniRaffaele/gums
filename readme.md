@@ -1,4 +1,5 @@
 # GUMS: Graph User Management System
+![GUMS](gums-ui/src/assets/chewing_gum_small.png)
 
 ## Introduction
 This project is a spring application that provides a reactive REST API for managing users and projects linked to them.
