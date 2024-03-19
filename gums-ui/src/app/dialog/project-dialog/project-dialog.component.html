@@ -67,12 +67,26 @@
         <mat-divider></mat-divider>
         <br>
         <p>Properties</p>
-        <div *ngFor="let property of properties; let i = index">
+        <div *ngFor="let propertyKey of propertiesKeyControls; let i = index">
             <mat-form-field appearance="outline">
-                <mat-label>{{property}}</mat-label>
-                <input matInput type="text" [formControl]="propertiesControls[i]">
+                <mat-label>key - {{i + 1}}</mat-label>
+                <input matInput type="text" [formControl]="propertyKey">
+                <button mat-icon-button matSuffix (click)="delete(propertyKey.value, 'properties')"
+                        type="button"
+                        class="background-transparent no-border">
+                    <mat-icon style="color: white">delete_outline</mat-icon>
+                </button>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>value - {{i + 1}}</mat-label>
+                <input matInput type="text" [formControl]="propertiesValueControls[i]">
             </mat-form-field>
         </div>
+        <button mat-raised-button color="secondary" (click)="add('properties')" class="center">
+            <mat-icon style="color: white">add</mat-icon>
+            Add
+        </button>
+        <br>
         <br>
     </form>
 </mat-dialog-content>

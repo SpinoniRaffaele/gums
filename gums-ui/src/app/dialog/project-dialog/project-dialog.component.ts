@@ -1,7 +1,16 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Project } from '../../graph-section/graph-utils/graph.datamodel';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogMode } from '../dialog.metadata';
 import { snackbarDuration } from '../../app.datamodel';
@@ -13,8 +22,8 @@ import { ProjectService } from '../../shared/project.service';
 })
 export class ProjectDialogComponent {
   projectFormGroup;
-  propertiesControls: FormControl[] = [];
-  properties: string[] = [];
+  propertiesKeyControls: FormControl[] = [];
+  propertiesValueControls: FormControl[] = [];
   constructor(
       public dialogRef: MatDialogRef<ProjectDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: {mode: DialogMode, project?: Project},
@@ -24,8 +33,10 @@ export class ProjectDialogComponent {
   ) {
     if (data.mode === DialogMode.Edit) {
       Object.keys(this.data.project.properties).forEach(key => {
-          this.properties.push(key);
-          this.propertiesControls.push(new FormControl(this.data.project.properties[key], [Validators.required]))
+          this.propertiesValueControls.push(new FormControl(this.data.project.properties[key],
+              [Validators.required]));
+          this.propertiesKeyControls.push(new FormControl(key,
+              [Validators.required, this.validateUnique(this.propertiesKeyControls)]));
       });
     }
     this.projectFormGroup = this.formBuilder.group(
@@ -39,9 +50,13 @@ export class ProjectDialogComponent {
           linkedProjectIds: this.formBuilder.array(
               data.mode === DialogMode.Edit ? this.stringsToArrayOfControls(data.project.linkedProjectIds) : []),
           ownerId: new FormControl(
-              data.mode === DialogMode.Edit ? data.project.ownerId : "", []),
-          properties: this.formBuilder.array(
-              data.mode === DialogMode.Edit ? this.propertiesControls : []),
+              data.mode === DialogMode.Edit ? data.project.ownerId : "", [Validators.required]),
+          properties: this.formBuilder.group({
+            propertyValues: this.formBuilder.array(
+                data.mode === DialogMode.Edit ? this.propertiesValueControls : []),
+            propertyKeys: this.formBuilder.array(
+                data.mode === DialogMode.Edit ? this.propertiesKeyControls : []),
+          })
         }
     );
   }
@@ -53,7 +68,7 @@ export class ProjectDialogComponent {
       const collaboratorIds = this.projectFormGroup.controls['collaboratorIds'].value;
       const linkedProjectIds = this.projectFormGroup.controls['linkedProjectIds'].value;
       const ownerId = this.projectFormGroup.controls['ownerId'].value;
-      const properties = this.projectFormGroup.controls['properties'].value;
+      const propertiesGroup = this.projectFormGroup.controls['properties'];
       if (this.data.mode === DialogMode.Create) {
         this.projectService.createProject(new Project(
             "DUMMY",
@@ -62,7 +77,7 @@ export class ProjectDialogComponent {
             collaboratorIds,
             linkedProjectIds,
             ownerId,
-            this.propertiesToObject(properties)));
+            this.propertiesToObject(propertiesGroup)));
       } else {
         this.projectService.editProject(new Project(
             this.data.project.id,
@@ -71,7 +86,7 @@ export class ProjectDialogComponent {
             collaboratorIds,
             linkedProjectIds,
             ownerId,
-            this.propertiesToObject(properties)));
+            this.propertiesToObject(propertiesGroup)));
       }
       this.dialogRef.close();
     } else {
@@ -84,18 +99,39 @@ export class ProjectDialogComponent {
   }
 
   add(field: string) {
-    this.projectFormGroup.controls[field]
-        .push(new FormControl('new value', [Validators.required]));
+    if (field === 'properties') {
+      this.propertiesKeyControls.push(new FormControl('new key',
+          [Validators.required, this.validateUnique(this.propertiesKeyControls)]));
+      this.propertiesValueControls.push(new FormControl('new value', [Validators.required]));
+      this.projectFormGroup.controls[field].controls['propertyKeys'] = this.propertiesKeyControls;
+      this.projectFormGroup.controls[field].controls['propertyValues'] = this.propertiesValueControls;
+    } else {
+      this.projectFormGroup.controls[field]
+          .push(new FormControl('new value', [Validators.required]));
+    }
   }
 
   delete(id: string, field: string) {
-    let indexOfDeletion;
-    for (let i = 0; i < this.projectFormGroup.controls[field].length; i++) {
-      if (this.projectFormGroup.controls[field].at(i).value === id) {
-        indexOfDeletion = i;
+    if (field === 'properties') {
+      let indexOfDeletion;
+      for (let i = 0; i < this.propertiesKeyControls.length; i++) {
+        if (this.propertiesKeyControls[i].value === id) {
+          indexOfDeletion = i;
+        }
       }
+      this.propertiesKeyControls.splice(indexOfDeletion, 1);
+      this.propertiesValueControls.splice(indexOfDeletion, 1);
+      this.projectFormGroup.controls[field].controls['propertyValues'] = this.propertiesValueControls;
+      this.projectFormGroup.controls[field].controls['propertyKeys'] = this.propertiesKeyControls;
+    } else {
+      let indexOfDeletion;
+      for (let i = 0; i < this.projectFormGroup.controls[field].length; i++) {
+        if (this.projectFormGroup.controls[field].at(i).value === id) {
+          indexOfDeletion = i;
+        }
+      }
+      this.projectFormGroup.controls[field].removeAt(indexOfDeletion);
     }
-    this.projectFormGroup.controls[field].removeAt(indexOfDeletion);
   }
 
   deleteProject() {
@@ -105,11 +141,14 @@ export class ProjectDialogComponent {
     }
   }
 
-  private propertiesToObject(values: string[]) {
+  private propertiesToObject(values: FormGroup) {
     const result = {};
-    this.properties.forEach((key, index) => {
-      result[key] = values[index];
-    });
+    const valuesArray = values.controls['propertyValues'] as FormArray;
+    const keysArray = values.controls['propertyKeys'] as FormArray;
+
+    for (let i = 0; i < valuesArray.length; i++) {
+      result[keysArray.at(i).value] = valuesArray.at(i).value;
+    }
     return result;
   }
 
@@ -119,10 +158,24 @@ export class ProjectDialogComponent {
     } catch (e) {
       return false;
     }
-    return this.projectFormGroup.valid;
+    const collaboratorIds = this.projectFormGroup.controls['collaboratorIds'].controls.map(control => control.value);
+    const linkedProjectIds = this.projectFormGroup.controls['linkedProjectIds'].controls.map(control => control.value);
+    return this.projectFormGroup.valid && this.areUnique(collaboratorIds) && this.areUnique(linkedProjectIds);
+  }
+
+  areUnique(ids: string[]) {
+    return !ids.some(id => ids.filter(id2 => id2 === id).length > 1);
   }
 
   private stringsToArrayOfControls(ids: string[]) {
     return ids.map(id => new FormControl(id, [Validators.required]));
+  }
+
+  private validateUnique(array: FormControl[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value) {
+        return array.filter(form => form.value === control.value).length > 1 ? {duplicateName: true} : null;
+      }
+    };
   }
 }

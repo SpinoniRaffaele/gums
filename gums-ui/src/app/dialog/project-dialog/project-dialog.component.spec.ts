@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectDialogComponent } from './project-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from '../../shared/project.service';
 import { Project } from '../../graph-section/graph-utils/graph.datamodel';
@@ -78,6 +78,23 @@ describe('ProjectDialogComponent', () => {
       project: new Project("id", "John Doe", "{}", [],[], "user1", {})
     };
     component.projectFormGroup.controls['content'].setValue("{\"new\": invalid}");
+
+    component.submitForm();
+
+    expect(mockProjectService.editProject).not.toHaveBeenCalled();
+    expect(mockDialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('should not submit if collaborators are duplicated', () => {
+    jest.spyOn(mockProjectService, 'editProject');
+    jest.spyOn(mockDialogRef, 'close');
+    component.data = {
+      mode: DialogMode.Edit,
+      project: new Project("id", "John Doe", "{}", [],[], "user1", {})
+    };
+    component.projectFormGroup.controls['collaboratorIds'] = new FormArray(
+        [new FormControl("user1"), new FormControl("user1")]
+    );
 
     component.submitForm();
 
