@@ -4,8 +4,8 @@ import { ProjectDialogComponent } from './project-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ProjectService } from '../../shared/project.service';
-import { Project, User } from '../../graph-section/graph-utils/graph.datamodel';
+import { ProjectService } from '../../services/project.service';
+import { Project, User } from '../../graph-section/graph-services/graph.datamodel';
 import { DialogMode } from '../dialog.metadata';
 import { provideMockStore } from '@ngrx/store/testing';
 

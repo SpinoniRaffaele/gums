@@ -7,8 +7,8 @@ import {
   EditUserCompleted,
   GetUsersCompleted
 } from "../graph-section/graph.action";
-import { GraphRendererService } from "../graph-section/graph-utils/graph-renderer.service";
-import { FullUser, User } from '../graph-section/graph-utils/graph.datamodel';
+import { GraphRendererService } from "../graph-section/graph-services/graph-renderer.service";
+import { FullUser, User } from '../graph-section/graph-services/graph.datamodel';
 import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { errorMessage, snackbarDuration } from '../app.datamodel';

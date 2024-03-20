@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from "../shared/user.service";
-import { GraphRendererService } from "./graph-utils/graph-renderer.service";
+import { UserService } from "../services/user.service";
+import { GraphRendererService } from "./graph-services/graph-renderer.service";
 import { Store } from '@ngrx/store';
 import { selectNoElementsToDisplay } from './graph.reducer';
-import { ProjectService } from '../shared/project.service';
+import { ProjectService } from '../services/project.service';
 
 @Component({
   selector: 'app-graph-section',

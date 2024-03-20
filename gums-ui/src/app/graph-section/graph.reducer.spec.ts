@@ -6,7 +6,7 @@ import {
   SelectElementCompleted,
   UnselectElementCompleted
 } from './graph.action';
-import { Project, User } from './graph-utils/graph.datamodel';
+import { Project, User } from './graph-services/graph.datamodel';
 
 describe('GraphReducer', () => {
   const initialStateWithUser = {

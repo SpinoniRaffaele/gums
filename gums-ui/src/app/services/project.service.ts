@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { Store } from '@ngrx/store';
-import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
+import { GraphRendererService } from '../graph-section/graph-services/graph-renderer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { errorMessage, snackbarDuration } from '../app.datamodel';
 import {
@@ -11,7 +11,7 @@ import {
   EditProjectCompleted,
   GetProjectsCompleted
 } from '../graph-section/graph.action';
-import { Project } from '../graph-section/graph-utils/graph.datamodel';
+import { Project } from '../graph-section/graph-services/graph.datamodel';
 
 @Injectable({
   providedIn: 'root'

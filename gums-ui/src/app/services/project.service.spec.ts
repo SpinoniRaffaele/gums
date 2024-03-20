@@ -3,9 +3,9 @@ import { ProjectService } from './project.service';
 import { HttpClient } from '@angular/common/http';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
+import { GraphRendererService } from '../graph-section/graph-services/graph-renderer.service';
 import { of } from 'rxjs';
-import { Project } from '../graph-section/graph-utils/graph.datamodel';
+import { Project } from '../graph-section/graph-services/graph.datamodel';
 
 describe('ProjectService', () => {
   const httpClientMock = { get: jest.fn(), put: jest.fn(), delete: jest.fn(), post: jest.fn() };

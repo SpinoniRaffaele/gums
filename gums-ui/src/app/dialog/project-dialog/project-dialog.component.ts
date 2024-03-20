@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Project, User } from '../../graph-section/graph-utils/graph.datamodel';
+import { Project, User } from '../../graph-section/graph-services/graph.datamodel';
 import {
   AbstractControl,
   FormArray,
@@ -14,7 +14,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogMode } from '../dialog.metadata';
 import { snackbarDuration } from '../../app.datamodel';
-import { ProjectService } from '../../shared/project.service';
+import { ProjectService } from '../../services/project.service';
 import { Store } from '@ngrx/store';
 import { selectElements } from '../../graph-section/graph.reducer';
 

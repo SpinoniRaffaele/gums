@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { UserService } from './user.service';
 import { HttpClient } from '@angular/common/http';
 import { provideMockStore } from '@ngrx/store/testing';
-import { GraphRendererService } from '../graph-section/graph-utils/graph-renderer.service';
+import { GraphRendererService } from '../graph-section/graph-services/graph-renderer.service';
 import { of } from 'rxjs';
-import { User } from '../graph-section/graph-utils/graph.datamodel';
+import { User } from '../graph-section/graph-services/graph.datamodel';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('test ServiceService', () => {

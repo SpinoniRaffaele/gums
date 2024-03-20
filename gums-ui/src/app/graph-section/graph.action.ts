@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Project, User } from "./graph-utils/graph.datamodel";
+import { Project, User } from "./graph-services/graph.datamodel";
 
 export const GetUsersCompleted = createAction('[Graph Action] Get Users completed',
     props<{users: User[]}>());

@@ -1,10 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from '../dialog/user-dialog/user-dialog.component';
 import { Store } from '@ngrx/store';
 import { selectSelectedElement } from '../graph-section/graph.reducer';
-import { ElementType, Project, User } from '../graph-section/graph-utils/graph.datamodel';
+import { ElementType, Project, User } from '../graph-section/graph-services/graph.datamodel';
 import { Subscription } from 'rxjs';
 import { UnselectElementCompleted } from '../graph-section/graph.action';
 import { DialogMode } from '../dialog/dialog.metadata';

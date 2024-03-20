@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel';
-import { UserService } from '../../shared/user.service';
+import { FullUser, User } from '../../graph-section/graph-services/graph.datamodel';
+import { UserService } from '../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { snackbarDuration } from '../../app.datamodel';
 import { DialogMode } from '../dialog.metadata';

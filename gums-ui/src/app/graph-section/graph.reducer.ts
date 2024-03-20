@@ -1,4 +1,4 @@
-import { ElementType, Project, User } from "./graph-utils/graph.datamodel";
+import { ElementType, Project, User } from "./graph-services/graph.datamodel";
 import {
   AddUserCompleted, CreateProjectCompleted,
   DeleteProjectCompleted,

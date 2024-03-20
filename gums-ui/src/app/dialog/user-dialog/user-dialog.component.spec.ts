@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserDialogComponent } from './user-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
-import { UserService } from '../../shared/user.service';
-import { FullUser, User } from '../../graph-section/graph-utils/graph.datamodel';
+import { UserService } from '../../services/user.service';
+import { FullUser, User } from '../../graph-section/graph-services/graph.datamodel';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogMode } from '../dialog.metadata';
 

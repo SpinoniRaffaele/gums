@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarComponent } from './sidebar.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../services/auth.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogMode } from '../dialog/dialog.metadata';

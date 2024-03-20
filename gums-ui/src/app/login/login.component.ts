@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { snackbarDuration } from '../app.datamodel';
 

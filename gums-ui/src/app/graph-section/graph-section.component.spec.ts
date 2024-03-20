@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GraphSectionComponent } from './graph-section.component';
-import { GraphRendererService } from './graph-utils/graph-renderer.service';
-import { UserService } from '../shared/user.service';
+import { GraphRendererService } from './graph-services/graph-renderer.service';
+import { UserService } from '../services/user.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
-import { ProjectService } from '../shared/project.service';
+import { ProjectService } from '../services/project.service';
 
 describe('GraphSectionComponent', () => {
   let component: GraphSectionComponent;

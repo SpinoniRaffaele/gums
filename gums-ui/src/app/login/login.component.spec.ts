@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('Login Component', () => {
