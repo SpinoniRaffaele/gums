@@ -20,8 +20,6 @@ export class GraphRendererService {
 
   camera;
 
-  clock;
-
   raycaster;
 
   pointer;
@@ -80,8 +78,6 @@ export class GraphRendererService {
   initializeScene(domElementRenderer) {
     this.initializeRenderer(domElementRenderer);
     this.initializeLabelRenderer(domElementRenderer);
-
-    this.clock = new THREE.Clock();
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color("rgb(52,58,69)");
@@ -161,7 +157,7 @@ export class GraphRendererService {
   }
 
   private render() {
-    this.physicsService.computeNewPosition(this.elements, this.clock);
+    this.physicsService.computeNewPosition(this.elements);
     this.updateRaycaster();
     this.renderer.render(this.scene, this.camera);
     this.labelRenderer.render( this.scene, this.camera );

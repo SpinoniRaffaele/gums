@@ -7,12 +7,14 @@ import * as THREE from 'three';
 })
 export class PhysicsService {
 
+  clock = new THREE.Clock();
+
   MAX_DISTANCE = 30;
 
   TIME_DILATION = 1;
 
-  computeNewPosition(elements: Element[], clock) {
-    let dt = clock.getDelta() * this.TIME_DILATION;
+  computeNewPosition(elements: Element[]) {
+    let dt = this.clock.getDelta() * this.TIME_DILATION;
     for (let element of elements) {
 
       let pos = element.nativeObject.position;
