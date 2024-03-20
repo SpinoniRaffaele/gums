@@ -43,7 +43,6 @@ Feature: project API is working as expected
     Given The following projects are in the database:
       | id | name | linkedProjectIds | content | collaboratorIds    | ownerId | properties        |
       | 1  | P1   | ["2"]            | BLOB    | ["user1", "user2"] | user1   | {"key1":"value1"} |
-      | 2  | P1   | ["2"]            | BLOB    | []                 | user0   | {"key1":"value1"} |
       | 3  | P2   | []               | BLOB    | ["user2"]          | user2   | {"key1":"value2"} |
     And The following users are in the database:
       | id     | name  | age | email            | password            | isAdmin  | adminKey  |
@@ -51,10 +50,10 @@ Feature: project API is working as expected
       | user1  | Alice | 23  | alice@mail.com   | 1234A_aeefewf3      | false    |           |
       | user2  | Bob   | 13  | bob@gmail.com    | 1234A_aeefewf3      | true     | qwerty    |
     When The client adds the project:
-      | name | linkedProjectIds | content | collaboratorIds    | ownerId | properties        |
-      | P2   | ["2"]            | BLOB    | ["user1", "user2"] | user1   | {"key1":"value1"} |
-    Then The projects left in database are 4
-    And There are 2 projects named "P2" in database
+      | name | linkedProjectIds  | content | collaboratorIds    | ownerId | properties        |
+      | P3   | ["3"]            | BLOB    | ["user1", "user2"] | user1   | {"key1":"value1"} |
+    Then The projects left in database are 3
+    And There are 1 projects named "P3" in database
 
   Scenario: project update
     Given The following projects are in the database:
@@ -67,7 +66,6 @@ Feature: project API is working as expected
       | user0  | Andre | 23  | alice@mail.com   | 1234A_aeefewf3      | false    |           |
       | user1  | Alice | 23  | alice@mail.com   | 1234A_aeefewf3      | false    |           |
       | user2  | Bob   | 13  | bob@gmail.com    | 1234A_aeefewf3      | true     | qwerty    |
-    When The client updates the project to:
+    Then The client cannot update the project to:
       | id | name | linkedProjectIds | content | collaboratorIds    | ownerId | properties        |
       | 1  | P2   | ["2"]            | NEWBLOB | ["user1", "user2"] | user2   | {"key1":"value2"} |
-    Then There are 2 projects named "P2" in database

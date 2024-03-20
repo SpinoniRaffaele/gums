@@ -27,14 +27,14 @@ public class ProjectService {
 
   public Project createProject(Project project) {
     project.setId(UUID.randomUUID().toString());
-    validateProjectCreation(project);
+    validateProjectCreationAndUpdate(project);
     return projectRepository.insert(project);
   }
 
   public void updateProject(Project project) {
     projectRepository.findById(project.getId()).ifPresentOrElse(
         projectToUpdate -> {
-          validateProjectCreation(project);
+          validateProjectCreationAndUpdate(project);
           projectRepository.save(project);
         },
         () -> {
@@ -87,14 +87,15 @@ public class ProjectService {
     projectRepository.deleteById(id);
   }
 
-  private void validateProjectCreation(Project project) {
+  private void validateProjectCreationAndUpdate(Project project) {
     if (project.getName() == null || project.getName().isEmpty()) {
       throw new InvalidRequestException("Project name is missing");
     }
     if (project.getOwnerId() == null || project.getOwnerId().isEmpty()) {
       throw new InvalidRequestException("Project owner missing");
     }
-    List<String> projectsIds = getAllProjects().stream().map(Project::getId).toList();
+    List<Project> projects = getAllProjects();
+    List<String> projectsIds = projects.stream().map(Project::getId).toList();
     if (project.getLinkedProjectIds().stream().anyMatch(linkedProjectId -> !projectsIds.contains(linkedProjectId))) {
       throw new InvalidRequestException("Linked projects must be present in the database");
     }
@@ -107,6 +108,17 @@ public class ProjectService {
     }
     if (!project.getCollaboratorIds().contains(project.getOwnerId())) {
       throw new InvalidRequestException("Owner must also be a collaborator");
+    }
+    ensureUniqueName(project, projects);
+  }
+
+  private void ensureUniqueName(Project project, List<Project> savedProjects) {
+    boolean duplicateNameOnDifferentIds = savedProjects.stream()
+        .anyMatch(savedProject ->
+            project.getName().equals(savedProject.getName())
+                && !project.getId().equals(savedProject.getId()));
+    if (duplicateNameOnDifferentIds) {
+      throw new InvalidRequestException("the specified Project Name is already in use");
     }
   }
 }

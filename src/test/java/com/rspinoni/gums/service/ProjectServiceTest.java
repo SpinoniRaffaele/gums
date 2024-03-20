@@ -83,6 +83,23 @@ class ProjectServiceTest {
   }
 
   @Test
+  void testCreateProjectDuplicateName() {
+    Project inputProject = Project.builder()
+        .name("name")
+        .linkedProjectIds(Collections.emptyList())
+        .content(null)
+        .collaboratorIds(Collections.singletonList("ownerId"))
+        .ownerId("ownerId")
+        .properties(Collections.singletonMap("key", "value"))
+        .build();
+
+    when(projectRepository.findAll()).thenReturn(Collections.singletonList(PROJECT));
+    when(userService.getAllUsers()).thenReturn(Collections.singletonList(USER));
+
+    assertThrows(InvalidRequestException.class, () -> projectService.createProject(inputProject));
+  }
+
+  @Test
   void testCreateProjectNoName() {
     Project inputProject = Project.builder()
         .name("")

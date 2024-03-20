@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rspinoni.gums.exceptions.InvalidRequestException;
 import com.rspinoni.gums.model.Credentials;
 import com.rspinoni.gums.model.CredentialsStatus;
 import com.rspinoni.gums.model.Project;
@@ -160,6 +161,11 @@ public class StepDefs extends CucumberIntegrationTest {
   @Then("The users received are:")
   public void theUsersReceivedAre(List<User> users) {
     Assertions.assertEquals(latestUsers, users);
+  }
+
+  @When("The client cannot update the project to:")
+  public void theClientCannotUpdateTheProject(Project project) {
+    Assertions.assertThrows(InvalidRequestException.class, () -> projectController.updateProject(project));
   }
 
   @Then("The projects received are:")

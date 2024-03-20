@@ -21,6 +21,7 @@ The application is meant to be a toy project that plays with spring, in particul
 
 In the frontend it uses:
 - Angular
+- Angular material
 - Three.js
 - Jest
 
@@ -49,4 +50,3 @@ http://localhost:32769
 ## TODO
 - fix UI bug on dialog opening
 - add links in the graph
-- ensure project names are unique in backend
