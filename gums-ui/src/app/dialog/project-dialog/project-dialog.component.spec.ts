@@ -5,8 +5,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from '../../shared/project.service';
-import { Project } from '../../graph-section/graph-utils/graph.datamodel';
+import { Project, User } from '../../graph-section/graph-utils/graph.datamodel';
 import { DialogMode } from '../dialog.metadata';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('ProjectDialogComponent', () => {
   let component: ProjectDialogComponent;
@@ -21,7 +22,8 @@ describe('ProjectDialogComponent', () => {
         FormBuilder,
         {provide: MAT_DIALOG_DATA, useValue: {}},
         {provide: ProjectService, useValue: mockProjectService},
-        {provide: MatSnackBar, useValue: {open: jest.fn()}}
+        {provide: MatSnackBar, useValue: {open: jest.fn()}},
+        provideMockStore()
       ]
     })
     .compileComponents();
@@ -43,12 +45,13 @@ describe('ProjectDialogComponent', () => {
     };
     component.projectFormGroup.controls['name'].setValue('new name');
     component.projectFormGroup.controls['content'].setValue("{\"new\": \"content\"}");
-    component.projectFormGroup.controls['ownerId'].setValue("owner");
+    component.projectFormGroup.controls['ownerName'].setValue("owner");
+    component.elements = {users: [{id: "1", name: "owner"} as User], projects: []};
 
     component.submitForm();
 
     expect(mockProjectService.createProject).toHaveBeenCalledWith(
-        new Project("DUMMY", "new name", "{\"new\": \"content\"}", [], [], "owner", {}));
+        new Project("DUMMY", "new name", "{\"new\": \"content\"}", [], [], "1", {}));
     expect(mockDialogRef.close).toHaveBeenCalled();
   });
 
@@ -61,13 +64,30 @@ describe('ProjectDialogComponent', () => {
     };
     component.projectFormGroup.controls['name'].setValue('new name');
     component.projectFormGroup.controls['content'].setValue("{\"new\": \"content\"}");
-    component.projectFormGroup.controls['ownerId'].setValue("user2");
+    component.projectFormGroup.controls['ownerName'].setValue("user2");
+    component.elements = {users: [{id: "2", name: "user2"} as User], projects: []};
 
     component.submitForm();
 
     expect(mockProjectService.editProject).toHaveBeenCalledWith(
-        new Project("id", "new name", "{\"new\": \"content\"}", [], [], "user2", {}));
+        new Project("id", "new name", "{\"new\": \"content\"}", [], [], "2", {}));
     expect(mockDialogRef.close).toHaveBeenCalled();
+  });
+
+  it('should not edit project if it refers to unexisting user name', () => {
+    jest.spyOn(mockProjectService, 'editProject');
+    jest.spyOn(mockDialogRef, 'close');
+    component.data = {
+      mode: DialogMode.Edit,
+      project: new Project("id", "John Doe", "{}", [],[], "user1", {})
+    };
+    component.projectFormGroup.controls['ownerName'].setValue("user2");
+    component.elements = {users: [{id: "1", name: "user1"} as User], projects: []};
+
+    component.submitForm();
+
+    expect(mockProjectService.editProject).not.toHaveBeenCalled();
+    expect(mockDialogRef.close).not.toHaveBeenCalled();
   });
 
   it('should not submit if content is not JSON', () => {

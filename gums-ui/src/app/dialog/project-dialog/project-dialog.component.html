@@ -17,21 +17,21 @@
         <br>
         <mat-divider></mat-divider>
         <br>
-        <p>Collaborator Ids</p>
-        <div *ngFor="let collaboratorIdControl of projectFormGroup.controls['collaboratorIds'].controls; let i = index">
+        <p>Collaborator Names</p>
+        <div *ngFor="let collaboratorNameControl of projectFormGroup.controls['collaboratorNames'].controls; let i = index">
             <mat-form-field appearance="outline">
-                <mat-label>Collaborator Id - {{i + 1}}</mat-label>
-                <button mat-icon-button matSuffix (click)="delete(collaboratorIdControl.value, 'collaboratorIds')"
+                <mat-label>Collaborator name - {{i + 1}}</mat-label>
+                <button mat-icon-button matSuffix (click)="delete(collaboratorNameControl.value, 'collaboratorNames')"
                         type="button"
-                        [disabled]="collaboratorIdControl.value === projectFormGroup.controls['ownerId'].value"
-                        [class.disabled]="collaboratorIdControl.value === projectFormGroup.controls['ownerId'].value"
+                        [disabled]="collaboratorNameControl.value === projectFormGroup.controls['ownerName'].value"
+                        [class.disabled]="collaboratorNameControl.value === projectFormGroup.controls['ownerName'].value"
                         class="background-transparent no-border">
                     <mat-icon style="color: white">delete_outline</mat-icon>
                 </button>
-                <input matInput type="text" [formControl]="collaboratorIdControl">
+                <input matInput type="text" [formControl]="collaboratorNameControl">
             </mat-form-field>
         </div>
-        <button mat-raised-button color="secondary" (click)="add('collaboratorIds')" class="center">
+        <button mat-raised-button color="secondary" (click)="add('collaboratorNames')" class="center">
             <mat-icon style="color: white">add</mat-icon>
             Add
         </button>
@@ -39,19 +39,19 @@
         <br>
         <mat-divider></mat-divider>
         <br>
-        <p>Linked project Ids</p>
-        <div *ngFor="let projectIdControl of projectFormGroup.controls['linkedProjectIds'].controls; let i = index">
+        <p>Linked project Names</p>
+        <div *ngFor="let projectNameControl of projectFormGroup.controls['linkedProjectNames'].controls; let i = index">
             <mat-form-field appearance="outline">
-                <mat-label>Linked project Id - {{i + 1}}</mat-label>
-                <input matInput type="text" [formControl]="projectIdControl">
-                <button mat-icon-button matSuffix (click)="delete(projectIdControl.value, 'linkedProjectIds')"
+                <mat-label>Linked project name - {{i + 1}}</mat-label>
+                <input matInput type="text" [formControl]="projectNameControl">
+                <button mat-icon-button matSuffix (click)="delete(projectNameControl.value, 'linkedProjectNames')"
                         type="button"
                         class="background-transparent no-border">
                     <mat-icon style="color: white">delete_outline</mat-icon>
                 </button>
             </mat-form-field>
         </div>
-        <button mat-raised-button color="secondary" (click)="add('linkedProjectIds')" class="center">
+        <button mat-raised-button color="secondary" (click)="add('linkedProjectNames')" class="center">
             <mat-icon style="color: white">add</mat-icon>
             Add
         </button>
@@ -60,8 +60,8 @@
         <mat-divider></mat-divider>
         <br>
         <mat-form-field appearance="outline">
-            <mat-label>Owner Id</mat-label>
-            <input matInput type="text" [formControl]="projectFormGroup.controls['ownerId']">
+            <mat-label>Owner name</mat-label>
+            <input matInput type="text" [formControl]="projectFormGroup.controls['ownerName']">
         </mat-form-field>
         <br>
         <mat-divider></mat-divider>

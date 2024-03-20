@@ -48,4 +48,5 @@ http://localhost:32769
 
 ## TODO
 - fix UI bug on dialog opening
-- use project names and collaborators name instead of ids in the UI
+- add links in the graph
+- ensure project names are unique in backend

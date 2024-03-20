@@ -42,7 +42,7 @@ export class Project {
       public content: any,
       public collaboratorIds: string[],
       public linkedProjectIds: string[],
-      public ownerId: String,
+      public ownerId: string,
       public properties: any,
   ) {}
 }

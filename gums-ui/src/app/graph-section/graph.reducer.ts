@@ -124,3 +124,10 @@ export const selectSelectedElement = createSelector(select, (state: GraphState) 
 export const selectNoElementsToDisplay = createSelector(select, (state: GraphState) => {
   return state.users.length === 0 && state.projects.length === 0;
 });
+
+export const selectElements = createSelector(select, (state: GraphState) => {
+  return {
+    users: state.users,
+    projects: state.projects
+  };
+});
