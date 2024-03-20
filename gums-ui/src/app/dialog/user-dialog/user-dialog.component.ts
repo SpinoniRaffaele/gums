@@ -5,7 +5,7 @@ import { FullUser, User } from '../../graph-section/graph-services/graph.datamod
 import { UserService } from '../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { snackbarDuration } from '../../app.datamodel';
-import { DialogMode } from '../dialog.metadata';
+import { DialogMode } from '../dialog.datamodel';
 
 @Component({
   selector: 'app-user-dialog',

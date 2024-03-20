@@ -6,7 +6,7 @@ import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from '../../services/project.service';
 import { Project, User } from '../../graph-section/graph-services/graph.datamodel';
-import { DialogMode } from '../dialog.metadata';
+import { DialogMode } from '../dialog.datamodel';
 import { provideMockStore } from '@ngrx/store/testing';
 
 describe('ProjectDialogComponent', () => {

@@ -12,7 +12,7 @@ import {
   Validators
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogMode } from '../dialog.metadata';
+import { DialogMode } from '../dialog.datamodel';
 import { snackbarDuration } from '../../app.datamodel';
 import { ProjectService } from '../../services/project.service';
 import { Store } from '@ngrx/store';

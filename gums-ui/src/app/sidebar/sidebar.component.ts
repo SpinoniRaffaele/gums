@@ -7,7 +7,7 @@ import { selectSelectedElement } from '../graph-section/graph.reducer';
 import { ElementType, Project, User } from '../graph-section/graph-services/graph.datamodel';
 import { Subscription } from 'rxjs';
 import { UnselectElementCompleted } from '../graph-section/graph.action';
-import { DialogMode } from '../dialog/dialog.metadata';
+import { DialogMode } from '../dialog/dialog.datamodel';
 import { ProjectDialogComponent } from '../dialog/project-dialog/project-dialog.component';
 
 @Component({

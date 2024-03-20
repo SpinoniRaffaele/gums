@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogMode } from '../dialog/dialog.metadata';
+import { DialogMode } from '../dialog/dialog.datamodel';
 import { ProjectDialogComponent } from '../dialog/project-dialog/project-dialog.component';
 import { UserDialogComponent } from '../dialog/user-dialog/user-dialog.component';
 

@@ -6,7 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { FullUser, User } from '../../graph-section/graph-services/graph.datamodel';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogMode } from '../dialog.metadata';
+import { DialogMode } from '../dialog.datamodel';
 
 describe('UserDialogComponent', () => {
   let component: UserDialogComponent;

@@ -48,5 +48,4 @@ Then you can open your browser at
 http://localhost:32769
 
 ## TODO
-- fix UI bug on dialog opening
 - add links in the graph

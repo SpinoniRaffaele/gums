@@ -10,7 +10,7 @@ import { Project } from '../graph-section/graph-services/graph.datamodel';
 describe('ProjectService', () => {
   const httpClientMock = { get: jest.fn(), put: jest.fn(), delete: jest.fn(), post: jest.fn() };
   const graphRendererServiceMock = {
-    renderProjects: jest.fn(),
+    renderNewProjects: jest.fn(),
     renderElementUpdate: jest.fn(),
     renderElementDelete: jest.fn()
   };
@@ -32,12 +32,12 @@ describe('ProjectService', () => {
 
   it('should retrieve the projects and update the graph', () => {
     jest.spyOn(httpClientMock, 'get').mockReturnValue(of([{name : "test"}]));
-    jest.spyOn(graphRendererServiceMock, 'renderProjects');
+    jest.spyOn(graphRendererServiceMock, 'renderNewProjects');
     jest.spyOn(store, 'dispatch');
 
     service.getProjects();
     expect(httpClientMock.get).toHaveBeenCalledWith('/gums/project', expect.anything());
-    expect(graphRendererServiceMock.renderProjects).toHaveBeenCalledWith([{name : "test"}]);
+    expect(graphRendererServiceMock.renderNewProjects).toHaveBeenCalledWith([{name : "test"}]);
     expect(store.dispatch).toHaveBeenCalled();
   });
 
@@ -69,13 +69,13 @@ describe('ProjectService', () => {
   it('should create the project and update the graph', () => {
     const project = new Project('id', 'name', 'content', [], [], 'ownerId', []);
     jest.spyOn(httpClientMock, 'post').mockReturnValue(of(project));
-    jest.spyOn(graphRendererServiceMock, 'renderProjects');
+    jest.spyOn(graphRendererServiceMock, 'renderNewProjects');
     jest.spyOn(store, 'dispatch');
 
     service.createProject(project);
 
     expect(httpClientMock.post).toHaveBeenCalledWith('/gums/project', project, expect.anything());
-    expect(graphRendererServiceMock.renderProjects).toHaveBeenCalledWith([project]);
+    expect(graphRendererServiceMock.renderNewProjects).toHaveBeenCalledWith([project]);
     expect(store.dispatch).toHaveBeenCalled();
   });
 });

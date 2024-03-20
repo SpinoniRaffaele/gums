@@ -32,7 +32,7 @@ export class ProjectService {
       .subscribe({
         next: (data: Project[]) => {
           this.store.dispatch(GetProjectsCompleted({ projects: data }));
-          this.graphRenderer.renderProjects(data);
+          this.graphRenderer.renderNewProjects(data);
         },
         error: _ => {
           this.snackBar.open(errorMessage, 'Ok', { duration: snackbarDuration });
@@ -73,7 +73,7 @@ export class ProjectService {
         .subscribe({
           next: (res: Project) => {
             this.store.dispatch(CreateProjectCompleted({project: res}));
-            this.graphRenderer.renderProjects([res]);
+            this.graphRenderer.renderNewProjects([res]);
             this.snackBar.open('Project created', 'Ok', { duration: snackbarDuration });
           },
           error: _ => {
