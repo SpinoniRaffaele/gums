@@ -23,6 +23,7 @@ import { selectElements } from '../../graph-section/graph.reducer';
   templateUrl: './project-dialog.component.html'
 })
 export class ProjectDialogComponent {
+  readonly INVALID_REFERENCE = '!reference not found!';
   projectFormGroup;
   propertiesKeyControls: FormControl[] = [];
   propertiesValueControls: FormControl[] = [];
@@ -60,7 +61,7 @@ export class ProjectDialogComponent {
                   []),
           ownerName: new FormControl(
               data.mode === DialogMode.Edit ? this.findNameById(data.project.ownerId) : "",
-              [Validators.required]),
+              [Validators.required, this.validateReference(), this.validateOwnerExists()]),
           properties: this.formBuilder.group({
             propertyValues: this.formBuilder.array(
                 data.mode === DialogMode.Edit ? this.propertiesValueControls : []),
@@ -111,7 +112,7 @@ export class ProjectDialogComponent {
       this.projectFormGroup.controls[field].controls['propertyValues'] = this.propertiesValueControls;
     } else {
       this.projectFormGroup.controls[field]
-          .push(new FormControl('new value', [Validators.required]));
+          .push(new FormControl('new value', [Validators.required, this.validateReference()]));
     }
   }
 
@@ -199,13 +200,15 @@ export class ProjectDialogComponent {
   }
 
   private stringsToArrayOfControls(ids: string[]) {
-    return ids.map(id => new FormControl(this.findNameById(id), [Validators.required]));
+    return ids.map(id => new FormControl(this.findNameById(id), [Validators.required, this.validateReference()]));
   }
 
   private findNameById(id: string) {
     const user = this.elements.users.find(user => user.id === id);
     const project = this.elements.projects.find(project => project.id === id);
-    return user ? user.name : project.name;
+    if (user) return user.name;
+    if (project) return project.name;
+    return this.INVALID_REFERENCE;
   }
 
   private validateUnique(array: FormControl[]): ValidatorFn {
@@ -213,6 +216,18 @@ export class ProjectDialogComponent {
       if (control.value) {
         return array.filter(form => form.value === control.value).length > 1 ? {duplicateName: true} : null;
       }
+    };
+  }
+
+  private validateReference(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value === this.INVALID_REFERENCE ? {referenceNotFound: true} : null;
+    };
+  }
+
+  private validateOwnerExists(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return !this.elements?.users.find(user => user.name === control.value) ? {referenceNotFound: true} : null;
     };
   }
 }

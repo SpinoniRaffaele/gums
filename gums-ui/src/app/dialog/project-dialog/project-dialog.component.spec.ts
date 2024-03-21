@@ -43,9 +43,13 @@ describe('ProjectDialogComponent', () => {
     component.data = {
       mode: DialogMode.Create
     };
+    component.elements = {users: [{id: "1", name: "owner"} as User], projects: []};
+
     component.projectFormGroup.controls['name'].setValue('new name');
     component.projectFormGroup.controls['content'].setValue("{\"new\": \"content\"}");
     component.projectFormGroup.controls['ownerName'].setValue("owner");
+    component.projectFormGroup.controls['collaboratorNames'] = new FormArray([]);
+    component.projectFormGroup.controls['linkedProjectNames'] = new FormArray([]);
     component.elements = {users: [{id: "1", name: "owner"} as User], projects: []};
 
     component.submitForm();
@@ -62,16 +66,36 @@ describe('ProjectDialogComponent', () => {
       mode: DialogMode.Edit,
       project: new Project("id", "John Doe", "{}", [],[], "user1", {})
     };
+    component.elements = {users: [{id: "2", name: "user2"} as User], projects: []};
+
     component.projectFormGroup.controls['name'].setValue('new name');
     component.projectFormGroup.controls['content'].setValue("{\"new\": \"content\"}");
     component.projectFormGroup.controls['ownerName'].setValue("user2");
-    component.elements = {users: [{id: "2", name: "user2"} as User], projects: []};
 
     component.submitForm();
 
     expect(mockProjectService.editProject).toHaveBeenCalledWith(
         new Project("id", "new name", "{\"new\": \"content\"}", [], [], "2", {}));
     expect(mockDialogRef.close).toHaveBeenCalled();
+  });
+
+  it('should be invalid if invalid user name is provided when editing project', () => {
+    jest.spyOn(mockProjectService, 'editProject');
+    jest.spyOn(mockDialogRef, 'close');
+    component.data = {
+      mode: DialogMode.Edit,
+      project: new Project("id", "John Doe", "{}", [],[], "user1", {})
+    };
+    component.elements = {users: [{id: "2", name: "user2"} as User], projects: []};
+
+    component.projectFormGroup.controls['name'].setValue('new name');
+    component.projectFormGroup.controls['content'].setValue("{\"new\": \"content\"}");
+    component.projectFormGroup.controls['ownerName'].setValue("invalid name");
+
+    component.submitForm();
+
+    expect(component.projectFormGroup.valid).toBeFalsy();
+    expect(mockProjectService.editProject).not.toHaveBeenCalled();
   });
 
   it('should not edit project if it refers to unexisting user name', () => {
