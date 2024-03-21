@@ -95,6 +95,7 @@ function editProjectsCompletedAction(state: GraphState, action) {
   return {
     ...state,
     projects: state.projects.map(project => project.id === action.project.id ? action.project : project),
+    selectedId: null
   };
 }
 

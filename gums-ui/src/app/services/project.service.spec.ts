@@ -50,7 +50,8 @@ describe('ProjectService', () => {
     service.editProject(project);
 
     expect(httpClientMock.put).toHaveBeenCalledWith('/gums/project/id', project, expect.anything());
-    expect(graphRendererServiceMock.renderElementUpdate).toHaveBeenCalledWith(project.id, project.name);
+    expect(graphRendererServiceMock.renderElementUpdate)
+        .toHaveBeenCalledWith(project.id, project.name, project.ownerId);
     expect(store.dispatch).toHaveBeenCalled();
   });
 

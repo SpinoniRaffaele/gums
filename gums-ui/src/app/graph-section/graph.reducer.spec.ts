@@ -90,7 +90,8 @@ describe('GraphReducer', () => {
           linkedProjectIds: ["old"],
           ownerId: "old",
           properties: { old: "old" }
-        }]
+        }],
+      selectedId: "1"
     }, EditProjectCompleted({ project: project }));
 
     expect(state.projects).toEqual([project]);

@@ -85,11 +85,13 @@ export class ProjectDialogComponent {
       const ownerId = this.elements.users.find(user => user.name === ownerName).id;
       const propertiesGroup = this.projectFormGroup.controls['properties'];
       const propertiesObject = this.propertiesToObject(propertiesGroup);
-      this.data.mode === DialogMode.Create ?
-      this.projectService.createProject(new Project(
-          "DUMMY", name, content, collaboratorIds, linkedProjectIds, ownerId, propertiesObject)) :
-      this.projectService.editProject(new Project(
-          this.data.project.id, name, content, collaboratorIds, linkedProjectIds, ownerId, propertiesObject));
+      if (this.data.mode === DialogMode.Create) {
+        this.projectService.createProject(new Project(
+            "DUMMY", name, content, collaboratorIds, linkedProjectIds, ownerId, propertiesObject));
+      } else {
+        this.projectService.editProject(new Project(
+            this.data.project.id, name, content, collaboratorIds, linkedProjectIds, ownerId, propertiesObject));
+      }
       this.dialogRef.close();
     } else {
       this.snackBar.open("Invalid project data", "Ok", { duration: snackbarDuration });

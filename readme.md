@@ -49,4 +49,3 @@ http://localhost:32769
 
 ## TODO
 - fix project-dialog when any collaborator or project has been deleted
-- fix dialog opening two times

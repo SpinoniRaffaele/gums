@@ -47,6 +47,7 @@ export class UserService {
         next: res => {
           this.store.dispatch(AddUserCompleted({ newUser: res as User }))
           this.graphRenderer.renderNewUsers([res as User]);
+          this.snackBar.open('User added', 'Ok', { duration: snackbarDuration });
         },
         error: error => {
           this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
@@ -60,6 +61,7 @@ export class UserService {
           next: _ => {
             this.store.dispatch(EditUserCompleted({ editedUser: user }));
             this.graphRenderer.renderElementUpdate(user.id, user.name);
+            this.snackBar.open('User updated', 'Ok', { duration: snackbarDuration });
           },
           error: error => {
             this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
@@ -73,6 +75,7 @@ export class UserService {
           next: _ => {
             this.store.dispatch(DeleteUserCompleted({ deletedUserId: id }));
             this.graphRenderer.renderElementDelete(id);
+            this.snackBar.open('User deleted', 'Ok', { duration: snackbarDuration });
           },
           error: error => {
             this.snackBar.open(errorMessage, "Ok", { duration: snackbarDuration });
