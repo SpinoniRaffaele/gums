@@ -35,7 +35,7 @@ describe('LinkHelperService', () => {
       ownerId: '2',
       nativeObject: new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial())
     });
-    service.updateLinkTargets(elements, '1', '2');
+    service.updateLinkTargets(elements, '1', '2', {add: jest.fn(), remove: jest.fn()});
     expectPosition();
   });
 

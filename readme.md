@@ -48,4 +48,4 @@ Then you can open your browser at
 http://localhost:32769
 
 ## TODO
-- fix project-dialog when any collaborator or project has been deleted
+- fix logout relogin graph issue

@@ -29,24 +29,30 @@ export class LinkHelperService {
   updateLinkPositions(elements: Element[]) {
     for (let line of this.lines.entries()) {
       const projectPosition = elements.find((element: Element) => element.id === line[0])
-          .nativeObject.position;
+          ?.nativeObject.position;
       const ownerPosition = elements.find((element: Element) => element.id === line[1].ownerId)
-          .nativeObject.position;
-      line[1].nativeObject.geometry.setFromPoints([projectPosition, ownerPosition]);
+          ?.nativeObject.position;
+      line[1].nativeObject?.geometry.setFromPoints([projectPosition, ownerPosition]);
     }
   }
 
-  updateLinkTargets(elements: Element[], id: string, ownerId: string) {
-    const line = this.lines.get(id);
-    if (!line || !ownerId) return;
+  updateLinkTargets(elements: Element[], id: string, ownerId: string, scene) {
+    if (!ownerId) return;
     const ownerPosition = elements.find((element: Element) => element.id === ownerId)
         ?.nativeObject.position;
     if (!ownerPosition) return;
-    line.nativeObject.geometry.setFromPoints([
-        elements.find((element: Element) => element.id === id).nativeObject.position,
+    if (this.lines.has(id)) {
+      scene.remove(this.lines.get(id).nativeObject);
+      this.lines.delete(id);
+    }
+    const material = new THREE.LineBasicMaterial({color: 0xffffff});
+    const geometry = new THREE.BufferGeometry().setFromPoints([
+      elements.find((element: Element) => element.id === id).nativeObject.position,
       ownerPosition
     ]);
-    this.lines.set(id, {ownerId: ownerId, nativeObject: line.nativeObject});
+    const line = new THREE.Line(geometry, material);
+    this.lines.set(id, {ownerId: ownerId, nativeObject: line});
+    scene.add(line);
   }
 
   deleteLinks(id: string, scene) {

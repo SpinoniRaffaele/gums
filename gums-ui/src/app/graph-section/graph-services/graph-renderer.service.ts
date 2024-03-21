@@ -62,7 +62,7 @@ export class GraphRendererService {
     const element = this.elements.find((element: Element) => element.id === id);
     this.labelHelperService.updateElementLabel(name, element.nativeObject);
     if (element.type === ElementType.PROJECT) {
-      this.linkHelperService.updateLinkTargets(this.elements, id, ownerId);
+      this.linkHelperService.updateLinkTargets(this.elements, id, ownerId, this.scene);
     }
   }
 
