@@ -48,4 +48,5 @@ Then you can open your browser at
 http://localhost:32769
 
 ## TODO
-- add links in the graph
+- fix project-dialog when any collaborator or project has been deleted
+- fix dialog opening two times

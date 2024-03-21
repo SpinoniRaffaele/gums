@@ -17,6 +17,7 @@ import gsap from "gsap";
 import { Store } from '@ngrx/store';
 import { SelectElementCompleted, UnselectElementCompleted } from '../graph.action';
 import { LabelHelperService } from './label-helper.service';
+import { LinkHelperService } from './link-helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,30 +25,21 @@ import { LabelHelperService } from './label-helper.service';
 export class GraphRendererService {
 
   renderer;
-
   scene;
-
   camera;
-
   raycaster;
-
   pointer;
-
   elements: Element[] = [];
-
   intersected;
-
   labelRenderer;
-
   pointedObject = undefined;
-
   orbit;
-
   isFocusedOnElement = false;
 
   constructor(private readonly physicsService: PhysicsService,
               private readonly store: Store,
-              private labelHelperService: LabelHelperService
+              private labelHelperService: LabelHelperService,
+              private linkHelperService: LinkHelperService
   ) {
     this.store.select(selectSelectedElement).subscribe((selected) => {
       if (!selected.element) {
@@ -59,20 +51,25 @@ export class GraphRendererService {
 
   renderNewProjects(projects: Project[]) {
     this.addRandomPositionElement(projects, ElementType.PROJECT);
+    this.linkHelperService.createLinkFromProjectsToOwners(projects, this.elements, this.scene);
   }
 
   renderNewUsers(users: User[]) {
     this.addRandomPositionElement(users, ElementType.USER);
   }
 
-  renderElementUpdate(id: string, name: string) {
+  renderElementUpdate(id: string, name: string, ownerId?: string) {
     const element = this.elements.find((element: Element) => element.id === id);
     this.labelHelperService.updateElementLabel(name, element.nativeObject);
+    if (element.type === ElementType.PROJECT) {
+      this.linkHelperService.updateLinkTargets(this.elements, id, ownerId);
+    }
   }
 
   renderElementDelete(id: string) {
     const element = this.elements.find((element: Element) => element.id === id);
     this.scene.remove(element.nativeObject);
+    this.linkHelperService.deleteLinks(id, this.scene);
     this.labelHelperService.deleteLabelById(id);
     this.elements = this.elements.filter((element: Element) => element.id !== id);
   }
@@ -145,6 +142,7 @@ export class GraphRendererService {
 
   private render() {
     this.physicsService.computeNewPosition(this.elements);
+    this.linkHelperService.updateLinkPositions(this.elements);
     this.updateRaycaster();
     this.renderer.render(this.scene, this.camera);
     this.labelRenderer.render( this.scene, this.camera );
@@ -173,7 +171,7 @@ export class GraphRendererService {
   private updateRaycaster() {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     if (!this.isFocusedOnElement) {
-      const intersects = this.raycaster.intersectObjects(this.scene.children, false);
+      const intersects = this.raycaster.intersectObjects(this.scene.children.filter(child => child.isMesh), false);
       this.pointedObject = undefined;
       if (this.intersected) {
         this.intersected.material.emissive.setHex(0x000000);

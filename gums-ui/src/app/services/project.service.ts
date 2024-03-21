@@ -45,7 +45,7 @@ export class ProjectService {
         .subscribe({
           next: (_) => {
             this.store.dispatch(EditProjectCompleted({project: project}));
-            this.graphRenderer.renderElementUpdate(project.id, project.name);
+            this.graphRenderer.renderElementUpdate(project.id, project.name, project.ownerId);
             this.snackBar.open('Project updated', 'Ok', { duration: snackbarDuration });
           },
           error: _ => {
