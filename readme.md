@@ -5,6 +5,9 @@
 This project is a spring application that provides a reactive REST API for managing users and projects linked to them.
 The application stores data in the NoSQL MongoDB.
 
+The frontend is an Angular application that provides a simple 3D UI to interact with the backend.
+![UI look](gums-ui/src/assets/admin_panel.gif)
+
 ## Details
 The application is meant to be a toy project that plays with spring, in particular, the project uses:
 - Spring IoC
