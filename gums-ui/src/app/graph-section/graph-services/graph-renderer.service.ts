@@ -93,6 +93,12 @@ export class GraphRendererService {
     animate();
   }
 
+  dispose() {
+    this.linkHelperService.deleteAllLinks(this.scene);
+    this.elements.forEach(element => this.scene.remove(element.nativeObject));
+    this.elements = [];
+  }
+
   private initializeOrbitAndHisListeners() {
     this.orbit = new OrbitControls(this.camera, this.labelRenderer.domElement);
     this.orbit.addEventListener('change', () => {

@@ -11,7 +11,7 @@ describe('GraphSectionComponent', () => {
   let component: GraphSectionComponent;
   let fixture: ComponentFixture<GraphSectionComponent>;
   const userServiceMock = {getUsers: jest.fn()};
-  const graphRendererServiceMock = {initializeScene: jest.fn()};
+  const graphRendererServiceMock = {initializeScene: jest.fn(), dispose: jest.fn()};
   const projectServiceMock = {getProjects: jest.fn()};
   let store;
 
@@ -52,5 +52,13 @@ describe('GraphSectionComponent', () => {
     expect(graphRendererServiceMock.initializeScene).toHaveBeenCalled();
     expect(userServiceMock.getUsers).toHaveBeenCalled();
     expect(component.noElementsToDisplay).toBe(true);
+  });
+
+  it('should dispose the renderer on destroy', () => {
+    jest.spyOn(graphRendererServiceMock, 'dispose');
+
+    component.ngOnDestroy();
+
+    expect(graphRendererServiceMock.dispose).toHaveBeenCalled();
   });
 });

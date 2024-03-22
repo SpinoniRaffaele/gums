@@ -46,6 +46,3 @@ it will:
 
 Then you can open your browser at
 http://localhost:32769
-
-## TODO
-- fix logout relogin graph issue

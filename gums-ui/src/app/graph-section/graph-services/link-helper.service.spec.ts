@@ -50,6 +50,17 @@ describe('LinkHelperService', () => {
     expect(service.lines.get('1')).toBeUndefined();
   });
 
+  it('should delete all links', () => {
+    const scene = {remove: jest.fn()};
+    service.lines.set('1', {
+      ownerId: '2',
+      nativeObject: new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial())
+    });
+    service.deleteAllLinks(scene);
+    expect(scene.remove).toHaveBeenCalled();
+    expect(service.lines.get('1')).toBeUndefined();
+  });
+
   function expectPosition() {
     expect(service.lines.get('1').nativeObject.geometry.getAttribute('position').array['0'])
         .toEqual(1);

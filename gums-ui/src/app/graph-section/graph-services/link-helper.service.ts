@@ -63,4 +63,11 @@ export class LinkHelperService {
       }
     }
   }
+
+  deleteAllLinks(scene) {
+    for (let entry of this.lines.entries()) {
+      scene.remove(entry[1].nativeObject);
+    }
+    this.lines.clear();
+  }
 }

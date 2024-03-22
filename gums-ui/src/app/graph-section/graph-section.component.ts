@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from "../services/user.service";
 import { GraphRendererService } from "./graph-services/graph-renderer.service";
 import { Store } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { ProjectService } from '../services/project.service';
   selector: 'app-graph-section',
   templateUrl: './graph-section.component.html'
 })
-export class GraphSectionComponent implements OnInit {
+export class GraphSectionComponent implements OnInit, OnDestroy {
 
   noElementsToDisplay: boolean;
 
@@ -28,5 +28,9 @@ export class GraphSectionComponent implements OnInit {
     this.store.select(selectNoElementsToDisplay).subscribe(noElementsToDisplay => {
       this.noElementsToDisplay = noElementsToDisplay;
     })
+  }
+
+  ngOnDestroy() {
+    this.graphRenderer.dispose();
   }
 }

@@ -53,4 +53,4 @@ export const INITIAL_CUBE_SIZE = 15;
 
 export const ANIMATION_DURATION = 1;
 
-export const RELATIVE_DISTANCE_AFTER_FOCUS = 1.3;
+export const RELATIVE_DISTANCE_AFTER_FOCUS = 1.5;
