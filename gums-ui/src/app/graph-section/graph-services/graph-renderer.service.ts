@@ -83,8 +83,8 @@ export class GraphRendererService {
     this.initializeLights();
     this.pointer = new THREE.Vector2();
     this.raycaster = new THREE.Raycaster();
-    this.createMouseMovementListener();
-    this.createFocusClickEventListener();
+    window.addEventListener( 'pointermove', this.mouseMovementListener);
+    window.addEventListener('click', this.focusClickEventListener);
     this.initializeOrbitAndHisListeners();
     const animate = () => {
       requestAnimationFrame(animate);
@@ -97,6 +97,9 @@ export class GraphRendererService {
     this.linkHelperService.deleteAllLinks(this.scene);
     this.elements.forEach(element => this.scene.remove(element.nativeObject));
     this.elements = [];
+    window.removeEventListener( 'pointermove', this.mouseMovementListener);
+    window.removeEventListener('click', this.focusClickEventListener);
+    window.removeEventListener( 'resize', this.cameraResizeListener);
   }
 
   private initializeOrbitAndHisListeners() {
@@ -114,12 +117,10 @@ export class GraphRendererService {
     domElementRenderer.appendChild(this.renderer.domElement);
   }
 
-  private createMouseMovementListener() {
-    window.addEventListener( 'pointermove', (event) => {
-      const actualX = event.clientX - (window.innerWidth * (1 - WIDTH_PERCENTAGE));
-      this.pointer.x = (actualX / (window.innerWidth * WIDTH_PERCENTAGE)) * 2 - 1;
-      this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    });
+  private mouseMovementListener = (event) => {
+    const actualX = event.clientX - (window.innerWidth * (1 - WIDTH_PERCENTAGE));
+    this.pointer.x = (actualX / (window.innerWidth * WIDTH_PERCENTAGE)) * 2 - 1;
+    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
 
   private initializeLights() {
@@ -138,12 +139,14 @@ export class GraphRendererService {
     );
     this.camera.position.z = 50;
 
-    window.addEventListener( 'resize', () => {
-      this.camera.aspect = window.innerWidth * WIDTH_PERCENTAGE / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth * WIDTH_PERCENTAGE, window.innerHeight);
-      this.labelRenderer.setSize(window.innerWidth * WIDTH_PERCENTAGE, window.innerHeight);
-    });
+    window.addEventListener( 'resize', this.cameraResizeListener);
+  }
+
+  private cameraResizeListener = () => {
+    this.camera.aspect = window.innerWidth * WIDTH_PERCENTAGE / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth * WIDTH_PERCENTAGE, window.innerHeight);
+    this.labelRenderer.setSize(window.innerWidth * WIDTH_PERCENTAGE, window.innerHeight);
   }
 
   private render() {
@@ -190,31 +193,29 @@ export class GraphRendererService {
     }
   }
 
-  private createFocusClickEventListener() {
-    window.addEventListener('click', (_) => {
-      if (this.pointedObject && !this.isFocusedOnElement) {
-        const id = this.pointedObject.id;
-        const aabb = new THREE.Box3().setFromObject( this.pointedObject );
-        const center = aabb.getCenter( new THREE.Vector3() );
+  private focusClickEventListener = () => {
+    if (this.pointedObject && !this.isFocusedOnElement) {
+      const id = this.pointedObject.id;
+      const aabb = new THREE.Box3().setFromObject(this.pointedObject);
+      const center = aabb.getCenter(new THREE.Vector3());
 
-        gsap.to( this.camera.position, {
-          duration: ANIMATION_DURATION,
-          x: center.x * RELATIVE_DISTANCE_AFTER_FOCUS,
-          y: center.y * RELATIVE_DISTANCE_AFTER_FOCUS,
-          z: center.z * RELATIVE_DISTANCE_AFTER_FOCUS,
-          onUpdate: () => {
-            this.orbit.update();
-          },
-          onComplete: () => {
-            this.orbit.update();
-            const selectedElement = this.elements.find((element: Element) => element.nativeObject.id === id);
-            if (selectedElement) {
-              this.store.dispatch(SelectElementCompleted({selectedId: selectedElement.id}));
-              this.labelHelperService.hideAllLabels();
-            }
+      gsap.to(this.camera.position, {
+        duration: ANIMATION_DURATION,
+        x: center.x * RELATIVE_DISTANCE_AFTER_FOCUS,
+        y: center.y * RELATIVE_DISTANCE_AFTER_FOCUS,
+        z: center.z * RELATIVE_DISTANCE_AFTER_FOCUS,
+        onUpdate: () => {
+          this.orbit.update();
+        },
+        onComplete: () => {
+          this.orbit.update();
+          const selectedElement = this.elements.find((element: Element) => element.nativeObject.id === id);
+          if (selectedElement) {
+            this.store.dispatch(SelectElementCompleted({selectedId: selectedElement.id}));
+            this.labelHelperService.hideAllLabels();
           }
-        });
-      }
-    });
+        }
+      });
+    }
   }
 }
