@@ -150,7 +150,7 @@ export class GraphRendererService {
   }
 
   private render() {
-    this.physicsService.computeNewPosition(this.elements);
+    this.physicsService.computeNewPosition(this.elements, this.linkHelperService.lines);
     this.linkHelperService.updateLinkPositions(this.elements);
     this.updateRaycaster();
     this.renderer.render(this.scene, this.camera);
