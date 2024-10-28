@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { GraphSectionComponent } from './graph-section/graph-section.component';
-import { HttpClientModule } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { StoreModule } from "@ngrx/store";
 import { GRAPH_REDUCER, graphReducer } from "./graph-section/graph.reducer";
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -25,38 +25,31 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { ProjectDialogComponent } from './dialog/project-dialog/project-dialog.component';
 import { MatDivider } from '@angular/material/divider';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    GraphSectionComponent,
-    SidebarComponent,
-    AdminPanelComponent,
-    LoginComponent,
-    UserDialogComponent,
-    ProjectDialogComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    StoreModule.forRoot({[GRAPH_REDUCER]: graphReducer}),
-    RouterModule.forRoot(routes),
-    MatSlideToggleModule,
-    MatFormField,
-    MatInputModule,
-    MatLabel,
-    MatIcon,
-    MatButton,
-    MatCard,
-    MatDialogContent,
-    MatDialogActions,
-    MatCheckbox,
-    MatDivider
-  ],
-  providers: [
-      HttpClientModule,
-      provideAnimationsAsync()
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        GraphSectionComponent,
+        SidebarComponent,
+        AdminPanelComponent,
+        LoginComponent,
+        UserDialogComponent,
+        ProjectDialogComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot({ [GRAPH_REDUCER]: graphReducer }),
+        RouterModule.forRoot(routes),
+        MatSlideToggleModule,
+        MatFormField,
+        MatInputModule,
+        MatLabel,
+        MatIcon,
+        MatButton,
+        MatCard,
+        MatDialogContent,
+        MatDialogActions,
+        MatCheckbox,
+        MatDivider], providers: [
+        provideAnimationsAsync(),
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
